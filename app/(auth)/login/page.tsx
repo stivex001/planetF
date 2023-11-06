@@ -29,7 +29,7 @@ const Login = (props: Props) => {
             </div>
             <Link href="#">Forgot Password?</Link>
           </div>
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-4 my-2">
             <button className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3">
               Login
             </button>
@@ -39,7 +39,7 @@ const Login = (props: Props) => {
             <Link href='#' className=" whitespace-nowrap text-[#164e63]">Need Support?</Link>
           </div>
         </form>
-        <p className="mt-10 text-center lg:text-left text-slate-600 text-base">
+        <p className="mt-10 text-center text-slate-600 text-base">
           By signin up, you agree to our Terms and Conditions & Privacy Policy
         </p>
       </div>
