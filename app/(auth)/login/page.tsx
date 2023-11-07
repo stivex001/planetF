@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -8,12 +8,21 @@ import React from "react";
 type Props = {};
 
 const Login = (props: Props) => {
-  const router = useRouter
+  const router = useRouter();
+
+  const handleLoginForm = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    router.push('/')
+  }
 
   return (
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
-      <div className="bg-[#164e63] hidden lg:block h-screen flex-1 rounded-r-full">
-        <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center">
+      <div className="bg-[#164e63] hidden lg:block h-screen flex-1 relative rounded-r-full">
+        <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center ">
+          {/* <div className="bg-red-500 absolute top-0 right-0 w-full h-[5%] border-t-[50%]" />
+          <div className="bg-[#d0dce0] absolute bottom-0 right-0 w-full h-[2%]" /> */}
+
           <div className="flex items-center gap-2">
             <Image
               src="https://enigma-laravel.left4code.com/build/assets/logo-9a88cec5.svg"
@@ -31,9 +40,13 @@ const Login = (props: Props) => {
               height={290}
             />
             <h1 className="text-4xl mt-10 font-medium text-white leading-tight whitespace-nowrap">
-              A few more clicks to<br />sign in to your account.
+              A few more clicks to
+              <br />
+              sign in to your account.
             </h1>
-            <p className="mt-5 text-white text-lg text-opacity-70 whitespace-nowrap">Manage all your e-commerce accounts in one place</p>
+            <p className="mt-5 text-white text-lg text-opacity-70 whitespace-nowrap">
+              Manage all your e-commerce accounts in one place
+            </p>
           </div>
         </div>
       </div>
@@ -43,7 +56,7 @@ const Login = (props: Props) => {
             Sign In
           </h2>
 
-          <form className="mt-8 flex flex-col gap-4 ">
+          <form className="mt-8 flex flex-col gap-4 " onSubmit={handleLoginForm}>
             <input
               type="email"
               placeholder="email"
@@ -62,10 +75,13 @@ const Login = (props: Props) => {
               <Link href="#">Forgot Password?</Link>
             </div>
             <div className="flex items-center gap-3 mb-4 my-2">
-              <button className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3">
+              <button type="submit" className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3">
                 Login
               </button>
-              <Link href='/register'  className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-transparent  border border-[#e2e8f0] hover:bg-slate-100  text-slate-500 w-full px-4 py-3">
+              <Link
+                href="/register"
+                className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-transparent  border border-[#e2e8f0] hover:bg-slate-100  text-slate-500 w-full px-4 py-3"
+              >
                 Register
               </Link>
               <Link href="#" className=" whitespace-nowrap text-[#164e63]">
@@ -74,7 +90,10 @@ const Login = (props: Props) => {
             </div>
           </form>
           <p className="mt-10 text-center lg:text-left lg:whitespace-nowrap text-slate-600 text-base">
-            By signin up, you agree to our <span className="text-[#164e63]">Terms and Conditions & Privacy Policy</span>
+            By signin up, you agree to our{" "}
+            <span className="text-[#164e63]">
+              Terms and Conditions & Privacy Policy
+            </span>
           </p>
         </div>
       </div>
