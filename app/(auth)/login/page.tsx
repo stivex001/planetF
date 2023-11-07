@@ -1,10 +1,15 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {};
 
 const Login = (props: Props) => {
+  const router = useRouter
+
   return (
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
       <div className="bg-[#164e63] hidden lg:block h-screen flex-1 rounded-r-full">
@@ -22,8 +27,8 @@ const Login = (props: Props) => {
             <Image
               src="https://enigma-laravel.left4code.com/build/assets/illustration-bbfd1da0.svg"
               alt=""
-              width={250}
-              height={250}
+              width={300}
+              height={290}
             />
             <h1 className="text-4xl mt-10 font-medium text-white leading-tight whitespace-nowrap">
               A few more clicks to<br />sign in to your account.
@@ -60,9 +65,9 @@ const Login = (props: Props) => {
               <button className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3">
                 Login
               </button>
-              <button className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-transparent  border border-[#e2e8f0] hover:bg-slate-100  text-slate-500 w-full px-4 py-3">
+              <Link href='/register'  className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-transparent  border border-[#e2e8f0] hover:bg-slate-100  text-slate-500 w-full px-4 py-3">
                 Register
-              </button>
+              </Link>
               <Link href="#" className=" whitespace-nowrap text-[#164e63]">
                 Need Support?
               </Link>
