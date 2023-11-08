@@ -6,64 +6,56 @@ import { IoIosArrowDown } from "react-icons/io";
 import { BiHomeAlt } from "react-icons/bi";
 import { BsInbox } from "react-icons/bs";
 import { FiActivity, FiBox, FiHardDrive, FiLayout, FiSidebar } from "react-icons/fi";
-import {
-  RiHome2Line,
-  RiUserLine,
-  RiSettings2Line,
-  RiMailLine,
-  RiCalendar2Line,
-  RiBriefcaseLine,
-  RiBarChart2Line,
-} from "react-icons/ri";
+
 
 const navbarLinks = [
   {
     id: 1,
     icon: <BiHomeAlt size={24} />,
     title: "Dashboard",
-    url: "/",
+    url: "/user",
     arrowIcon: <IoIosArrowDown />,
   },
   {
     id: 2,
     icon: <FiBox size={24} />,
     title: "Menu Layout",
-    url: "/menu",
+    url: "/user/menu",
     arrowIcon: <IoIosArrowDown />,
   },
   {
     id: 3,
     icon: <FiActivity size={24} />,
     title: "Apps",
-    url: "/apps",
+    url: "/user/apps",
     arrowIcon: <IoIosArrowDown />,
   },
   {
     id: 4,
     icon: <FiLayout size={24} />,
     title: "Pages",
-    url: "/pages",
+    url: "/user/pages",
     arrowIcon: <IoIosArrowDown />,
   },
   {
     id: 5,
     icon: <BsInbox size={24} />,
     title: "Components",
-    url: "/components",
+    url: "/user/components",
     arrowIcon: <IoIosArrowDown />,
   },
   {
     id: 6,
     icon: <FiSidebar size={24} />,
     title: "Forms",
-    url: "/forms",
+    url: "/user/forms",
     arrowIcon: <IoIosArrowDown />,
   },
   {
     id: 7,
     icon: <FiHardDrive size={24} />,
     title: "Widgets",
-    url: "/widgets",
+    url: "/user/widgets",
     arrowIcon: <IoIosArrowDown />,
   },
 ];

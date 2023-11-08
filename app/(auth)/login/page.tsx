@@ -13,7 +13,7 @@ const Login = (props: Props) => {
   const handleLoginForm = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    router.push('/')
+    router.push('/user')
   }
 
   return (
