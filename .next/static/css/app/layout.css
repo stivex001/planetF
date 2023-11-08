@@ -842,6 +842,22 @@ video {
 .text-white\/70 {
   color: rgb(255 255 255 / 0.7);
 }
+.text-\[\] {
+  color: ;
+}
+.text-\[1e\] {
+  color: 1e;
+}
+.text-\[1e29\] {
+  color: 1e29;
+}
+.text-\[1e293b\] {
+  color: 1e293b;
+}
+.text-\[\#1e293b\] {
+  --tw-text-opacity: 1;
+  color: rgb(30 41 59 / var(--tw-text-opacity));
+}
 .text-opacity-70 {
   --tw-text-opacity: 0.7;
 }
