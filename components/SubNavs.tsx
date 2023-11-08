@@ -80,7 +80,7 @@ const SubNavs = (props: Props) => {
   return (
     <header className="mt-24 fixed top-0 z-[999]">
       <nav className="w-[90%] mx-auto">
-        <ul className="flex items-center justify-between gap-2 whitespace-nowrap">
+        <ul className="hidden lg:flex items-center justify-between gap-2 whitespace-nowrap">
           {navbarLinks.map((link) => (
             <Link
               href={`${link.url}`}

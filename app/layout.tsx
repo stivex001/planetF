@@ -22,7 +22,7 @@ export default function RootLayout({
         <Navbar />
         <SubNavs />
 
-        <div className="mt-48">{children}</div>
+        <div className="mt-40">{children}</div>
       </body>
     </html>
   );

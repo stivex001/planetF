@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
+import {HiBars3BottomRight} from "react-icons/hi2"
 
 type Props = {};
 
@@ -20,7 +21,7 @@ const Navbar = (props: Props) => {
             />
             <span className="text-white text-lg">Enigma</span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-2">
             <Link href="/" className="text-sm text-white ">
               Application
             </Link>
@@ -30,7 +31,8 @@ const Navbar = (props: Props) => {
             </Link>
           </div>
         </div>
-        <div className="flex items-center gap-5">
+        <HiBars3BottomRight size={32} className="cursor-pointer lg:hidden" />
+        <div className="hidden lg:flex items-center gap-5">
           <div className="hidden sm:flex items-center justify-between rounded-[50px] bg-slate-200 px-3 py-2">
             <input
               type="text"
