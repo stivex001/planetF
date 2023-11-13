@@ -608,6 +608,10 @@ video {
   margin-top: auto;
   margin-bottom: auto;
 }
+.my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
 .mb-4 {
   margin-bottom: 1rem;
 }
@@ -734,6 +738,9 @@ video {
 .gap-\[100px\] {
   gap: 100px;
 }
+.gap-10 {
+  gap: 2.5rem;
+}
 .whitespace-nowrap {
   white-space: nowrap;
 }
@@ -825,6 +832,15 @@ video {
 .p-8 {
   padding: 2rem;
 }
+.p-0 {
+  padding: 0px;
+}
+.p-2 {
+  padding: 0.5rem;
+}
+.p-3 {
+  padding: 0.75rem;
+}
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -875,6 +891,10 @@ video {
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 .font-bold {
   font-weight: 700;
