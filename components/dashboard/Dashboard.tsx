@@ -217,10 +217,8 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* <div>
-          <Card />
-        </div> */}
       </div>
+      
     </main>
   );
 };
