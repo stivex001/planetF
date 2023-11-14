@@ -22,10 +22,10 @@
       "static/css/app/(dashboard)/user/layout.css",
       "static/chunks/app/(dashboard)/user/layout.js"
     ],
-    "/(dashboard)/user/beneficiary/page": [
+    "/(dashboard)/user/commission/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/user/beneficiary/page.js"
+      "static/chunks/app/(dashboard)/user/commission/page.js"
     ]
   }
 }
