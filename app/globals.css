@@ -5,3 +5,22 @@
 body{
     background-color: #e2e8f0;
 }
+
+.scrollable-container {
+    overflow: hidden;
+  }
+  
+  .scrollable-content {
+    overflow-y: scroll;
+    height: 100%; /* You can adjust the height as needed */
+  }
+  
+  /* Hide the scrollbar in Webkit-based browsers */
+  .scrollable-content::-webkit-scrollbar {
+    width: 0.01rem;
+  }
+  
+  /* Hide the scrollbar in Firefox */
+  .scrollable-content {
+    scrollbar-width: none;
+  }
