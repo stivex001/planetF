@@ -6,9 +6,9 @@ type Props = {};
 
 const DashboardChart = (props: Props) => {
   return (
-    <div className="my-10 flex gap-4">
+    <div className="my-10 flex gap-4 ">
       <section
-        className=" bg-white rounded-2xl py-5 px-3 border w-1/2"
+        className=" bg-white rounded-2xl py-5 px-0 border w-1/2"
         style={{
           boxShadow: "0px 8.54605px 34.18421px 0px rgba(51, 38, 174, 0.08)",
         }}
@@ -33,12 +33,7 @@ const DashboardChart = (props: Props) => {
                 Current Week
               </span>
             </h6>
-            <h6 className="flex">
-              <BsDot size={20} color="#A8C5DA" />
-              <span className="text-xs font-normal text-[#1C1C1C]">
-                Previous Week
-              </span>
-            </h6>
+            
           </div>
         </div>
         <LineChart />
@@ -51,11 +46,26 @@ const DashboardChart = (props: Props) => {
       >
         <div>
           <h6 className="text-sm font-semibold text-[#1C1C1C]">
-            Traffic by Location
+            Weekly Top Seller
           </h6>
         </div>
         <div className="max-h-[400px] max-w-[450px] -mt-[30px]">
-        <DoughChart />
+          <DoughChart />
+        </div>
+      </section>
+      <section
+        className=" bg-white rounded-2xl p-5 border w-1/2"
+        style={{
+          boxShadow: "0px 8.54605px 34.18421px 0px rgba(51, 38, 174, 0.08)",
+        }}
+      >
+        <div>
+          <h6 className="text-sm font-semibold text-[#1C1C1C]">
+            Weekly Top Seller
+          </h6>
+        </div>
+        <div className="max-h-[400px] max-w-[450px] -mt-[30px]">
+          <DoughChart />
         </div>
       </section>
     </div>

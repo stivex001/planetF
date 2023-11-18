@@ -14,9 +14,9 @@ export const data = {
       backgroundColor: ["#1C1C1C", "#05CE91", "#B1E3FF", "#95A4FC"],
       borderColor: ["#1C1C1C", "#05CE91", "#B1E3FF", "#95A4FC"],
       borderWidth: 1,
-        weight: 10,
-        spacing: 10,
-        borderRadius: 4,
+      weight: 10,
+      spacing: 10,
+      borderRadius: 4,
     },
   ],
 };
