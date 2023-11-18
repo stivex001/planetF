@@ -24,7 +24,7 @@ export default function RootLayout({
 
         <div className="flex">
           <Sidebar />
-          <div className="pt-36 bg-slate-100 w-full md:w-11/12 xl:w-[80%] px-6">
+          <div className="pt-10 sm:pt-36 bg-slate-100 w-full md:w-11/12 xl:w-[80%] px-6">
             {children}
           </div>
           
