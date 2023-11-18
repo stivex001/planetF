@@ -5,9 +5,7 @@ import Swiper from "swiper";
 import "swiper/swiper-bundle.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-type Props = {};
-
-const MovingBanner = (props: Props) => {
+const MovingBanner = () => {
   useEffect(() => {
     const mySwiper = new Swiper(".swiper-container", {
       direction: "horizontal",

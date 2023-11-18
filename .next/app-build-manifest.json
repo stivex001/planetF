@@ -29,10 +29,23 @@
       "static/css/app/(dashboard)/user/page.css",
       "static/chunks/app/(dashboard)/user/page.js"
     ],
-    "/not-found": [
+    "/(dashboard)/user/billpayment/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
+      "static/css/app/(dashboard)/user/billpayment/page.css",
+      "static/chunks/app/(dashboard)/user/billpayment/page.js"
+    ],
+    "/(dashboard)/user/cgwallet/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(dashboard)/user/cgwallet/page.css",
+      "static/chunks/app/(dashboard)/user/cgwallet/page.js"
+    ],
+    "/(dashboard)/user/salesreport/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(dashboard)/user/salesreport/page.css",
+      "static/chunks/app/(dashboard)/user/salesreport/page.js"
     ]
   }
 }

@@ -116,7 +116,7 @@ const Navbar = (props: Props) => {
             </div>
           </div>
           {showModal && (
-            <div className=" md:hidden absolute right-6a top-14">
+            <div className=" md:hidden absolute right-6 top-14">
               <UserModal />
             </div>
           )}

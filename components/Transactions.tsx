@@ -15,11 +15,11 @@ const Transactions = (props: Props) => {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 bg-white shadow-sm transition duration-200 py-2 px-3 rounded-md cursor-pointer text-[#475569]">
               <FiFileText />
-              <span>Export to Excel</span>
+              <span className=" font-medium whitespace-nowrap">Export to Excel</span>
             </div>
             <div className="flex items-center gap-2 bg-white shadow-sm transition duration-200 py-2 px-3 rounded-md cursor-pointer text-[#475569]">
               <FiFileText />
-              <span>Export to PDF</span>
+              <span className="font-medium whitespace-nowrap">Export to PDF</span>
             </div>
           </div>
         </div>

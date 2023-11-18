@@ -23,7 +23,7 @@ const navbarLinks = [
     sublinks: [
       { id: 1, title: "Fund Wallet", url: "/user/fundwallet" },
       { id: 2, title: "Bill Payment", url: "/user/billpayment" },
-      { id: 3, title: "CD Wallet", url: "/user/cdwallet" },
+      { id: 3, title: "CG Wallet", url: "/user/cgwallet" },
       { id: 4, title: "Sales Report", url: "/user/salesreport" },
     ],
   },
