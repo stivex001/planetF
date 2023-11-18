@@ -1,7 +1,7 @@
 {
   "/(dashboard)/user/cgwallet/page": "app/(dashboard)/user/cgwallet/page.js",
   "/(dashboard)/user/salesreport/page": "app/(dashboard)/user/salesreport/page.js",
-  "/(dashboard)/user/fundwallet/page": "app/(dashboard)/user/fundwallet/page.js",
   "/(dashboard)/user/beneficiary/page": "app/(dashboard)/user/beneficiary/page.js",
-  "/(dashboard)/user/billpayment/page": "app/(dashboard)/user/billpayment/page.js"
+  "/(dashboard)/user/billpayment/page": "app/(dashboard)/user/billpayment/page.js",
+  "/(dashboard)/user/fundwallet/page": "app/(dashboard)/user/fundwallet/page.js"
 }

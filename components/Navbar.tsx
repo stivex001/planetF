@@ -7,18 +7,24 @@ import { IoIosArrowForward } from "react-icons/io";
 import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import UserModal from "./UserModal";
+import MobileNav from "./MobileNav";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
   const [showModal, setShowModal] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleModalClick = () => {
     setShowModal(!showModal);
   };
 
+  const toggleMobileMenu = () => {
+    setShowMobileMenu(!showMobileMenu);
+  };
+
   return (
-    <header>
+    <header className="relative">
       <section className="w-full md:w-[97%] h-[70px] md:h-[65px] z-[51] border-b border-white/[0.08] mx-auto px-5 py-3 md:border-b-0 relative md:fixed md:inset-x-0 md:top-0 bg-[#164e63] rounded-xl text-white">
         <nav className="flex items-center justify-between relative">
           <div className="flex items-center gap-[50px] lg:gap-[150px] ">
@@ -41,7 +47,11 @@ const Navbar = (props: Props) => {
               </Link>
             </div>
           </div>
-          <HiBars3BottomRight size={32} className="cursor-pointer md:hidden" />
+          <HiBars3BottomRight
+            size={32}
+            className="cursor-pointer md:hidden"
+            onClick={toggleMobileMenu}
+          />
           <div className="hidden md:flex items-center gap-5">
             <div className="hidden sm:flex items-center justify-between rounded-[50px] bg-slate-200 px-3 py-2">
               <input
@@ -122,6 +132,7 @@ const Navbar = (props: Props) => {
           )}
         </nav>
       </section>
+      {showMobileMenu && <MobileNav setShowMobileMenu={setShowMobileMenu} showMobileMenu={showMobileMenu} />}
     </header>
   );
 };
