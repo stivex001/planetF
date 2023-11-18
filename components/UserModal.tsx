@@ -8,9 +8,9 @@ type Props = {};
 
 const UserModal = (props: Props) => {
   return (
-    <div className="absolute right-0 top-12 bg-[#164e63] rounded-md border-transparent shadow-[opx 3px 10px #00000017] w-56 text-white">
+    <div className=" bg-[#164e63] rounded-md border-transparent shadow-[opx 3px 10px #00000017] w-56 text-white">
       <div className="flex flex-col">
-        <div className="flex flex-col p-2 ">
+        <div className="flex flex-col py-2 px-4 ">
           <h1 className="font-medium">John Doe</h1>
           <p className="text-xs text-white/70">Frontend Engineer</p>
         </div>
