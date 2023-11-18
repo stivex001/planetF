@@ -26,9 +26,9 @@ const Dashboard = () => {
   };
 
   return (
-    <main className="w-full bg-[#f1f5f9]">
-      <div className="px-5 py-4">
-        <div className="flex items-center justify-between ">
+    <main className="w-full ">
+      <div className="py-3">
+        <div className="flex items-center justify-between">
           <h2 className="text-lg font-medium text-[#1e293b]">General Report</h2>
           <div
             className="flex items-center gap-3 text-[#164e63] cursor-pointer"

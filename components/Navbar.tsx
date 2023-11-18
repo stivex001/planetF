@@ -21,7 +21,7 @@ const Navbar = (props: Props) => {
     <header>
       <section className="w-full md:w-[97%] h-[70px] md:h-[65px] z-[51] border-b border-white/[0.08] mx-auto px-5 py-3 md:border-b-0 relative md:fixed md:inset-x-0 md:top-0 bg-[#164e63] rounded-xl text-white">
         <nav className="flex items-center justify-between relative">
-          <div className="flex items-center gap-[100px]">
+          <div className="flex items-center gap-[50px] lg:gap-[150px] ">
             <Link href="/user" className="flex items-center gap-2">
               <Image
                 src="https://enigma-laravel.left4code.com/build/assets/logo-9a88cec5.svg"
@@ -29,9 +29,9 @@ const Navbar = (props: Props) => {
                 width={20}
                 height={20}
               />
-              <span className="text-white text-lg">Enigma</span>
+              <span className="hidden xl:block text-white text-lg">Enigma</span>
             </Link>
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2 ">
               <Link href="/user" className="text-sm text-white ">
                 Application
               </Link>
@@ -116,7 +116,7 @@ const Navbar = (props: Props) => {
             </div>
           </div>
           {showModal && (
-            <div className=" md:hidden absolute right-6 top-14">
+            <div className=" md:hidden absolute right-6a top-14">
               <UserModal />
             </div>
           )}
