@@ -1,8 +1,7 @@
 {
-  "/not-found": "app/not-found.js",
-  "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/(dashboard)/user/page": "app/(dashboard)/user/page.js",
   "/(dashboard)/user/promocode/page": "app/(dashboard)/user/promocode/page.js",
-  "/(dashboard)/user/upgrade/page": "app/(dashboard)/user/upgrade/page.js"
+  "/(dashboard)/user/upgrade/page": "app/(dashboard)/user/upgrade/page.js",
+  "/(dashboard)/user/beneficiary/page": "app/(dashboard)/user/beneficiary/page.js",
+  "/(dashboard)/user/commission/page": "app/(dashboard)/user/commission/page.js"
 }
