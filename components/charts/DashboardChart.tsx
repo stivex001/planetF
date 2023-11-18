@@ -1,6 +1,7 @@
 import { BsDot } from "react-icons/bs";
 import LineChart from "./lineChart";
 import DoughChart from "./doughChart";
+import CustomDatePicker from "../CustomDatePicker";
 
 type Props = {};
 
@@ -8,21 +9,12 @@ const DashboardChart = (props: Props) => {
   return (
     <div className=" w-full my-10 grid grid-rows-1 lg:grid-cols-2 gap-4 sm:-ml-2 ">
       <section className="flex flex-col">
-        <div className="flex items-center gap-4 my-1 mb-10">
-          <div className="flex gap-3 items-center">
-            <h6 className="text-sm font-semibold text-[#1C1C1C]">
-              Sales Report
-            </h6>
-          </div>
-          <p className="text-sm font-normal text-[#1C1C1C33]">|</p>
-          <div className="flex gap-3 items-center">
-            <h6 className="flex">
-              <BsDot size={20} color="#1C1C1C" />
-              <span className="text-xs font-normal text-[#1C1C1C]">
-                Current Week
-              </span>
-            </h6>
-          </div>
+        <div className="flex justify-between gap-4 my-1 mb-10 w-1/2">
+          <h6 className="text-lg font-medium text-[#1e293b] whitespace-nowrap">
+            Sales Report
+          </h6>
+
+          <CustomDatePicker />
         </div>
         <div
           className=" bg-white rounded-2xl py-5 px-3 border w-full h-[338px] "
@@ -37,7 +29,7 @@ const DashboardChart = (props: Props) => {
       <div className="flex flex-col sm:flex-row gap-4  ">
         <section className=" flex flex-col  sm:w-1/2">
           <div className="mb-10">
-            <h6 className="text-sm font-semibold text-[#1C1C1C]">
+            <h6 className="text-lg font-medium text-[#1e293b]">
               Weekly Top Seller
             </h6>
           </div>
@@ -52,7 +44,7 @@ const DashboardChart = (props: Props) => {
         </section>
         <section className=" flex flex-col sm:w-1/2 ">
           <div className="mb-10">
-            <h6 className="text-sm font-semibold text-[#1C1C1C]">
+            <h6 className="text-lg font-medium text-[#1e293b]">
               Weekly Top Seller
             </h6>
           </div>

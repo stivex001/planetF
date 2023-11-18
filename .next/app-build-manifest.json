@@ -12,35 +12,6 @@
       "static/css/app/(dashboard)/user/layout.css",
       "static/chunks/app/(dashboard)/user/layout.js"
     ],
-    "/(dashboard)/user/fundwallet/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/fundwallet/page.css",
-      "static/chunks/app/(dashboard)/user/fundwallet/page.js"
-    ],
-    "/(dashboard)/user/beneficiary/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/user/beneficiary/page.js"
-    ],
-    "/(dashboard)/user/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/page.css",
-      "static/chunks/app/(dashboard)/user/page.js"
-    ],
-    "/(dashboard)/user/billpayment/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/billpayment/page.css",
-      "static/chunks/app/(dashboard)/user/billpayment/page.js"
-    ],
-    "/(dashboard)/user/cgwallet/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/cgwallet/page.css",
-      "static/chunks/app/(dashboard)/user/cgwallet/page.js"
-    ],
     "/(dashboard)/user/salesreport/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",

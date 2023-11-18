@@ -1,18 +1,18 @@
 "use client";
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const data = {
-  labels: ["United States", "Canada", "Other", "Mexico"],
+  labels: ["31 - 50 Years old", "17 - 30 Years old", ">= 50 Years old"],
   datasets: [
     {
-      label: "# of Votes",
-      data: [38.6, 22.5, 8.1, 30.8],
-      backgroundColor: ["#1C1C1C", "#05CE91", "#B1E3FF", "#95A4FC"],
-      borderColor: ["#1C1C1C", "#05CE91", "#B1E3FF", "#95A4FC"],
+      label: "Years old",
+      data: [33, 62, 10],
+      backgroundColor: ["#dd841e", "#2d5f72", "#dd841e"],
+      borderColor: ["#dd841e", "#2d5f72", "#dd841e"],
       borderWidth: 1,
       weight: 10,
       spacing: 10,
@@ -27,7 +27,7 @@ export const options = {
   plugins: {
     legend: {
       display: true,
-      position: "right" as const,
+      position: "bottom" as const,
     },
     title: {
       display: false,
@@ -44,7 +44,7 @@ export const options = {
 type Props = {};
 
 function doughChart(props: Props) {
-  return <Doughnut data={data} options={options} />;
+  return <Pie data={data} options={options} />;
 }
 
 export default doughChart;
