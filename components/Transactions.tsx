@@ -8,8 +8,8 @@ const Transactions = (props: Props) => {
   return (
     <section className=" py-5 px-5 my-10">
       <div>
-        <div className="flex items-center justify-between">
-          <h1 className="bg-[#164e63] text-white px-5 text-lg font-medium rounded-sm">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:items-center justify-between">
+          <h1 className="bg-[#164e63] w-fit text-white px-5 text-lg font-medium rounded-sm">
             Transactions
           </h1>
           <div className="flex items-center gap-3">

@@ -181,7 +181,7 @@ const Tables = (props: Props) => {
         <tbody className="bg-white divide-y divide-gray-200">
           {currentItems.map((row) => (
             <tr key={row.id}>
-              <td className="px-3 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
+              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
                 {row.id}
               </td>
               <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">

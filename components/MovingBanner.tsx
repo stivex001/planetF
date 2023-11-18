@@ -28,10 +28,10 @@ const MovingBanner = (props: Props) => {
   }, []);
 
   return (
-    <section className="py-5 px-5 my-4">
+    <section className="py-5 px-5 my-7">
       <div>
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-medium">Important Note</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-medium text-[#1e293b]">Important Note</h2>
           <div className="flex items-center gap-2">
             <IoIosArrowBack
               size={40}
@@ -47,10 +47,10 @@ const MovingBanner = (props: Props) => {
         <div className="swiper-container overflow-x-auto">
           <div className="swiper-wrapper">
             <div className="swiper-slide bg-white shadow-xl p-7 cursor-pointer duration-200">
-              <h1 className="text-base font-medium">
+              <h1 className="text-base font-medium text-[#1e293b] mb-3">
                 Lorem Ipsum is simply dummy text
               </h1>
-              <span className="text-slate-400 mt-1">20 hours ago</span>
+              <span className="text-slate-400 ">20 hours ago</span>
               <p className="text-slate-500 mt-1 text-justify">
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry. Lorem Ipsum has been the industry's standard dummy

@@ -137,12 +137,12 @@ const SubNavs = (props: Props) => {
 
             {/* Render sublinks if they exist */}
             {link.sublinks && activeLink === link.title && (
-              <ul className=" mt-2 p-2 bg-slate-100 border border-gray-200 rounded shadow flex flex-col gap-4  ">
+              <ul className=" mt-2 p-3 bg-slate-100 border border-gray-200 rounded shadow flex flex-col gap-4   ">
                 {link.sublinks.map((sublink) => (
                   <li key={sublink.id}>
                     <Link href={`${sublink.url}`} className="flex items-center  justify-center xl:justify-start gap-2">
                       <FiActivity size={24} className="-ml-3 xl:ml-0" />
-                      <span className="hidden xl:flex text-sm font-medium text-gray-800 hover:text-[#164e63]">
+                      <span className="hidden xl:flex text-sm font-medium text-[#164e63] hover:text-[#164e63]">
                         {sublink.title}
                       </span>
                     </Link>
