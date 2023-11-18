@@ -6,6 +6,12 @@ body{
     background-color: #e2e8f0;
 }
 
+@media screen and (max-width: 768px) {
+  body{
+    background-color: #164e63;
+}
+}
+
 .scrollable-container {
     overflow: hidden;
   }

@@ -1,3 +1,47 @@
 {
-  "pages": {}
+  "pages": {
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/(dashboard)/user/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(dashboard)/user/page.css",
+      "static/chunks/app/(dashboard)/user/page.js"
+    ],
+    "/(dashboard)/user/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(dashboard)/user/layout.css",
+      "static/chunks/app/(dashboard)/user/layout.js"
+    ],
+    "/(dashboard)/user/beneficiary/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/user/beneficiary/page.js"
+    ],
+    "/(dashboard)/user/commission/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/user/commission/page.js"
+    ],
+    "/(dashboard)/user/promocode/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/user/promocode/page.js"
+    ],
+    "/(dashboard)/user/upgrade/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/user/upgrade/page.js"
+    ]
+  }
 }
