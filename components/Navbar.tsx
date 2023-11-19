@@ -25,7 +25,7 @@ const Navbar = (props: Props) => {
 
   return (
     <header className="relative">
-      <section className="w-full md:w-[97%] h-[70px] md:h-[65px] z-[51] border-b border-white/[0.08] mx-auto px-5 py-3 md:border-b-0 relative md:fixed md:inset-x-0 md:top-0 bg-[#164e63] rounded-xl text-white">
+      <section className="w-full md:w-[97%] h-[70px] md:h-[65px] z-[10] border-b border-white/[0.08] mx-auto px-5 py-3 md:border-b-0  fixed inset-x-0 top-0 bg-[#164e63] rounded-xl text-white">
         <nav className="flex items-center justify-between relative">
           <div className="flex items-center gap-[50px] lg:gap-[150px] ">
             <Link href="/user" className="flex items-center gap-2">
@@ -38,11 +38,11 @@ const Navbar = (props: Props) => {
               <span className="hidden xl:block text-white text-lg">Enigma</span>
             </Link>
             <div className="hidden md:flex items-center gap-2 ">
-              <Link href="/user" className="text-sm text-white ">
+              <Link href="/user/fundwallet" className="text-sm text-white ">
                 Application
               </Link>
               <IoIosArrowForward className="text-white/70 cursor-pointer" />
-              <Link href="/user" className="text-sm text-white/70 ">
+              <Link href="/user/fundwallet" className="text-sm text-white/70 ">
                 Dashboard
               </Link>
             </div>
@@ -85,7 +85,7 @@ const Navbar = (props: Props) => {
         </nav>
       </section>
 
-      <section className="w-full md:hidden mt-4  md:w-[97%] h-[70px] md:h-[65px] z-[51] border-b border-white/[0.08] mx-auto px-3 py-3 md:border-b-0 relative bg-[#164e63] rounded-xl text-white">
+      <section className="w-full md:hidden mt-20  md:w-[97%] h-[70px] md:h-[65px] z-[51] border-b border-white/[0.08]  mx-auto px-3 py-3 md:border-b-0 relative bg-[#164e63] rounded-xl text-white">
         <nav className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/user" className="text-sm text-white ">
