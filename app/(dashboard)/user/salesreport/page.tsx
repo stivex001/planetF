@@ -11,7 +11,7 @@ const SalesReport = (props: Props) => {
   return (
     <main className="w-full">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-medium text-[#1e293b]">General Report</h2>
+        <h2 className="text-lg font-medium text-[#1e293b]">Sales Report</h2>
         <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
           <FiRefreshCcw size={16} />
           <span>Reload Data</span>

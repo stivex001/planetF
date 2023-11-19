@@ -1,11 +1,24 @@
-import React from 'react'
+import MovingBanner from "@/components/MovingBanner";
+import Transactions from "@/components/Transactions";
+import React from "react";
+import { FiRefreshCcw } from "react-icons/fi";
 
-type Props = {}
+type Props = {};
 
 const Beneficiary = (props: Props) => {
   return (
-    <div>Beneficiary</div>
-  )
-}
+    <main>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-medium text-[#1e293b]">Saved Beneficiary</h2>
+        <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
+          <FiRefreshCcw size={16} />
+          <span>Reload Data</span>
+        </div>
+      </div>
+      <MovingBanner />
+      <Transactions />
+    </main>
+  );
+};
 
-export default Beneficiary
+export default Beneficiary;
