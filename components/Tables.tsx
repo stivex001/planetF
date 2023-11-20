@@ -6,7 +6,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 // Sample data
 const data = [
   {
-    id: 1,
+    id: Date.now(),
     service: "MTN",
     plan: "20GB",
     amount: "N5000",
@@ -19,7 +19,7 @@ const data = [
     action: "View",
   },
   {
-    id: 2,
+    id: Date.now(),
     service: "MTN",
     plan: "20GB",
     amount: "N5000",
@@ -32,7 +32,7 @@ const data = [
     action: "View",
   },
   {
-    id: 3,
+    id: Date.now(),
     service: "MTN",
     plan: "20GB",
     amount: "N5000",
@@ -45,7 +45,7 @@ const data = [
     action: "View",
   },
   {
-    id: 4,
+    id: Date.now(),
     service: "MTN",
     plan: "20GB",
     amount: "N5000",
@@ -58,7 +58,7 @@ const data = [
     action: "View",
   },
   {
-    id: 5,
+    id: Date.now(),
     service: "MTN",
     plan: "20GB",
     amount: "N5000",
@@ -71,7 +71,7 @@ const data = [
     action: "View",
   },
   {
-    id: 6,
+    id: Date.now(),
     service: "MTN",
     plan: "20GB",
     amount: "N5000",
@@ -107,7 +107,7 @@ const Tables = (props: Props) => {
 
   return (
     <div className="my-10 overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 scrollable-container table-auto border-collapse">
+      <table className="min-w-full divide-y divide-gray-200 scrollable-container">
         <thead className="bg-[#164e63] text-white">
           <tr>
             <th
