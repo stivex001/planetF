@@ -107,7 +107,7 @@ const Tables = (props: Props) => {
 
   return (
     <div className="my-10 overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 scrollable-container">
+      <table className="min-w-full divide-y divide-gray-200 scrollable-container table-auto border-collapse">
         <thead className="bg-[#164e63] text-white">
           <tr>
             <th
