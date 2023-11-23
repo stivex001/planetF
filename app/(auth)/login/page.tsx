@@ -10,19 +10,16 @@ type Props = {};
 const Login = (props: Props) => {
   const router = useRouter();
 
-  const handleLoginForm = (e:React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleLoginForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    router.push('/user')
-  }
+    router.push("/user");
+  };
 
   return (
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
-      <div className="bg-[#164e63] hidden lg:block h-screen flex-1 relative rounded-r-full">
+      <div className="bg-[url(/eeee.svg)] bg-no-repeat bg-contain overflow-x-hidden hidden lg:block h-screen flex-1 relative ">
         <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center ">
-          {/* <div className="bg-red-500 absolute top-0 right-0 w-full h-[5%] border-t-[50%]" />
-          <div className="bg-[#d0dce0] absolute bottom-0 right-0 w-full h-[2%]" /> */}
-
           <div className="flex items-center gap-2">
             <Image
               src="https://enigma-laravel.left4code.com/build/assets/logo-9a88cec5.svg"
@@ -56,7 +53,10 @@ const Login = (props: Props) => {
             Sign In
           </h2>
 
-          <form className="mt-8 flex flex-col gap-4 " onSubmit={handleLoginForm}>
+          <form
+            className="mt-8 flex flex-col gap-4 "
+            onSubmit={handleLoginForm}
+          >
             <input
               type="email"
               placeholder="email"
@@ -75,7 +75,10 @@ const Login = (props: Props) => {
               <Link href="#">Forgot Password?</Link>
             </div>
             <div className="flex items-center gap-3 mb-4 my-2">
-              <button type="submit" className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3">
+              <button
+                type="submit"
+                className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
+              >
                 Login
               </button>
               <Link

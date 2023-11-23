@@ -7,7 +7,7 @@ type Props = {};
 const Register = (props: Props) => {
   return (
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
-      <div className="bg-[#164e63] hidden lg:block h-screen flex-1 rounded-r-full">
+      <div className="bg-[url(/eeee.svg)] bg-no-repeat bg-contain overflow-x-hidden hidden lg:block h-screen flex-1 ">
         <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center">
           <div className="flex items-center gap-2">
             <Image
