@@ -63,7 +63,9 @@ const Register = (props: Props) => {
               placeholder="Password"
               className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
             />
-            <span className="text-[#164e63] text-sm">What is a secure password?</span>
+            <span className="text-[#164e63] text-sm">
+              What is a secure password?
+            </span>
             <input
               type="password"
               placeholder="Password Confirmation"
@@ -77,7 +79,9 @@ const Register = (props: Props) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <input type="checkbox" name="" id="" />{" "}
-                <span className="text-sm text-[#164e63]">I agree to Enigma Privacy Policy.</span>
+                <span className="text-sm text-[#164e63]">
+                  I agree to Enigma Privacy Policy.
+                </span>
               </div>
               <Link href="#" className=" whitespace-nowrap text-[#164e63]">
                 Need Support?
