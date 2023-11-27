@@ -1,7 +1,6 @@
 import { http } from "@/service/http";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-// import { http } from "@/service/http";
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -25,10 +24,9 @@ export const authOptions: NextAuthOptions = {
         try {
           const user = await http.httpLoginUser({ email, password });
           if (user) {
-            // Set the token in the token object
             return {
               ...user.user,
-              accessToken: user.token, // Assuming the token property in the user object
+              accessToken: user.token,
             };
           }
         } catch (error: any) {
