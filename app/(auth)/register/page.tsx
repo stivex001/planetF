@@ -1,10 +1,56 @@
+import { useSignup } from "@/hooks/auth/useSignUp";
+import { SignUpFormValues, signUpSchema } from "@/models/auth";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 type Props = {};
 
 const Register = (props: Props) => {
+  const router = useRouter();
+
+  const form = useForm<SignUpFormValues>({
+    defaultValues: {
+      user_name: "",
+      phoneno: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    mode: "all",
+    resolver: yupResolver(signUpSchema),
+  });
+
+  const { mutate: signUp, isPending } = useSignup();
+
+  const handleSignUp = useCallback(
+    (values: SignUpFormValues) => {
+      signUp(values, {
+        onError: (error: unknown) => {
+          if (error instanceof Error) {
+            console.log(error?.message);
+            toast.error(error?.message);
+          }
+        },
+        onSuccess: () => {
+          toast.success("Account Created successfully");
+          router.push("/auth/signin");
+        },
+      });
+    },
+    [signUp]
+  );
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = form;
+
   return (
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
       <div className="bg-[url(/eeee.svg)] bg-no-repeat bg-contain overflow-x-hidden hidden lg:block h-screen flex-1 ">
@@ -42,7 +88,10 @@ const Register = (props: Props) => {
             Sign Up
           </h2>
 
-          <form className="mt-8 flex flex-col gap-4 ">
+          <form
+            className="mt-8 flex flex-col gap-4 "
+            onSubmit={handleSubmit(handleSignUp)}
+          >
             <input
               type="text"
               placeholder="First Name"
