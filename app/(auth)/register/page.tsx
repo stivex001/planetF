@@ -1,9 +1,11 @@
+"use client"
+
 import { useSignup } from "@/hooks/auth/useSignUp";
 import { SignUpFormValues, signUpSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -94,32 +96,63 @@ const Register = (props: Props) => {
           >
             <input
               type="text"
-              placeholder="First Name"
+              placeholder="UserName"
+              {...register("user_name")}
               className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
-            <input
-              type="text"
-              placeholder="Last Name"
-              className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
-            />
+            {errors?.user_name && (
+              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                  !
+                </div>
+                <p>{errors.message}</p>
+              </div>
+            )}
             <input
               type="email"
               placeholder="email"
+              {...register("email")}
               className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
+            {errors?.email && (
+              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                  !
+                </div>
+                <p>{errors.message}</p>
+              </div>
+            )}
             <input
               type="password"
               placeholder="Password"
+              {...register("password")}
               className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
             />
+            {errors?.password && (
+              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                  !
+                </div>
+                <p>{errors.message}</p>
+              </div>
+            )}
             <span className="text-[#164e63] text-sm">
               What is a secure password?
             </span>
             <input
               type="password"
               placeholder="Password Confirmation"
+              {...register("confirmPassword")}
               className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
             />
+            {errors?.confirmPassword && (
+              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                  !
+                </div>
+                <p>{errors.message}</p>
+              </div>
+            )}
             <input
               type="text"
               placeholder="Referal (optional)"
