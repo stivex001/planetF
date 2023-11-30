@@ -105,7 +105,7 @@ const Register = (props: Props) => {
                 <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
                   !
                 </div>
-                <p>{errors.message}</p>
+                <p>{errors?.user_name?.message}</p>
               </div>
             )}
             <input
@@ -119,7 +119,7 @@ const Register = (props: Props) => {
                 <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
                   !
                 </div>
-                <p>{errors.message}</p>
+                <p>{errors?.email?.message}</p>
               </div>
             )}
             <input
@@ -133,7 +133,7 @@ const Register = (props: Props) => {
                 <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
                   !
                 </div>
-                <p>{errors.message}</p>
+                <p>{errors?.password?.message}</p>
               </div>
             )}
             <span className="text-[#164e63] text-sm">
@@ -150,7 +150,7 @@ const Register = (props: Props) => {
                 <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
                   !
                 </div>
-                <p>{errors.message}</p>
+                <p>{errors?.confirmPassword?.message}</p>
               </div>
             )}
             <input
