@@ -12,7 +12,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import clsx from "clsx";
 
-
 const Register = () => {
   const router = useRouter();
 
@@ -40,9 +39,10 @@ const Register = () => {
             toast.error(error?.message);
           }
         },
-        onSuccess: () => {
-          toast.success("Account Created successfully");
-          router.push("/auth/signin");
+        onSuccess: (response: any) => {
+          console.log(response?.data);
+          toast.success(response?.data?.message);
+          router.push("/user");
         },
       });
     },
@@ -176,12 +176,8 @@ const Register = () => {
             <div className="flex items-center gap-3 mb-4 my-2">
               <button
                 type="submit"
-                className={clsx({
-                  "transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3":
-                    true,
-                  "opacity-70 cursor-not-allowed": isPending,
-                })}
                 disabled={isPending}
+                className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
               >
                 {isPending ? <Spinner /> : "Register"}
               </button>

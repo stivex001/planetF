@@ -1,6 +1,5 @@
 import { SignUpFormValues } from "@/models/auth";
 import axios, { AxiosError } from "axios";
-import { toast } from "react-toastify";
 
 const BASE_URL = process.env.NEXT_PUBLIC_PLANETF_API;
 
@@ -25,10 +24,9 @@ export const signUp = async ({
     if (response?.status === 200) {
       return {
         success: true,
-        data: response?.data?.data,
+        data: response?.data,
       };
     } else {
-      toast.error(response?.data?.message);
       throw new Error(response.data.message);
     }
   } catch (error: unknown) {
