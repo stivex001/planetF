@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useSignup } from "@/hooks/auth/useSignUp";
 import { SignUpFormValues, signUpSchema } from "@/models/auth";
@@ -22,12 +22,19 @@ const Register = (props: Props) => {
       email: "",
       password: "",
       confirmPassword: "",
+      referral: "",
     },
     mode: "all",
     resolver: yupResolver(signUpSchema),
   });
 
   const { mutate: signUp, isPending } = useSignup();
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = form;
 
   const handleSignUp = useCallback(
     (values: SignUpFormValues) => {
@@ -46,12 +53,6 @@ const Register = (props: Props) => {
     },
     [signUp]
   );
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    register,
-  } = form;
 
   return (
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
@@ -92,7 +93,11 @@ const Register = (props: Props) => {
 
           <form
             className="mt-8 flex flex-col gap-4 "
-            onSubmit={handleSubmit(handleSignUp)}
+            onSubmit={(e) => {
+              e.preventDefault();
+              alert("register");
+              handleSubmit(handleSignUp);
+            }}
           >
             <input
               type="text"
@@ -156,6 +161,7 @@ const Register = (props: Props) => {
             <input
               type="text"
               placeholder="Referal (optional)"
+              {...register("referral")}
               className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
             />
             <div className="flex items-center justify-between">
@@ -172,7 +178,7 @@ const Register = (props: Props) => {
 
             <div className="flex items-center gap-3 mb-4 my-2">
               <button className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3">
-                Register
+                {isPending ? "Registering..." : "Register"}
               </button>
               <Link
                 href="/login"

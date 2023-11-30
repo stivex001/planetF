@@ -9,19 +9,23 @@ export const signUp = async ({
   phoneno,
   email,
   password,
+  referral,
 }: SignUpFormValues) => {
   try {
-    const response = await axios.post(`${BASE_URL}/register`, {
+    const response = await axios.post(`${BASE_URL}/signup`, {
       user_name,
       email,
       password,
       phoneno,
+      referral,
     });
 
-    if (response.status === 200) {
+    console.log(response, "ressssss");
+
+    if (response?.status === 200) {
       return {
         success: true,
-        data: response.data?.data,
+        data: response?.data?.data,
       };
     } else {
       toast.error(response?.data?.message);

@@ -11,6 +11,7 @@ export const signUpSchema = yup.object().shape({
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("password"), undefined], "Passwords must match"),
+  referral: yup.string(),
 });
 
 export const signInSchema = yup.object().shape({

@@ -38,15 +38,15 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  callbacks: {
-    async session({ session, token }) {
-      return {
-        ...session,
-        ...token,
-      };
-    },
-    async jwt({ token, user, session }) {
-      return { ...token, ...user, ...session };
-    },
-  },
+  // callbacks: {
+  //   async session({ session, token }) {
+  //     return {
+  //       ...session,
+  //       ...token,
+  //     };
+  //   },
+  //   async jwt({ token, user, session }) {
+  //     return { ...token, ...user, ...session };
+  //   },
+  // },
 };
