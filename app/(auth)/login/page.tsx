@@ -1,20 +1,52 @@
 "use client";
 
+import { Spinner } from "@/components/Spinner";
+import { useEmailSignin } from "@/hooks/auth/useEmailSignin";
+import { SigninFormValues, signInSchema } from "@/models/auth";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 type Props = {};
 
 const Login = (props: Props) => {
   const router = useRouter();
 
-  const handleLoginForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const form = useForm<SigninFormValues>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "all",
+    resolver: yupResolver(signInSchema),
+  });
 
-    router.push("/user");
-  };
+  const { mutate: loginWithEmail, isPending } = useEmailSignin();
+
+  const handleSignin = useCallback(
+    (values: SigninFormValues) => {
+      loginWithEmail(values, {
+        onError: (error) => {
+          console.log(error);
+        },
+        onSuccess: (response: object) => {
+          toast.success("Logged in successfully");
+          router.push("/user");
+        },
+      });
+    },
+    [loginWithEmail]
+  );
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = form;
 
   return (
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
@@ -55,18 +87,36 @@ const Login = (props: Props) => {
 
           <form
             className="mt-8 flex flex-col gap-4 "
-            onSubmit={handleLoginForm}
+            onSubmit={handleSubmit(handleSignin)}
           >
             <input
               type="email"
               placeholder="email"
+              {...register("email")}
               className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
+            {errors?.email && (
+              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                  !
+                </div>
+                <p>{errors?.email?.message}</p>
+              </div>
+            )}
             <input
               type="password"
-              placeholder="email"
+              placeholder="password"
+              {...register("password")}
               className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
             />
+            {errors?.password && (
+              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                  !
+                </div>
+                <p>{errors?.password?.message}</p>
+              </div>
+            )}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <input type="checkbox" name="" id="" />
@@ -77,9 +127,10 @@ const Login = (props: Props) => {
             <div className="flex items-center gap-3 mb-4 my-2">
               <button
                 type="submit"
+                disabled={isPending}
                 className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
               >
-                Login
+                {isPending ? <Spinner /> : "Login"}
               </button>
               <Link
                 href="/register"

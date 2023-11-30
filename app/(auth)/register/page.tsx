@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner } from "@/components/Spinner";
 import { useSignup } from "@/hooks/auth/useSignUp";
 import { SignUpFormValues, signUpSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,10 +10,10 @@ import { useRouter } from "next/navigation";
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import clsx from "clsx";
 
-type Props = {};
 
-const Register = (props: Props) => {
+const Register = () => {
   const router = useRouter();
 
   const form = useForm<SignUpFormValues>({
@@ -29,12 +30,6 @@ const Register = (props: Props) => {
   });
 
   const { mutate: signUp, isPending } = useSignup();
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    register,
-  } = form;
 
   const handleSignUp = useCallback(
     (values: SignUpFormValues) => {
@@ -53,6 +48,12 @@ const Register = (props: Props) => {
     },
     [signUp]
   );
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = form;
 
   return (
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
@@ -93,11 +94,7 @@ const Register = (props: Props) => {
 
           <form
             className="mt-8 flex flex-col gap-4 "
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert("register");
-              handleSubmit(handleSignUp);
-            }}
+            onSubmit={handleSubmit(handleSignUp)}
           >
             <input
               type="text"
@@ -177,8 +174,16 @@ const Register = (props: Props) => {
             </div>
 
             <div className="flex items-center gap-3 mb-4 my-2">
-              <button className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3">
-                {isPending ? "Registering..." : "Register"}
+              <button
+                type="submit"
+                className={clsx({
+                  "transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3":
+                    true,
+                  "opacity-70 cursor-not-allowed": isPending,
+                })}
+                disabled={isPending}
+              >
+                {isPending ? <Spinner /> : "Register"}
               </button>
               <Link
                 href="/login"
