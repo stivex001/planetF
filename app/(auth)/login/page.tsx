@@ -18,7 +18,7 @@ const Login = (props: Props) => {
 
   const form = useForm<SigninFormValues>({
     defaultValues: {
-      email: "",
+      user_name: "",
       password: "",
     },
     mode: "all",
@@ -33,8 +33,9 @@ const Login = (props: Props) => {
         onError: (error) => {
           console.log(error);
         },
-        onSuccess: (response: object) => {
-          toast.success("Logged in successfully");
+        onSuccess: (response: any) => {
+          console.log(response?.data);
+          toast.success(response?.data?.message);
           router.push("/user");
         },
       });
@@ -90,17 +91,17 @@ const Login = (props: Props) => {
             onSubmit={handleSubmit(handleSignin)}
           >
             <input
-              type="email"
-              placeholder="email"
-              {...register("email")}
+              type="text"
+              placeholder="username"
+              {...register("user_name")}
               className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
-            {errors?.email && (
+            {errors?.user_name && (
               <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
                 <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
                   !
                 </div>
-                <p>{errors?.email?.message}</p>
+                <p>{errors?.user_name?.message}</p>
               </div>
             )}
             <input

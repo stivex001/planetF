@@ -1,24 +1,21 @@
 import { SigninFormValues } from "@/models/auth";
 import axios, { AxiosError } from "axios";
-import { toast } from "react-toastify";
 
 const BASE_URL = process.env.NEXT_PUBLIC_PLANETF_API;
 
 export const signinWithEmail = async ({
-  email,
+  user_name,
   password,
 }: SigninFormValues) => {
   try {
     const response = await axios.post(`${BASE_URL}/login`, {
-      email,
+      user_name,
       password,
     });
-    console.log(response);
-    if (response.status === 201) {
-      toast.success(response?.data?.data);
-      return { success: true, data: response.data?.data };
+    console.log(response.data);
+    if (response.status === 200) {
+      return { success: true, data: response?.data };
     } else {
-      toast.error(response.data.message);
       throw new Error(response.data.message);
     }
   } catch (error: unknown) {
