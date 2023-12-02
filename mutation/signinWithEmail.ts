@@ -4,6 +4,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 const BASE_URL = process.env.NEXT_PUBLIC_PLANETF_API;
 
 interface ApiResponseType {
+  token: string;
   message: string | undefined;
   success: number | undefined;
   data: any;
@@ -23,6 +24,7 @@ export const signinWithEmail = async ({
     );
 
     if (response?.data?.success === 1) {
+      localStorage.setItem("token", response?.data?.token);
       return { success: true, data: response?.data };
     } else {
       throw new Error(response?.data?.message);

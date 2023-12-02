@@ -8,12 +8,17 @@ import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import UserModal from "./UserModal";
 import MobileNav from "./MobileNav";
+import { useUser } from "@/context/user-context";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  const { user, loading } = useUser();
+
+  console.log(user?.user, "userrrr");
 
   const handleModalClick = () => {
     setShowModal(!showModal);
@@ -70,7 +75,10 @@ const Navbar = (props: Props) => {
               onClick={handleModalClick}
             >
               <Image
-                src="https://avatars.githubusercontent.com/u/87942124?v=4"
+                src={
+                  user?.user?.photo ||
+                  "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png"
+                }
                 alt=""
                 className="rounded-full"
                 fill={true}
@@ -132,7 +140,12 @@ const Navbar = (props: Props) => {
           )}
         </nav>
       </section>
-      {showMobileMenu && <MobileNav setShowMobileMenu={setShowMobileMenu} showMobileMenu={showMobileMenu} />}
+      {showMobileMenu && (
+        <MobileNav
+          setShowMobileMenu={setShowMobileMenu}
+          showMobileMenu={showMobileMenu}
+        />
+      )}
     </header>
   );
 };
