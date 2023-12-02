@@ -30,8 +30,9 @@ const Login = (props: Props) => {
   const handleSignin = useCallback(
     (values: SigninFormValues) => {
       loginWithEmail(values, {
-        onError: (error) => {
-          console.log(error);
+        onError: (error: any) => {
+          console.log(error.message);
+          toast.error(error?.message);
         },
         onSuccess: (response: any) => {
           console.log(response?.data);
