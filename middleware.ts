@@ -13,7 +13,7 @@ export const middleware = async (request: NextRequest) => {
   const user = JSON.parse(request.cookies.get("user")?.value || "{}");
 
   if (token && (pathname === "/" || pathname === "/login")) {
-    return redirect(request, `/profile`);
+    return redirect(request, `/user`);
   }
 
   if (!token && pathname !== "/register") {

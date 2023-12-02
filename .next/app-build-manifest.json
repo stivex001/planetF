@@ -1,37 +1,20 @@
 {
   "pages": {
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/(dashboard)/user/layout": [
+    "/(auth)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/layout.css",
-      "static/chunks/app/(dashboard)/user/layout.js"
-    ],
-    "/(dashboard)/user/fundwallet/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/fundwallet/page.css",
-      "static/chunks/app/(dashboard)/user/fundwallet/page.js"
+      "static/chunks/app/(auth)/layout.js"
     ],
     "/(auth)/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(auth)/login/page.js"
-    ],
-    "/(auth)/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/layout.js"
     ],
     "/(dashboard)/user/page": [
       "static/chunks/webpack.js",
@@ -39,15 +22,11 @@
       "static/css/app/(dashboard)/user/page.css",
       "static/chunks/app/(dashboard)/user/page.js"
     ],
-    "/(auth)/register/page": [
+    "/(dashboard)/user/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/register/page.js"
-    ],
-    "/not-found": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
+      "static/css/app/(dashboard)/user/layout.css",
+      "static/chunks/app/(dashboard)/user/layout.js"
     ]
   }
 }
