@@ -31,11 +31,7 @@ export const UserProvider = ({ children }: UserDataProps) => {
       try {
         const token = localStorage.getItem("token");
 
-        console.log(token);
-        
-
         if (!token) {
-          toast.error("Authorization token not found");
           setLoading(false);
           return;
         }
@@ -51,8 +47,8 @@ export const UserProvider = ({ children }: UserDataProps) => {
 
         setUser(response?.data?.data);
       } catch (error: unknown) {
-        console.log(error, 'errr');
-        
+        console.log(error, "errr");
+
         if (error instanceof AxiosError) {
           throw new Error(error?.response?.data?.error?.message);
           setLoading(false);

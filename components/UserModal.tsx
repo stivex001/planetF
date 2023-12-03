@@ -3,16 +3,36 @@ import React from "react";
 import { IoMdHelpCircleOutline, IoMdPerson } from "react-icons/io";
 import { FaEdit, FaLock } from "react-icons/fa";
 import { LuToggleRight } from "react-icons/lu";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
-type Props = {};
+type Props = {
+  user: {
+    user: {
+      user_name: string;
+      status: string;
+    };
+  };
+};
 
-const UserModal = (props: Props) => {
+const UserModal = ({ user }: Props) => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    toast.success("You have successfully Loggedout");
+    localStorage.removeItem("token");
+
+    setTimeout(() => {
+      router.push("/login");
+    }, 2000);
+  };
+
   return (
     <div className=" bg-[#164e63] rounded-md border-transparent shadow-[opx 3px 10px #00000017] w-56 text-white">
       <div className="flex flex-col">
         <div className="flex flex-col py-2 px-4 ">
-          <h1 className="font-medium">John Doe</h1>
-          <p className="text-xs text-white/70">Frontend Engineer</p>
+          <h1 className="font-medium">{user?.user?.user_name}</h1>
+          <p className="text-xs text-white/70">{user?.user?.status}</p>
         </div>
         <hr className="my-2 bg-white/5" />
         <ul className="flex flex-col gap-1 p-2">
@@ -46,13 +66,13 @@ const UserModal = (props: Props) => {
           </Link>
         </ul>
         <hr className="my-2 bg-white/5" />
-        <Link
-          href="#"
-          className="flex items-center transition duration-300 ease-in-out rounded-md hover:bg-white/5 gap-2 p-2 ml-2 mb-2"
+        <p
+          onClick={handleLogout}
+          className="flex items-center transition duration-300 ease-in-out rounded-md hover:bg-white/5 gap-2 p-2 ml-2 mb-2 cursor-pointer"
         >
           <LuToggleRight size={24} className="text-white/70" />
           <span className="font-medium">Logout</span>
-        </Link>
+        </p>
       </div>
     </div>
   );

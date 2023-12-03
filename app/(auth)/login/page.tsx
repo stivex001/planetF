@@ -37,7 +37,7 @@ const Login = (props: Props) => {
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data?.message);
-          router.push("/user");
+          router.push("/user/fundwallet");
         },
       });
     },
