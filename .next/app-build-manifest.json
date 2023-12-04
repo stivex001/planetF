@@ -21,10 +21,22 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(auth)/register/page.js"
     ],
-    "/not-found": [
+    "/(auth)/signup/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
+      "static/chunks/app/(auth)/signup/page.js"
+    ],
+    "/(dashboard)/user/fundwallet/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(dashboard)/user/fundwallet/page.css",
+      "static/chunks/app/(dashboard)/user/fundwallet/page.js"
+    ],
+    "/(dashboard)/user/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(dashboard)/user/layout.css",
+      "static/chunks/app/(dashboard)/user/layout.js"
     ]
   }
 }

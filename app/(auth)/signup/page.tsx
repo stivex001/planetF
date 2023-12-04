@@ -1,64 +1,74 @@
 "use client";
 
 import { Spinner } from "@/components/Spinner";
-import { useSignup } from "@/hooks/auth/useSignUp";
-import { SignUpFormValues, signUpSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useCallback } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import clsx from "clsx";
+import * as yup from "yup";
 
-const Register = () => {
-  const router = useRouter();
+const BASE_URL = process.env.NEXT_PUBLIC_PLANETF_API;
 
-  const form = useForm<SignUpFormValues>({
-    defaultValues: {
-      user_name: "",
-      phoneno: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      referral: "",
-    },
-    mode: "all",
-    resolver: yupResolver(signUpSchema),
+type Props = {};
+
+const page = (props: Props) => {
+  const [formData, setFormData] = useState({
+    user_name: "",
+    phoneno: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    referral: "",
   });
 
-  const { mutate: signUpUser, isPending } = useSignup();
+  const handleInputChange = (e: { target: { name: any; value: any } }) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-  const handleSignUp = useCallback(
-    (values: SignUpFormValues) => {
-      signUpUser(values, {
-        onError: (error: unknown) => {
-          if (error instanceof Error) {
-            console.log(error?.message);
-            toast.error(error?.message);
-          }
-        },
-        onSuccess: (response: any) => {
-          console.log(response?.data);
-          toast.success(response?.data?.message);
-          router.push("/user/fundwallet");
-        },
+  const handleSignUp = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    try {
+      // Show a loading spinner or disable the button if needed
+      // e.g., setIsPending(true);
+
+      const response = await axios.post(`${BASE_URL}/signup`, formData);
+
+      // Handle the successful response, you might want to redirect the user or show a success message
+      console.log("Signup successful", response.data);
+
+      // Reset the form if needed
+      setFormData({
+        user_name: "",
+        phoneno: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        referral: "",
       });
-    },
-    [signUpUser]
-  );
+    } catch (error: any) {
+      // Handle errors
+      if (axios.isAxiosError(error)) {
+        // Axios error (e.g., network error, timeout)
+        console.error("Axios Error:", error.message);
+      } else {
+        // Non-Axios error (e.g., validation error from the server)
+        console.error("Non-Axios Error:", error.response.data);
+      }
 
-  // const handleSignUp = (e) => {
-  //   e.preventDefault()
-  //   alert("handleSignUp function invoked");
-  // };
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    register,
-  } = form;
+      // You might want to display an error message to the user
+      // setErrorMsg('An error occurred during signup.');
+    } finally {
+      // Hide the loading spinner or enable the button if needed
+      // e.g., setIsPending(false);
+    }
+  };
 
   return (
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
@@ -97,87 +107,58 @@ const Register = () => {
             Sign Up
           </h2>
 
-          <form
-            className="mt-8 flex flex-col gap-4 "
-            onSubmit={handleSubmit(handleSignUp)}
-          >
+          <form className="mt-8 flex flex-col gap-4 " onSubmit={handleSignUp}>
             <input
               type="text"
               placeholder="UserName"
-              {...register("user_name")}
+              name="user_name"
+              value={formData.user_name}
+              required
+              onChange={handleInputChange}
               className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
-            {errors?.user_name && (
-              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
-                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
-                  !
-                </div>
-                <p>{errors?.user_name?.message}</p>
-              </div>
-            )}
-            <input
-              type="email"
-              placeholder="email"
-              {...register("email")}
-              className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
-            />
-            {errors?.email && (
-              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
-                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
-                  !
-                </div>
-                <p>{errors?.email?.message}</p>
-              </div>
-            )}
             <input
               type="text"
-              placeholder="Phone Number"
-              {...register("phoneno")}
+              placeholder="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
               className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
-            {errors?.phoneno && (
-              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
-                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
-                  !
-                </div>
-                <p>{errors?.phoneno?.message}</p>
-              </div>
-            )}
+            <input
+              type="text"
+              placeholder="phone number"
+              name="phoneno"
+              value={formData.phoneno}
+              onChange={handleInputChange}
+              required
+              className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
+            />
             <input
               type="password"
-              placeholder="Password"
-              {...register("password")}
-              className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
+              placeholder="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+              className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
-            {errors?.password && (
-              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
-                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
-                  !
-                </div>
-                <p>{errors?.password?.message}</p>
-              </div>
-            )}
             <span className="text-[#164e63] text-sm">
               What is a secure password?
             </span>
             <input
-              type="password"
-              placeholder="Password Confirmation"
-              {...register("confirmPassword")}
-              className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
+              type="text"
+              placeholder="confirm password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              required
+              onChange={handleInputChange}
+              className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
-            {errors?.confirmPassword && (
-              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
-                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
-                  !
-                </div>
-                <p>{errors?.confirmPassword?.message}</p>
-              </div>
-            )}
             <input
               type="text"
               placeholder="Referal (optional)"
-              {...register("referral")}
               className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
             />
             <div className="flex items-center justify-between">
@@ -195,10 +176,10 @@ const Register = () => {
             <div className="flex items-center gap-3 mb-4 my-2">
               <button
                 type="submit"
-                disabled={isPending}
+                // disabled={isPending}
                 className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
               >
-                {isPending ? <Spinner /> : "Register"}
+                {"Register"}
               </button>
               <Link
                 href="/login"
@@ -220,4 +201,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default page;
