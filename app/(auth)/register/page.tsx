@@ -28,11 +28,11 @@ const Register = () => {
     resolver: yupResolver(signUpSchema),
   });
 
-  const { mutate: signUp, isPending } = useSignup();
+  const { mutate: signUpUser, isPending } = useSignup();
 
   const handleSignUp = useCallback(
     (values: SignUpFormValues) => {
-      signUp(values, {
+      signUpUser(values, {
         onError: (error: unknown) => {
           if (error instanceof Error) {
             console.log(error?.message);
@@ -42,12 +42,17 @@ const Register = () => {
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data?.message);
-          router.push("/user");
+          router.push("/user/fundwallet");
         },
       });
     },
-    [signUp]
+    [signUpUser]
   );
+
+  // const handleSignUp = (e) => {
+  //   e.preventDefault()
+  //   alert("handleSignUp function invoked");
+  // };
 
   const {
     formState: { errors },
