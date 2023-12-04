@@ -21,11 +21,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(auth)/register/page.js"
     ],
-    "/(auth)/signup/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/signup/page.js"
-    ],
     "/(dashboard)/user/fundwallet/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -37,6 +32,11 @@
       "static/chunks/main-app.js",
       "static/css/app/(dashboard)/user/layout.css",
       "static/chunks/app/(dashboard)/user/layout.js"
+    ],
+    "/not-found": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/not-found.js"
     ]
   }
 }

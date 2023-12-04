@@ -42,7 +42,7 @@ const Register = () => {
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data?.message);
-          router.push("/user/fundwallet");
+          router.push("/login");
         },
       });
     },

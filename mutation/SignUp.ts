@@ -17,7 +17,6 @@ export const signUp = async ({
   password,
   referral,
 }: SignUpFormValues) => {
-  alert("Before API call");
   try {
     const response: AxiosResponse<ApiResponseType> = await axios.post(
       `${BASE_URL}/signup`,
@@ -29,7 +28,6 @@ export const signUp = async ({
         referral,
       }
     );
-    alert("after api call");
     console.log(response, "ressssss");
 
     if (response?.data?.success === 1) {
