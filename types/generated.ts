@@ -73,3 +73,6 @@ export declare type Scalars = {
     confirmPassword: Scalars["String"];
   };
   
+  export type UserTransaction= {
+    _id: string;
+  }

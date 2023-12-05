@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import { Transactions } from "@/types/transaction";
+import { format } from "date-fns";
+import React, { FC, useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 // Sample data
@@ -87,13 +89,18 @@ const data = [
 
 type Props = {};
 
-const Tables = (props: Props) => {
+const Tables: FC<{ transactionData: Transactions[] }> = ({
+  transactionData,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = transactionData?.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   const totalItems = data.length;
   const pageNumbers = [];
@@ -120,13 +127,13 @@ const Tables = (props: Props) => {
               scope="col"
               className="px-6 py-3 text-left font-bold text-lg capitalize tracking-wider"
             >
-              Service
+              Name
             </th>
             <th
               scope="col"
               className="px-6 py-3 text-left font-bold text-lg capitalize tracking-wider"
             >
-              Plan
+              Description
             </th>
             <th
               scope="col"
@@ -134,29 +141,18 @@ const Tables = (props: Props) => {
             >
               Amount
             </th>
+
             <th
               scope="col"
               className="px-6 py-3 text-left font-bold text-lg capitalize tracking-wider"
             >
-              Receiver
+              I.Wallet
             </th>
             <th
               scope="col"
               className="px-6 py-3 text-left font-bold text-lg capitalize tracking-wider"
             >
-              Date/Time
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left font-bold text-lg capitalize tracking-wider"
-            >
-              B.Bef
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left font-bold text-lg capitalize tracking-wider"
-            >
-              B.Aft
+              F.Wallet
             </th>
             <th
               scope="col"
@@ -168,87 +164,85 @@ const Tables = (props: Props) => {
               scope="col"
               className="px-6 py-3 text-left font-bold text-lg capitalize tracking-wider"
             >
-              Channel
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-lg font-bold  capitalize tracking-wider"
-            >
-              Action
+              Date/Time
             </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {currentItems.map((row) => (
-            <tr key={row.id}>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.id}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.service}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.plan}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.amount}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.receiver}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.datetime}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.before}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.after}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.status}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.channel}
-              </td>
-              <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                {row.action}
+          {currentItems?.length > 0 ? (
+            currentItems?.map((row) => (
+              <tr key={row?.id}>
+                <td className="px-6 py-4 text-[#163e63] text-xl font-semibold ">
+                  {row?.id}
+                </td>
+                <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
+                  {row?.name}
+                </td>
+                <td className="px-6 py-4 text-[#163e63] text-xl font-semibold ">
+                  {row?.description}
+                </td>
+                <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
+                  ₦{row?.amount}
+                </td>
+                <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
+                  ₦{row?.i_wallet}
+                </td>
+                <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
+                  ₦{row.f_wallet}
+                </td>
+                <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
+                  {row?.status}
+                </td>
+                <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
+                  {format(new Date(row?.created_at), "MMM dd, yyyy HH:mm:ss")}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                className="px-6 py-4 text-[#163e63] text-xl font-semibold text-center "
+                colSpan={8}
+              >
+                No data available
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
         {/* Pagination */}
-        <div className="flex justify-between mt-4">
-          <button
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 text-[#163e63] rounded disabled:opacity-50 cursor-pointer"
-          >
-            <IoIosArrowBack size={30} />
-          </button>
-          <div className="flex">
-            {pageNumbers.map((number) => (
-              <button
-                key={number}
-                onClick={() => paginate(number)}
-                className={`px-4 py-2 mx-1 text-[#163e63] rounded cursor-pointer ${
-                  currentPage === number
-                    ? "bg-white text-[#163e63] font-bold"
-                    : ""
-                }`}
-              >
-                {number}
-              </button>
-            ))}
+        {transactionData?.length > 0 && (
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 text-[#163e63] rounded disabled:opacity-50 cursor-pointer"
+            >
+              <IoIosArrowBack size={30} />
+            </button>
+            <div className="flex">
+              {pageNumbers?.map((number) => (
+                <button
+                  key={number}
+                  onClick={() => paginate(number)}
+                  className={`px-4 py-2 mx-1 text-[#163e63] rounded cursor-pointer ${
+                    currentPage === number
+                      ? "bg-white text-[#163e63] font-bold"
+                      : ""
+                  }`}
+                >
+                  {number}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={indexOfLastItem >= data.length}
+              className="px-4 py-2 text-[#163e63] rounded disabled:opacity-50 cursor-pointer"
+            >
+              <IoIosArrowForward size={30} />
+            </button>
           </div>
-          <button
-            onClick={() => paginate(currentPage + 1)}
-            disabled={indexOfLastItem >= data.length}
-            className="px-4 py-2 text-[#163e63] rounded disabled:opacity-50 cursor-pointer"
-          >
-            <IoIosArrowForward size={30} />
-          </button>
-        </div>
+        )}
       </table>
     </div>
   );

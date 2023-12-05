@@ -1,11 +1,5 @@
 {
   "pages": {
-    "/(dashboard)/user/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/page.css",
-      "static/chunks/app/(dashboard)/user/page.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -24,15 +18,20 @@
       "static/css/app/(dashboard)/user/fundwallet/page.css",
       "static/chunks/app/(dashboard)/user/fundwallet/page.js"
     ],
+    "/(auth)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(auth)/layout.js"
+    ],
     "/(auth)/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(auth)/login/page.js"
     ],
-    "/(auth)/layout": [
+    "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/layout.js"
+      "static/chunks/app/not-found.js"
     ]
   }
 }
