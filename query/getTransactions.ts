@@ -1,8 +1,6 @@
 import { useToken } from "@/hooks/auth/useToken";
+import { BASE_URL } from "@/utils/baseUrl";
 import axios, { AxiosError } from "axios";
-import { log } from "util";
-
-const BASE_URL = process.env.NEXT_PUBLIC_PLANETF_API;
 
 export const getTransaction = async () => {
   const { token } = useToken();
@@ -13,7 +11,7 @@ export const getTransaction = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    
+
     if (response.data.success === 1) {
       return response.data;
     } else {

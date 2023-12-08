@@ -49,11 +49,6 @@ const Register = () => {
     [signUpUser]
   );
 
-  // const handleSignUp = (e) => {
-  //   e.preventDefault()
-  //   alert("handleSignUp function invoked");
-  // };
-
   const {
     formState: { errors },
     handleSubmit,

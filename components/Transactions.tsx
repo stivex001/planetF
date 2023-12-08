@@ -30,7 +30,6 @@ const Transactions = (props: Props) => {
     fetchTransactionData()
   }, []);
 
-  console.log(transactionData);
   
   if (isLoading) {
     return <ScreenLoader />;
