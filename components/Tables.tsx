@@ -5,87 +5,6 @@ import { format } from "date-fns";
 import React, { FC, useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-// Sample data
-const data = [
-  {
-    id: Date.now(),
-    service: "MTN",
-    plan: "20GB",
-    amount: "N5000",
-    receiver: "08162174754",
-    datetime: "2023-01-01 12:00",
-    before: "N10,000",
-    after: "N5000",
-    status: "Success",
-    channel: "App",
-    action: "View",
-  },
-  {
-    id: Date.now(),
-    service: "MTN",
-    plan: "20GB",
-    amount: "N5000",
-    receiver: "08162174754",
-    datetime: "2023-01-01 12:00",
-    before: "N10,000",
-    after: "N5000",
-    status: "Success",
-    channel: "App",
-    action: "View",
-  },
-  {
-    id: Date.now(),
-    service: "MTN",
-    plan: "20GB",
-    amount: "N5000",
-    receiver: "08162174754",
-    datetime: "2023-01-01 12:00",
-    before: "N10,000",
-    after: "N5000",
-    status: "Success",
-    channel: "App",
-    action: "View",
-  },
-  {
-    id: Date.now(),
-    service: "MTN",
-    plan: "20GB",
-    amount: "N5000",
-    receiver: "08162174754",
-    datetime: "2023-01-01 12:00",
-    before: "N10,000",
-    after: "N5000",
-    status: "Success",
-    channel: "App",
-    action: "View",
-  },
-  {
-    id: Date.now(),
-    service: "MTN",
-    plan: "20GB",
-    amount: "N5000",
-    receiver: "08162174754",
-    datetime: "2023-01-01 12:00",
-    before: "N10,000",
-    after: "N5000",
-    status: "Success",
-    channel: "App",
-    action: "View",
-  },
-  {
-    id: Date.now(),
-    service: "MTN",
-    plan: "20GB",
-    amount: "N5000",
-    receiver: "08162174754",
-    datetime: "2023-01-01 12:00",
-    before: "N10,000",
-    after: "N5000",
-    status: "Success",
-    channel: "App",
-    action: "View",
-  },
-];
 
 type Props = {};
 
@@ -102,7 +21,7 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
     indexOfLastItem
   );
 
-  const totalItems = data.length;
+  const totalItems = transactionData?.length;
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
     pageNumbers.push(i);
@@ -236,7 +155,7 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
             </div>
             <button
               onClick={() => paginate(currentPage + 1)}
-              disabled={indexOfLastItem >= data.length}
+              disabled={indexOfLastItem >= transactionData?.length}
               className="px-4 py-2 text-[#163e63] rounded disabled:opacity-50 cursor-pointer"
             >
               <IoIosArrowForward size={30} />
