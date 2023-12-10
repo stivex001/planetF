@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { FiRefreshCcw } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useUser } from "@/context/user-context";
 
 type Props = {};
 
@@ -23,10 +24,13 @@ const page = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState("This is some text");
 
-  const onCopy = () => {
-    toast.success("Copied!")
-  };
+  const { user, loading } = useUser();
 
+  console.log(user);
+
+  const onCopy = () => {
+    toast.success("Copied!");
+  };
 
   useEffect(() => {
     const fetchirtualData = async () => {
@@ -60,7 +64,10 @@ const page = (props: Props) => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <CustomCard className="">
-          <CopyToClipboard text={`${accounts?.[1]?.account_number}`} onCopy={onCopy}>
+          <CopyToClipboard
+            text={`${accounts?.[1]?.account_number}`}
+            onCopy={onCopy}
+          >
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between h-20 ">
                 <h1 className="text-2xl  font-medium ">
@@ -76,7 +83,10 @@ const page = (props: Props) => {
           </CopyToClipboard>
         </CustomCard>
         <CustomCard className="">
-        <CopyToClipboard text={`${accounts?.[0]?.account_number}`} onCopy={onCopy}>
+          <CopyToClipboard
+            text={`${accounts?.[0]?.account_number}`}
+            onCopy={onCopy}
+          >
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between h-20 ">
                 <h1 className="text-2xl  font-medium">
@@ -92,7 +102,10 @@ const page = (props: Props) => {
           </CopyToClipboard>
         </CustomCard>
         <CustomCard className="">
-        <CopyToClipboard text={`${accounts?.[2]?.account_number}`} onCopy={onCopy}>
+          <CopyToClipboard
+            text={`${accounts?.[2]?.account_number}`}
+            onCopy={onCopy}
+          >
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between h-20 ">
                 <h1 className="text-2xl  font-medium ">
@@ -107,12 +120,12 @@ const page = (props: Props) => {
             </div>
           </CopyToClipboard>
         </CustomCard>
-        {/* <CustomCard className="flex justify-center items-center">
+        <CustomCard className="flex justify-center items-center">
           <span className="text-4xl font-medium whitespace-nowrap ">
             Fund with card
           </span>
         </CustomCard>
-        <CustomCard className="">
+        {/* <CustomCard className="">
           <span className="text-xl font-medium  ">
             Transfer Wallet to Wallet move commission move referal bonus
           </span>

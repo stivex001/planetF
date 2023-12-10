@@ -4,26 +4,38 @@ import React, { useEffect } from "react";
 import Swiper from "swiper";
 import "swiper/swiper-bundle.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useUser } from "@/context/user-context";
+import { ScreenLoader } from "./ScreenLoader";
 
 const MovingBanner = () => {
-  useEffect(() => {
-    const mySwiper = new Swiper(".swiper-container", {
-      direction: "horizontal",
-      loop: true,
-      autoplay: {
-        delay: 10000,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
 
-    // Destroy Swiper instance when component unmounts
-    return () => {
-      mySwiper.destroy();
-    };
-  }, []);
+  const { user, loading } = useUser();
+
+  
+
+  // useEffect(() => {
+  //   const mySwiper = new Swiper(".swiper-container", {
+  //     direction: "horizontal",
+  //     loop: true,
+  //     autoplay: {
+  //       delay: 10000,
+  //     },
+  //     navigation: {
+  //       nextEl: ".swiper-button-next",
+  //       prevEl: ".swiper-button-prev",
+  //     },
+  //   });
+
+  //   // Destroy Swiper instance when component unmounts
+  //   return () => {
+  //     mySwiper?.destroy();
+  //   };
+  // }, []);
+
+  if (loading) {
+    return <ScreenLoader />;
+  }
+
 
   return (
     <section className="py-5 px-5 my-7">
@@ -45,23 +57,21 @@ const MovingBanner = () => {
         <div className="swiper-container overflow-x-auto">
           <div className="swiper-wrapper">
             <div className="swiper-slide bg-white shadow-xl p-7 cursor-pointer duration-200">
-              <h1 className="text-base font-medium text-[#1e293b] mb-3">
+              {/* <h1 className="text-base font-medium text-[#1e293b] mb-3">
                 Lorem Ipsum is simply dummy text
-              </h1>
-              <span className="text-slate-400 ">20 hours ago</span>
+              </h1> */}
+              {/* <span className="text-slate-400 ">20 hours ago</span> */}
               <p className="text-slate-500 mt-1 text-justify">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s.
+               {user?.news}
               </p>
-              <div className="flex items-center justify-between mt-5">
+              {/* <div className="flex items-center justify-between mt-5">
                 <button className="transition duration-200 rounded-md font-medium bg-[#64748b]/50  py-1 px-7 text-[#64748b]">
                   View
                 </button>
                 <button className="transition duration-200 rounded-md font-medium bg-[#64748b]/10  py-1 px-7 text-[#64748b]">
                   Dismiss
                 </button>
-              </div>
+              </div> */}
             </div>
             {/* Add more slides with similar structure */}
             {/* <div className="swiper-slide bg-white shadow-xl p-7 cursor-pointer duration-200">
