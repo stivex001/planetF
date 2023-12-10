@@ -1,5 +1,6 @@
 "use client";
 
+import { BASE_URL } from "@/utils/baseUrl";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import {
   ReactNode,
@@ -14,7 +15,6 @@ interface UserDataProps {
   children: ReactNode;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_PLANETF_API;
 
 const UserContext = createContext<{ user: any | null; loading: boolean }>({
   user: null,
@@ -44,6 +44,9 @@ export const UserProvider = ({ children }: UserDataProps) => {
             },
           }
         );
+
+        console.log(response.data, 'redssfwf');
+        
 
         setUser(response?.data?.data);
       } catch (error: unknown) {

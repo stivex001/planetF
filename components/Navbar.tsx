@@ -33,7 +33,7 @@ const Navbar = (props: Props) => {
       <section className="w-full md:w-[97%] h-[70px] md:h-[65px] z-[999] border-b border-white/[0.08] mx-auto px-5 py-3 md:border-b-0  fixed inset-x-0 top-0 bg-[#164e63] rounded-xl text-white">
         <nav className="flex items-center justify-between relative">
           <div className="flex items-center gap-[50px] lg:gap-[150px] ">
-            <Link href="/user" className="flex items-center gap-2">
+            <Link href="/user/fundwallet" className="flex items-center gap-2">
               <Image
                 src="https://enigma-laravel.left4code.com/build/assets/logo-9a88cec5.svg"
                 alt=""

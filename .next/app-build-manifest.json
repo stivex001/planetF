@@ -6,6 +6,16 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/(auth)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(auth)/layout.js"
+    ],
+    "/(auth)/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(auth)/login/page.js"
+    ],
     "/(dashboard)/user/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -18,32 +28,27 @@
       "static/css/app/(dashboard)/user/fundwallet/page.css",
       "static/chunks/app/(dashboard)/user/fundwallet/page.js"
     ],
+    "/(auth)/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(auth)/register/page.js"
+    ],
     "/(dashboard)/user/billpayment/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/(dashboard)/user/billpayment/page.css",
       "static/chunks/app/(dashboard)/user/billpayment/page.js"
     ],
-    "/(dashboard)/user/cgwallet/page": [
+    "/(dashboard)/user/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/cgwallet/page.css",
-      "static/chunks/app/(dashboard)/user/cgwallet/page.js"
+      "static/css/app/(dashboard)/user/page.css",
+      "static/chunks/app/(dashboard)/user/page.js"
     ],
-    "/(auth)/layout": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/layout.js"
-    ],
-    "/(auth)/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/login/page.js"
-    ],
-    "/not-found": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
+      "static/chunks/app/page.js"
     ]
   }
 }
