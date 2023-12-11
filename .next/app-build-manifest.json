@@ -1,5 +1,10 @@
 {
   "pages": {
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -18,11 +23,11 @@
       "static/css/app/(dashboard)/user/fundwallet/page.css",
       "static/chunks/app/(dashboard)/user/fundwallet/page.js"
     ],
-    "/(dashboard)/user/cgwallet/page": [
+    "/(dashboard)/user/billpayment/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/cgwallet/page.css",
-      "static/chunks/app/(dashboard)/user/cgwallet/page.js"
+      "static/css/app/(dashboard)/user/billpayment/page.css",
+      "static/chunks/app/(dashboard)/user/billpayment/page.js"
     ],
     "/(auth)/layout": [
       "static/chunks/webpack.js",
@@ -34,11 +39,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(auth)/login/page.js"
     ],
-    "/(dashboard)/user/billpayment/page": [
+    "/(dashboard)/user/beneficiary/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(dashboard)/user/billpayment/page.css",
-      "static/chunks/app/(dashboard)/user/billpayment/page.js"
+      "static/css/app/(dashboard)/user/beneficiary/page.css",
+      "static/chunks/app/(dashboard)/user/beneficiary/page.js"
     ]
   }
 }
