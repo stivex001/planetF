@@ -2,12 +2,13 @@
 
 import { Spinner } from "@/components/Spinner";
 import { useEmailSignin } from "@/hooks/auth/useEmailSignin";
+import { OpenEyeIcon } from "@/icons/CloseEye";
 import { SigninFormValues, signInSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -15,6 +16,11 @@ type Props = {};
 
 const Login = (props: Props) => {
   const router = useRouter();
+  const [showText, setShowText] = useState(false);
+
+  const togglePassword = () => {
+    setShowText((showText) => !showText);
+  };
 
   const form = useForm<SigninFormValues>({
     defaultValues: {
@@ -105,12 +111,23 @@ const Login = (props: Props) => {
                 <p>{errors?.user_name?.message}</p>
               </div>
             )}
-            <input
-              type="password"
-              placeholder="password"
-              {...register("password")}
-              className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
-            />
+            <div className="relative">
+              <input
+                type={!showText ? "password" : "text"}
+                placeholder="Password"
+                {...register("password")}
+                className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
+              />
+              <div className="absolute top-0 right-0 h-full w-14 flex items-center justify-center bg-transparent">
+                <button
+                  type="button"
+                  className="button"
+                  onClick={togglePassword}
+                >
+                  <OpenEyeIcon />
+                </button>
+              </div>
+            </div>
             {errors?.password && (
               <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
                 <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
