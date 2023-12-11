@@ -18,7 +18,6 @@ const Transactions = (props: Props) => {
       setIsLoading(true)
       try {
         const data = await getTransaction()
-        console.log(data, 'data');
         
         setTransactionData(data?.data);
         setIsLoading(false)

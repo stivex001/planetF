@@ -2,11 +2,11 @@ import { useToken } from "@/hooks/auth/useToken";
 import { BASE_URL } from "@/utils/baseUrl";
 import axios, { AxiosError } from "axios";
 
-export const getTransaction = async () => {
+export const getCGs = async () => {
   const { token } = useToken();
 
   try {
-    const response = await axios.get(`${BASE_URL}/transactions`, {
+    const response = await axios.get(`${BASE_URL}/cg-wallets`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -15,7 +15,7 @@ export const getTransaction = async () => {
     if (response?.data?.success === 1) {
       return response?.data;
     } else {
-      throw new Error(response.data.message);
+      throw new Error(response?.data?.message);
     }
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
