@@ -19,10 +19,20 @@ export const signInSchema = yup.object().shape({
   password: yup.string().required("Password is required"),
 });
 
+export const buyCGBundleSchema = yup.object().shape({
+  bundle_id: yup.string().required("You have to select a Bundle"),
+  paywith: yup.string().required("select mode of payment"),
+});
+
 export type SignUpFormValues = yup.InferType<typeof signUpSchema>;
+
+export type CGFormValues = yup.InferType<typeof buyCGBundleSchema>;
 
 export type SigninFormValues = yup.InferType<typeof signInSchema>;
 
-export type AuthFormTypes = SignUpFormValues | SigninFormValues;
+export type AuthFormTypes = SignUpFormValues | SigninFormValues | CGFormValues;
 
-export type AuthFormFields = keyof SignUpFormValues | keyof SigninFormValues;
+export type AuthFormFields =
+  | keyof SignUpFormValues
+  | keyof SigninFormValues
+  | keyof CGFormValues;

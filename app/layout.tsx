@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import QueryProviders from "@/context/query-provider";
 import { UserProvider } from "@/context/user-context";
+import { ModalProvider } from "@/context/useModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,21 +24,23 @@ export default function RootLayout({
     <html lang="en">
       <AuthProviders>
         <UserProvider>
-          <QueryProviders>
-            <body className={inter.className}>
-              <div>{children}</div>
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={true}
-                closeOnClick={false}
-                rtl={false}
-                draggable
-                pauseOnFocusLoss
-                theme="light"
-              />
-            </body>
-          </QueryProviders>
+          <ModalProvider>
+            <QueryProviders>
+              <body className={inter.className}>
+                <div>{children}</div>
+                <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar={true}
+                  closeOnClick={false}
+                  rtl={false}
+                  draggable
+                  pauseOnFocusLoss
+                  theme="light"
+                />
+              </body>
+            </QueryProviders>
+          </ModalProvider>
         </UserProvider>
       </AuthProviders>
     </html>
