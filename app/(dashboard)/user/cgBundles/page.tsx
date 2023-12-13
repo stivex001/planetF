@@ -33,7 +33,7 @@ const customStyles: Modal.Styles = {
 
 type Props = {};
 
-const page = (props: Props) => {
+const CGBundles = (props: Props) => {
   const searchParams = useSearchParams();
   const network = searchParams.get("network") ?? undefined;
   const type = searchParams.get("type") ?? undefined;
@@ -43,6 +43,11 @@ const page = (props: Props) => {
   const [cGData, setCGData] = useState<CGbundles[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { openModal, closeModal, isOpen } = useModal();
+  const [selectedTab, setSelectedTab] = useState("wallet");
+
+  const handleTabChange = (tab: React.SetStateAction<string>) => {
+    setSelectedTab(tab);
+  };
 
   const form = useForm<CGFormValues>({
     defaultValues: {
@@ -158,7 +163,6 @@ const page = (props: Props) => {
           contentLabel="Start Project Modal"
           overlayClassName={`left-0 bg-[#00000070] outline-none transition-all ease-in-out duration-500`}
           className="w-full h-full flex items-center justify-center"
-          //   parentSelector={() => document.querySelector(".root")!}
         >
           <button
             type="button"
@@ -168,30 +172,60 @@ const page = (props: Props) => {
             Close
           </button>
           <div className="w-1/2 h-64 flex justify-center items-center bg-white shadow-md rounded-lg">
-            <form
-              className="flex flex-col"
-              onSubmit={handleSubmit(handleBuyBundle)}
-            >
-              <div className="w-full mt-7">
-                <TextInput
-                  label="Pay With Wallet"
-                  placeholder="Wallet balance"
-                  register={register}
-                  fieldName={"paywith"}
-                  error={errors.paywith}
-                  className="bg-gray-100 rounded-sm border border-zinc-600"
-                />
-              </div>
-              <div className="w-1/3 mx-auto h-9 mt-10">
+            <div>
+              <div className="flex justify-between">
                 <button
-                  type="submit"
-                  disabled={isPending}
-                  className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
+                  className={`tab-button ${
+                    selectedTab === "wallet" ? "active" : ""
+                  }`}
+                  onClick={() => handleTabChange("wallet")}
                 >
-                  {isPending ? <Spinner /> : "Pay"}
+                  Pay with Wallet
+                </button>
+                <button
+                  className={`tab-button ${
+                    selectedTab === "transfer" ? "active" : ""
+                  }`}
+                  onClick={() => handleTabChange("transfer")}
+                >
+                  Pay with Transfer
                 </button>
               </div>
-            </form>
+              {selectedTab === "wallet" && (
+                <form
+                  className="flex flex-col"
+                  onSubmit={handleSubmit(handleBuyBundle)}
+                >
+                  <div className="w-full mt-7">
+                    <TextInput
+                      label="Pay With Wallet"
+                      placeholder="Wallet balance"
+                      register={register}
+                      fieldName={"paywith"}
+                      error={errors.paywith}
+                      className="bg-gray-100 rounded-sm border border-zinc-600"
+                    />
+                  </div>
+                  <div className="w-1/3 mx-auto h-9 mt-10">
+                    <button
+                      type="submit"
+                      disabled={isPending}
+                      className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
+                    >
+                      {isPending ? <Spinner /> : "Pay"}
+                    </button>
+                  </div>
+                </form>
+              )}
+              {selectedTab === "transfer" && (
+                <form
+                  className="flex flex-col"
+                  onSubmit={handleSubmit(handleBuyBundle)}
+                >
+                  {/* Form fields for 'Pay with Transfer' */}
+                </form>
+              )}
+            </div>
           </div>
         </Modal>
       )}
@@ -199,4 +233,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default CGBundles;
