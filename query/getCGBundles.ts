@@ -2,7 +2,12 @@ import { useToken } from "@/hooks/auth/useToken";
 import { BASE_URL } from "@/utils/baseUrl";
 import axios, { AxiosError } from "axios";
 
-export const getCGBundles = async () => {
+interface GetCGBundlesOptions {
+  network?: string;
+  type?: string;
+}
+
+export const getCGBundles = async (options?: GetCGBundlesOptions) => {
   const { token } = useToken();
 
   try {
@@ -10,6 +15,7 @@ export const getCGBundles = async () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: options
     });
 
     if (response?.data?.success === 1) {

@@ -50,13 +50,23 @@ const CGWallet = (props: Props) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {cGData?.map((data) => (
           <CustomCard className="">
-            <Link href='/user/cgBundles'>
-            <div className="flex flex-col gap-1" key={data?.id}>
-              {/* <h1 className="text-2xl  font-medium"></h1> */}
-              <h1 className="text-4xl font-extrabold ">{data?.name} ({data?.balance})</h1>
-            </div>
+            <Link
+              href={{
+                pathname: "/user/cgBundles",
+                query: {
+                  network: data?.name.split(" ")[0],
+                  type: data?.name.split(" ")[1] 
+                  
+                },
+              }}
+            >
+              <div className="flex flex-col gap-1" key={data?.id}>
+                {/* <h1 className="text-2xl  font-medium"></h1> */}
+                <h1 className="text-4xl font-extrabold ">
+                  {data?.name} ({data?.balance})
+                </h1>
+              </div>
             </Link>
-            
           </CustomCard>
         ))}
       </div>

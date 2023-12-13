@@ -14,6 +14,7 @@ import { CGFormValues, buyCGBundleSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Spinner } from "@/components/Spinner";
 import { useCreateProduct } from "@/mutation/useBuyBundles";
+import { useSearchParams } from "next/navigation";
 
 // Styles for modal
 const customStyles: Modal.Styles = {
@@ -33,6 +34,12 @@ const customStyles: Modal.Styles = {
 type Props = {};
 
 const page = (props: Props) => {
+  const searchParams = useSearchParams();
+  const network = searchParams.get("network") ?? undefined;
+  const type = searchParams.get("type") ?? undefined;
+
+  console.log(name, type, "name");
+
   const [cGData, setCGData] = useState<CGbundles[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { openModal, closeModal, isOpen } = useModal();
@@ -50,10 +57,29 @@ const page = (props: Props) => {
     const fetchCGBundles = async () => {
       setIsLoading(true);
       try {
-        const data = await getCGBundles();
+        const data = await getCGBundles({ network, type });
         console.log(data, "data");
 
-        setCGData(data);
+        let filteredData;
+
+        // Check if type is undefined
+        if (type === undefined) {
+          // If type is undefined, display all data
+          filteredData = data;
+        } else {
+          // If type is defined, apply the filter
+          filteredData = data?.filter(
+            (item: { network: string; type: string }) =>
+              item?.network === network && item?.type === type
+          );
+
+          // If filteredData is empty, set it to the original data
+          if (filteredData?.length === 0) {
+            filteredData = data;
+          }
+        }
+
+        setCGData(filteredData);
         setIsLoading(false);
       } catch (error: any) {
         toast.error(error);
@@ -61,7 +87,7 @@ const page = (props: Props) => {
       }
     };
     fetchCGBundles();
-  }, []);
+  }, [network, type]);
 
   const { mutate: buyBundle, isPending } = useCreateProduct();
 
@@ -157,13 +183,13 @@ const page = (props: Props) => {
                 />
               </div>
               <div className="w-1/3 mx-auto h-9 mt-10">
-              <button
-                type="submit"
-                disabled={isPending}
-                className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
-              >
-                {isPending ? <Spinner /> : "Pay"}
-              </button>
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
+                >
+                  {isPending ? <Spinner /> : "Pay"}
+                </button>
               </div>
             </form>
           </div>
