@@ -1,5 +1,10 @@
 {
   "pages": {
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -11,6 +16,18 @@
       "static/chunks/main-app.js",
       "static/css/app/(dashboard)/user/layout.css",
       "static/chunks/app/(dashboard)/user/layout.js"
+    ],
+    "/(dashboard)/user/fundwallet/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(dashboard)/user/fundwallet/page.css",
+      "static/chunks/app/(dashboard)/user/fundwallet/page.js"
+    ],
+    "/(dashboard)/user/cgwallet/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(dashboard)/user/cgwallet/page.css",
+      "static/chunks/app/(dashboard)/user/cgwallet/page.js"
     ],
     "/(dashboard)/user/cgBundles/page": [
       "static/chunks/webpack.js",
