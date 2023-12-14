@@ -171,11 +171,11 @@ const CGBundles = (props: Props) => {
           >
             Close
           </button>
-          <div className="w-1/2 h-64 flex justify-center items-center bg-white shadow-md rounded-lg">
+          <div className="w-1/2 h-[50vh]  flex justify-center items-center bg-white/70 shadow-md rounded-lg">
             <div>
               <div className="flex justify-between">
                 <button
-                  className={`tab-button ${
+                  className={`tab-button px-4 h-12 bg-[#164e63] text-white rounded-lg ${
                     selectedTab === "wallet" ? "active" : ""
                   }`}
                   onClick={() => handleTabChange("wallet")}
@@ -196,7 +196,7 @@ const CGBundles = (props: Props) => {
                   className="flex flex-col"
                   onSubmit={handleSubmit(handleBuyBundle)}
                 >
-                  <div className="w-full mt-7">
+                  <div className="w-full mt-2">
                     <TextInput
                       label="Pay With Wallet"
                       placeholder="Wallet balance"
@@ -222,7 +222,35 @@ const CGBundles = (props: Props) => {
                   className="flex flex-col"
                   onSubmit={handleSubmit(handleBuyBundle)}
                 >
-                  {/* Form fields for 'Pay with Transfer' */}
+                  <div className="w-full mt-2">
+                    <TextInput
+                      label="Pay With Transfer"
+                      placeholder="username"
+                      register={register}
+                      fieldName={"paywith"}
+                      error={errors.paywith}
+                      className="bg-gray-100 rounded-sm border border-zinc-600"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <TextInput
+                      label="Amount"
+                      placeholder="amount"
+                      register={register}
+                      fieldName={"paywith"}
+                      error={errors.paywith}
+                      className="bg-gray-100 rounded-sm border border-zinc-600"
+                    />
+                  </div>
+                  <div className="w-1/3 mx-auto h-9 mt-10">
+                    <button
+                      type="submit"
+                      disabled={isPending}
+                      className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
+                    >
+                      {isPending ? <Spinner /> : "Pay"}
+                    </button>
+                  </div>
                 </form>
               )}
             </div>
