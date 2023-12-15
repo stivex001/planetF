@@ -37,7 +37,7 @@ export const TextInput = ({
           type={type === "password" && !showText ? "password" : "text"}
           {...register(fieldName)}
           placeholder={placeholder}
-          className={`relative w-full h-14 rounded-lg py-2 pl-6 pr-16 placeholder:text-gray-400 outline-none text-sm sm:leading-6 border ${className}`}
+          className={`relative w-full h- rounded-lg py-2 pl-6 pr-16 placeholder:text-gray-400 outline-none text-sm sm:leading-6 border ${className}`}
         />
         {type === "password" && (
           <div className="absolute top-0 right-0 h-full w-14 flex items-center justify-center bg-transparent">

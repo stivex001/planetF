@@ -1,14 +1,10 @@
+import axios, { AxiosError } from "axios";
+import { useToken } from "@/hooks/auth/useToken";
+import { BASE_URL } from "@/utils/baseUrl";
+import { CGFormValues } from "@/models/auth";
+import { useUser } from "@/context/user-context";
 
-import axios, { AxiosError } from 'axios';
-import { useToken } from '@/hooks/auth/useToken';
-import { BASE_URL } from '@/utils/baseUrl';
-import { CGFormValues } from '@/models/auth';
-
-
-export const buyBundles = async ({
-    bundle_id,
-    paywith
-}: CGFormValues) => {
+export const buyBundles = async ({ bundle_id, paywith }: CGFormValues) => {
   const { token } = useToken();
 
   try {
@@ -16,7 +12,7 @@ export const buyBundles = async ({
       `${BASE_URL}/cg-bundles-buy`,
       {
         bundle_id,
-        paywith
+        paywith,
       },
       {
         headers: {
@@ -25,7 +21,7 @@ export const buyBundles = async ({
       }
     );
 
-    console.log(response, 'productress');
+    console.log(response, "productress");
 
     if (response?.data?.success === 1) {
       return {
@@ -34,14 +30,21 @@ export const buyBundles = async ({
         message: response.data?.message,
       };
     } else {
-      throw new Error(response.data.message);
+      throw new Error(response?.data?.message);
     }
   } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      throw new Error(error?.response?.data?.error?.message);
+    if (axios.isAxiosError(error)) {
+      // Handle AxiosError (e.g., network errors, 4xx, 5xx)
+      console.error("Axios error:", error);
+      throw new Error(error?.response?.data?.message);
     } else if (error instanceof Error) {
+      // Handle other types of errors
+      console.error("Generic error:", error);
       throw error;
-    } else throw new Error('Error occurred while creating account');
+    } else {
+      // Handle unknown errors
+      console.error("Unknown error:", error);
+      throw new Error("An unknown error occurred.");
+    }
   }
 };
- 

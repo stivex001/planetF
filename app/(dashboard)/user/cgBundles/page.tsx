@@ -5,16 +5,17 @@ import { useModal } from "@/context/useModal";
 import { AppModal } from "@/modal/Modal";
 import { getCGBundles } from "@/query/getCGBundles";
 import { CGbundles } from "@/types/cg";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Modal from "react-modal";
-import { TextInput } from "@/components/Form/TextInput";
+import { ReadOnlyTextInput, TextInput } from "@/components/Form/TextInput";
 import { useForm } from "react-hook-form";
 import { CGFormValues, buyCGBundleSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Spinner } from "@/components/Spinner";
-import { useCreateProduct } from "@/mutation/useBuyBundles";
+import { useBuyBundles } from "@/mutation/useBuyBundles";
 import { useSearchParams } from "next/navigation";
+import { useUser } from "@/context/user-context";
 
 // Styles for modal
 const customStyles: Modal.Styles = {
@@ -38,12 +39,20 @@ const CGBundles = (props: Props) => {
   const network = searchParams.get("network") ?? undefined;
   const type = searchParams.get("type") ?? undefined;
 
-  console.log(name, type, "name");
-
   const [cGData, setCGData] = useState<CGbundles[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { openModal, closeModal, isOpen } = useModal();
   const [selectedTab, setSelectedTab] = useState("wallet");
+  const [selectedBundle, setSelectedBundle] = useState<CGbundles | null>(null);
+
+  const { user, loading } = useUser();
+
+  const walletBalance = user?.user?.account_details;
+
+  const handleBuyButtonClick = (bundle: CGbundles) => {
+    setSelectedBundle(bundle);
+    openModal();
+  };
 
   const handleTabChange = (tab: React.SetStateAction<string>) => {
     setSelectedTab(tab);
@@ -57,6 +66,16 @@ const CGBundles = (props: Props) => {
     mode: "all",
     resolver: yupResolver(buyCGBundleSchema),
   });
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    getValues,
+    clearErrors,
+    setError,
+    register,
+  } = form;
 
   useEffect(() => {
     const fetchCGBundles = async () => {
@@ -94,21 +113,31 @@ const CGBundles = (props: Props) => {
     fetchCGBundles();
   }, [network, type]);
 
-  const { mutate: buyBundle, isPending } = useCreateProduct();
+  const { mutate: buyBundle, isPending } = useBuyBundles();
 
-  const handleBuyBundle = () => {
-    alert(`Buy button clicked for CG ID: `);
-  };
+  const handleBuyBundle = useCallback(() => {
+    if (selectedBundle) {
+      const payload = {
+        bundle_id: selectedBundle?.id?.toString(),
+        paywith: walletBalance,
+      };
 
-  const {
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    getValues,
-    clearErrors,
-    setError,
-    register,
-  } = form;
+      buyBundle(payload, {
+        onError: (error: unknown) => {
+          if (error instanceof Error) {
+            console.log(error?.message);
+            toast.error(error?.message);
+            closeModal();
+          }
+        },
+        onSuccess: (response: any) => {
+          console.log(response);
+          toast.success(response?.data?.message);
+          closeModal();
+        },
+      });
+    }
+  }, [buyBundle, selectedBundle, walletBalance]);
 
   if (isLoading) {
     return <ScreenLoader />;
@@ -143,7 +172,7 @@ const CGBundles = (props: Props) => {
               <td className="py-2 px-4 border-b">
                 <button
                   className="bg-[#164e63] text-white px-4 py-2 rounded-md"
-                  onClick={openModal}
+                  onClick={() => handleBuyButtonClick(data)}
                 >
                   Buy
                 </button>
@@ -173,7 +202,7 @@ const CGBundles = (props: Props) => {
           </button>
           <div className="w-1/2 h-[50vh]  flex justify-center items-center bg-white/70 shadow-md rounded-lg">
             <div>
-              <div className="flex justify-between">
+              <div className="flex gap-10">
                 <button
                   className={`tab-button px-4 h-12 bg-[#164e63] text-white rounded-lg ${
                     selectedTab === "wallet" ? "active" : ""
@@ -194,15 +223,13 @@ const CGBundles = (props: Props) => {
               {selectedTab === "wallet" && (
                 <form
                   className="flex flex-col"
-                  onSubmit={handleSubmit(handleBuyBundle)}
+                  onSubmit={handleSubmit(() => handleBuyBundle())}
                 >
                   <div className="w-full mt-2">
-                    <TextInput
-                      label="Pay With Wallet"
+                    <ReadOnlyTextInput
+                      label=""
                       placeholder="Wallet balance"
-                      register={register}
-                      fieldName={"paywith"}
-                      error={errors.paywith}
+                      value={` ${walletBalance}`}
                       className="bg-gray-100 rounded-sm border border-zinc-600"
                     />
                   </div>
@@ -220,11 +247,11 @@ const CGBundles = (props: Props) => {
               {selectedTab === "transfer" && (
                 <form
                   className="flex flex-col"
-                  onSubmit={handleSubmit(handleBuyBundle)}
+                  // onSubmit={handleSubmit(handleBuyBundle)}
                 >
                   <div className="w-full mt-2">
                     <TextInput
-                      label="Pay With Transfer"
+                      label=""
                       placeholder="username"
                       register={register}
                       fieldName={"paywith"}

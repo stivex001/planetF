@@ -20,8 +20,8 @@ export const signInSchema = yup.object().shape({
 });
 
 export const buyCGBundleSchema = yup.object().shape({
-  bundle_id: yup.string().required("You have to select a Bundle"),
-  paywith: yup.string().required("select mode of payment"),
+  bundle_id: yup.string(),
+  paywith: yup.string()
 });
 
 export type SignUpFormValues = yup.InferType<typeof signUpSchema>;
