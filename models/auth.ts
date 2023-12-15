@@ -38,7 +38,7 @@ export type CGFormTransferValues = yup.InferType<typeof transferCGBundleSchema>;
 
 export type SigninFormValues = yup.InferType<typeof signInSchema>;
 
-export type AuthFormTypes = SignUpFormValues | SigninFormValues | CGFormValues;
+export type AuthFormTypes = SignUpFormValues | SigninFormValues | CGFormValues | CGFormTransferValues;
 
 export type AuthFormFields =
   | keyof SignUpFormValues

@@ -1,27 +1,21 @@
 "use client";
 
+import MovingBanner from "@/components/MovingBanner";
 import { ScreenLoader } from "@/components/ScreenLoader";
+import Transactions from "@/components/Transactions";
 import { useModal } from "@/context/useModal";
-import { AppModal } from "@/modal/Modal";
-import { getCGBundles } from "@/query/getCGBundles";
-import { CGWallet, CGbundles } from "@/types/cg";
+import { CGFormTransferValues, transferCGBundleSchema } from "@/models/auth";
+import { useTransferBundles } from "@/mutation/useTransferBundles";
+import { getCGs } from "@/query/getCGs";
+import { CGbundles, CGwallets } from "@/types/cg";
 import React, { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { FiRefreshCcw } from "react-icons/fi";
 import { toast } from "react-toastify";
 import Modal from "react-modal";
-import { ReadOnlyTextInput, TextInput } from "@/components/Form/TextInput";
-import { useForm } from "react-hook-form";
-import {
-  CGFormTransferValues,
-  CGFormValues,
-  buyCGBundleSchema,
-  transferCGBundleSchema,
-} from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
-import { useBuyBundles } from "@/mutation/useBuyBundles";
-import { useSearchParams } from "next/navigation";
-import { useUser } from "@/context/user-context";
-import { useTransferBundles } from "@/mutation/useTransferBundles";
 
 // Styles for modal
 const customStyles: Modal.Styles = {
@@ -40,82 +34,54 @@ const customStyles: Modal.Styles = {
 
 type Props = {};
 
-const CGBundles = (props: Props) => {
-  const searchParams = useSearchParams();
-  const network = searchParams.get("network") ?? undefined;
-  const type = searchParams.get("type") ?? undefined;
-
-  const [cGData, setCGData] = useState<CGWallet[]>([]);
+const CGTransfer = (props: Props) => {
+  const [cGData, setCGData] = useState<CGbundles[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { openModal, closeModal, isOpen } = useModal();
-  const [selectedBundle, setSelectedBundle] = useState<CGWallet | null>(null);
-
-  const { user, loading } = useUser();
-
-  const walletBalance = user?.user?.account_details;
-
-  const user_name = user?.user?.user_name;
-
-  const handleBuyButtonClick = (bundle: CGWallet) => {
-    setSelectedBundle(bundle);
-    openModal();
-  };
+  const [selectedBundle, setSelectedBundle] = useState<CGbundles | null>(null);
 
   const form = useForm<CGFormTransferValues>({
     defaultValues: {
       amount: 0,
-      user_name: user_name || "",
+      user_name: "",
       cgwallet_id: "",
     },
     mode: "all",
     resolver: yupResolver(transferCGBundleSchema),
   });
 
+  const handleBuyButtonClick = (bundle: CGbundles) => {
+    setSelectedBundle(bundle);
+    openModal();
+  };
+
   useEffect(() => {
-    const fetchCGBundles = async () => {
+    const fetchCGData = async () => {
       setIsLoading(true);
       try {
-        const data = await getCGBundles({ network, type });
+        const data = await getCGs();
+        console.log(data, "data");
 
-        let filteredData;
-
-        // Check if type is undefined
-        if (type === undefined) {
-          // If type is undefined, display all data
-          filteredData = data;
-        } else {
-          // If type is defined, apply the filter
-          filteredData = data?.filter(
-            (item: { network: string; type: string }) =>
-              item?.network === network && item?.type === type
-          );
-
-          // If filteredData is empty, set it to the original data
-          if (filteredData?.length === 0) {
-            filteredData = data;
-          }
-        }
-
-        setCGData(filteredData);
+        setCGData(data?.data);
         setIsLoading(false);
       } catch (error: any) {
         toast.error(error);
         setIsLoading(false);
       }
     };
-    fetchCGBundles();
-  }, [network, type]);
+    fetchCGData();
+  }, []);
 
-  const { mutate: buyBundle, isPending } = useBuyBundles();
+  const { mutate: buyBundleWithTransfer, isPending: pending } =
+    useTransferBundles();
 
-  const handleBuyBundle = useCallback(() => {
-    if (selectedBundle) {
-      const payload = {
-        bundle_id: selectedBundle?.id?.toString(),
-        paywith: "wallet",
+  const handleBuyWithTransfer = useCallback(
+    (values: CGFormTransferValues) => {
+      const payloads = {
+        ...values,
+        cgwallet_id: selectedBundle?.id?.toString(),
       };
-
-      buyBundle(payload, {
+      buyBundleWithTransfer(payloads, {
         onError: (error: unknown) => {
           if (error instanceof Error) {
             console.log(error?.message);
@@ -124,17 +90,23 @@ const CGBundles = (props: Props) => {
           }
         },
         onSuccess: (response: any) => {
-          console.log(response);
+          console.log(response?.data);
           toast.success(response?.data?.message);
           closeModal();
         },
       });
-    }
-  }, [buyBundle, selectedBundle, walletBalance]);
+    },
+    [buyBundleWithTransfer]
+  );
 
   const {
     formState: { errors },
     handleSubmit,
+    setValue,
+    getValues,
+    clearErrors,
+    setError,
+    register,
   } = form;
 
   if (isLoading) {
@@ -142,16 +114,20 @@ const CGBundles = (props: Props) => {
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-300">
-        <thead className="bg-[#164e63] text-white">
+    <main>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-medium text-[#1e293b]">Bundles Transfer</h2>
+        <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
+          <FiRefreshCcw size={16} />
+          <span>Reload Data</span>
+        </div>
+      </div>
+      <table className="w-1/2  border  mt-16 ">
+        <thead className=" ">
           <tr className="text-left">
             <th className="py-2 px-4 border-b">ID</th>
-            <th className="py-2 px-4 border-b">Display Name</th>
-            <th className="py-2 px-4 border-b">Value</th>
             <th className="py-2 px-4 border-b">Network</th>
-            <th className="py-2 px-4 border-b">Type</th>
-            <th className="py-2 px-4 border-b">Price</th>
+            <th className="py-2 px-4 border-b">Balance</th>
             <th className="py-2 px-4 border-b">Action</th>
           </tr>
         </thead>
@@ -162,17 +138,14 @@ const CGBundles = (props: Props) => {
               className="hover:bg-gray-100 text-lg text-[#163e63]"
             >
               <td className="py-2 px-4 border-b">{data?.id}</td>
-              <td className="py-2 px-4 border-b">{data?.display_name}</td>
-              <td className="py-2 px-4 border-b">{data?.value}</td>
-              <td className="py-2 px-4 border-b">{data?.network}</td>
-              <td className="py-2 px-4 border-b">{data?.type}</td>
-              <td className="py-2 px-4 border-b">₦{data?.price}</td>
+              <td className="py-2 px-4 border-b">{data?.name}</td>
+              <td className="py-2 px-4 border-b">{data?.balance}</td>
               <td className="py-2 px-4 border-b">
                 <button
                   className="bg-[#164e63] text-white px-4 py-2 rounded-md"
                   onClick={() => handleBuyButtonClick(data)}
                 >
-                  Buy
+                  Transfer
                 </button>
               </td>
             </tr>
@@ -202,23 +175,36 @@ const CGBundles = (props: Props) => {
             <div className="flex flex-col gap-8">
               <form
                 className="flex flex-col"
-                onSubmit={handleSubmit(() => handleBuyBundle())}
+                onSubmit={handleSubmit(handleBuyWithTransfer)}
               >
                 <div className="w-full mt-2">
-                  <ReadOnlyTextInput
-                    label="Pay with Wallet"
-                    placeholder="Wallet balance"
-                    value={` ${walletBalance}`}
+                  <TextInput
+                    label=""
+                    placeholder="username"
+                    register={register}
+                    fieldName={"user_name"}
+                    error={errors.user_name}
+                    className="bg-gray-100 rounded-sm border border-zinc-600"
+                  />
+                </div>
+                <div className="w-full">
+                  <TextInput
+                    label=""
+                    type="number"
+                    placeholder="amount"
+                    register={register}
+                    fieldName={"amount"}
+                    error={errors.amount}
                     className="bg-gray-100 rounded-sm border border-zinc-600"
                   />
                 </div>
                 <div className="w-full mx-auto h-9 mt-10">
                   <button
                     type="submit"
-                    disabled={isPending}
+                    disabled={pending}
                     className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
                   >
-                    {isPending ? <Spinner /> : "Pay"}
+                    {pending ? <Spinner /> : "Pay"}
                   </button>
                 </div>
               </form>
@@ -226,8 +212,8 @@ const CGBundles = (props: Props) => {
           </div>
         </Modal>
       )}
-    </div>
+    </main>
   );
 };
 
-export default CGBundles;
+export default CGTransfer;

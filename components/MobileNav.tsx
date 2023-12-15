@@ -21,7 +21,7 @@ const navbarLinks = [
     arrowIcon: <IoIosArrowDown />,
     sublinks: [
       { id: 1, title: "Fund Wallet", url: "/user/fundwallet" },
-      { id: 2, title: "Bill Payment", url: "/user/billpayment" },
+      { id: 2, title: "CG Transfer", url: "/user/cgtransfer" },
       { id: 3, title: "CG Wallet", url: "/user/cgwallet" },
       { id: 4, title: "Sales Report", url: "/user/salesreport" },
     ],

@@ -7,7 +7,7 @@ export interface CGwallets {
   updated_at: string;
 }
 
-export interface CGbundles {
+export interface CGWallet {
   id?: number;
   display_name: string;
   value: string;
@@ -18,4 +18,15 @@ export interface CGbundles {
   created_at: string;
   updated_at: string;
   created_by: string;
+}
+
+export interface CGbundles {
+  id?: number;
+  name?: string;
+  balance?: string;
+  network?: string
+  status?: number;
+  created_at?: string;
+  updated_at?: string;
+  created_by?: string;
 }
