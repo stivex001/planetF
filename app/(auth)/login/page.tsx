@@ -141,7 +141,7 @@ const Login = (props: Props) => {
                 <input type="checkbox" name="" id="" />
                 Remember me
               </div>
-              <Link href="#">Forgot Password?</Link>
+              <Link href="/forgotpassword">Forgot Password?</Link>
             </div>
             <div className="flex items-center gap-3 mb-4 my-2">
               <button

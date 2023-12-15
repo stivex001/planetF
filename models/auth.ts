@@ -25,9 +25,13 @@ export const buyCGBundleSchema = yup.object().shape({
 });
 
 export const transferCGBundleSchema = yup.object().shape({
-  cgwallet_id:yup.string(),
+  cgwallet_id: yup.string(),
   user_name: yup.string().required("Username is required"),
   amount: yup.number().required("Amount is required"),
+});
+
+export const forgotPasswordSchemaOne = yup.object().shape({
+  user_name: yup.string().required("Enter Your Username"),
 });
 
 export type SignUpFormValues = yup.InferType<typeof signUpSchema>;
@@ -38,10 +42,20 @@ export type CGFormTransferValues = yup.InferType<typeof transferCGBundleSchema>;
 
 export type SigninFormValues = yup.InferType<typeof signInSchema>;
 
-export type AuthFormTypes = SignUpFormValues | SigninFormValues | CGFormValues | CGFormTransferValues;
+export type ForgotPasswordFormOneValues = yup.InferType<
+  typeof forgotPasswordSchemaOne
+>;
+
+export type AuthFormTypes =
+  | SignUpFormValues
+  | SigninFormValues
+  | CGFormValues
+  | CGFormTransferValues
+  | ForgotPasswordFormOneValues;
 
 export type AuthFormFields =
   | keyof SignUpFormValues
   | keyof SigninFormValues
   | keyof CGFormValues
-  | keyof CGFormTransferValues;
+  | keyof CGFormTransferValues
+  | keyof ForgotPasswordFormOneValues;

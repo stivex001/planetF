@@ -28,6 +28,11 @@ const customStyles: Modal.Styles = {
   },
   content: {
     borderRadius: "10px",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "50%",
+    marginRight: "-50%",
     opacity: "1",
   },
 };
@@ -171,7 +176,7 @@ const CGTransfer = (props: Props) => {
           >
             Close
           </button>
-          <div className="w-1/2 h-[50vh]  flex justify-center items-center bg-white/70 shadow-md rounded-lg">
+          <div className="w-11/12 md:w-1/2 h-[50vh]  flex justify-center items-center bg-white/70 shadow-md rounded-lg">
             <div className="flex flex-col gap-8">
               <form
                 className="flex flex-col"

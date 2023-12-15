@@ -22,7 +22,6 @@ const CGWallet = (props: Props) => {
       setIsLoading(true);
       try {
         const data = await getCGs();
-        console.log(data, "data");
 
         setCGData(data?.data);
         setIsLoading(false);

@@ -126,7 +126,10 @@ const Navbar = (props: Props) => {
               onClick={handleModalClick}
             >
               <Image
-                src="https://avatars.githubusercontent.com/u/87942124?v=4"
+                src={
+                  user?.user?.photo ||
+                  "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png"
+                }
                 alt=""
                 className="rounded-full"
                 fill={true}
