@@ -51,7 +51,7 @@ const UserModal = ({ user }: Props) => {
             <span className="font-medium">Add Account</span>
           </Link>
           <Link
-            href="#"
+            href="/forgotpassword"
             className="flex items-center transition duration-300 ease-in-out rounded-md hover:bg-white/5 gap-2 p-2"
           >
             <FaLock size={24} className="text-white/70" />
