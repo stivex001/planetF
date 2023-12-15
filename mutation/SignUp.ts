@@ -1,7 +1,8 @@
 import { SignUpFormValues } from "@/models/auth";
+import { BASE_URL } from "@/utils/baseUrl";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const BASE_URL = process.env.NEXT_PUBLIC_PLANETF_API;
+
 
 interface ApiResponseType {
   token: string;

@@ -21,12 +21,20 @@ export const signInSchema = yup.object().shape({
 
 export const buyCGBundleSchema = yup.object().shape({
   bundle_id: yup.string(),
-  paywith: yup.string()
+  paywith: yup.string(),
+});
+
+export const transferCGBundleSchema = yup.object().shape({
+  cgwallet_id:yup.string(),
+  user_name: yup.string().required("Username is required"),
+  amount: yup.number().required("Amount is required"),
 });
 
 export type SignUpFormValues = yup.InferType<typeof signUpSchema>;
 
 export type CGFormValues = yup.InferType<typeof buyCGBundleSchema>;
+
+export type CGFormTransferValues = yup.InferType<typeof transferCGBundleSchema>;
 
 export type SigninFormValues = yup.InferType<typeof signInSchema>;
 
@@ -35,4 +43,5 @@ export type AuthFormTypes = SignUpFormValues | SigninFormValues | CGFormValues;
 export type AuthFormFields =
   | keyof SignUpFormValues
   | keyof SigninFormValues
-  | keyof CGFormValues;
+  | keyof CGFormValues
+  | keyof CGFormTransferValues;

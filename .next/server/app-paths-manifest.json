@@ -1,7 +1,9 @@
 {
+  "/not-found": "app/not-found.js",
+  "/page": "app/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/(dashboard)/user/fundwallet/page": "app/(dashboard)/user/fundwallet/page.js",
   "/(dashboard)/user/cgwallet/page": "app/(dashboard)/user/cgwallet/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
   "/(dashboard)/user/cgBundles/page": "app/(dashboard)/user/cgBundles/page.js",
-  "/(dashboard)/user/billpayment/page": "app/(dashboard)/user/billpayment/page.js"
+  "/(auth)/login/page": "app/(auth)/login/page.js"
 }

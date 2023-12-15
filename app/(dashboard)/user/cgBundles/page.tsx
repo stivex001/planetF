@@ -10,12 +10,18 @@ import { toast } from "react-toastify";
 import Modal from "react-modal";
 import { ReadOnlyTextInput, TextInput } from "@/components/Form/TextInput";
 import { useForm } from "react-hook-form";
-import { CGFormValues, buyCGBundleSchema } from "@/models/auth";
+import {
+  CGFormTransferValues,
+  CGFormValues,
+  buyCGBundleSchema,
+  transferCGBundleSchema,
+} from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Spinner } from "@/components/Spinner";
 import { useBuyBundles } from "@/mutation/useBuyBundles";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "@/context/user-context";
+import { useTransferBundles } from "@/mutation/useTransferBundles";
 
 // Styles for modal
 const customStyles: Modal.Styles = {
@@ -49,6 +55,8 @@ const CGBundles = (props: Props) => {
 
   const walletBalance = user?.user?.account_details;
 
+  const user_name = user?.user?.user_name;
+
   const handleBuyButtonClick = (bundle: CGbundles) => {
     setSelectedBundle(bundle);
     openModal();
@@ -58,31 +66,22 @@ const CGBundles = (props: Props) => {
     setSelectedTab(tab);
   };
 
-  const form = useForm<CGFormValues>({
+  const form = useForm<CGFormTransferValues>({
     defaultValues: {
-      bundle_id: "",
-      paywith: "",
+      amount: 0,
+      user_name: user_name || "",
+      cgwallet_id: "",
     },
     mode: "all",
-    resolver: yupResolver(buyCGBundleSchema),
+    resolver: yupResolver(transferCGBundleSchema),
   });
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    getValues,
-    clearErrors,
-    setError,
-    register,
-  } = form;
 
   useEffect(() => {
     const fetchCGBundles = async () => {
       setIsLoading(true);
       try {
         const data = await getCGBundles({ network, type });
-        console.log(data, "data");
+        
 
         let filteredData;
 
@@ -115,6 +114,9 @@ const CGBundles = (props: Props) => {
 
   const { mutate: buyBundle, isPending } = useBuyBundles();
 
+  const { mutate: buyBundleWithTransfer, isPending: pending } =
+    useTransferBundles();
+
   const handleBuyBundle = useCallback(() => {
     if (selectedBundle) {
       const payload = {
@@ -138,6 +140,40 @@ const CGBundles = (props: Props) => {
       });
     }
   }, [buyBundle, selectedBundle, walletBalance]);
+
+  const handleBuyWithTransfer = useCallback(
+    (values: CGFormTransferValues) => {
+      buyBundleWithTransfer(values, {
+        onError: (error: unknown) => {
+          if (error instanceof Error) {
+            console.log(error?.message);
+            toast.error(error?.message);
+            closeModal();
+          }
+        },
+        onSuccess: (response: any) => {
+          console.log(response?.data);
+          toast.success(response?.data?.message);
+          closeModal();
+          
+        },
+      });
+    },
+    [buyBundleWithTransfer]
+  );
+
+
+  
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    getValues,
+    clearErrors,
+    setError,
+    register,
+  } = form;
 
   if (isLoading) {
     return <ScreenLoader />;
@@ -201,19 +237,19 @@ const CGBundles = (props: Props) => {
             Close
           </button>
           <div className="w-1/2 h-[50vh]  flex justify-center items-center bg-white/70 shadow-md rounded-lg">
-            <div>
+            <div className="flex flex-col gap-8">
               <div className="flex gap-10">
                 <button
-                  className={`tab-button px-4 h-12 bg-[#164e63] text-white rounded-lg ${
-                    selectedTab === "wallet" ? "active" : ""
+                  className={`tab-button px-4 h-12 text-[#164e63] rounded-lg ${
+                    selectedTab === "wallet" ? "bg-[#164e63] text-white" : ""
                   }`}
                   onClick={() => handleTabChange("wallet")}
                 >
                   Pay with Wallet
                 </button>
                 <button
-                  className={`tab-button ${
-                    selectedTab === "transfer" ? "active" : ""
+                  className={`tab-button px-4 h-12 text-[#164e63] rounded-lg ${
+                    selectedTab === "transfer" ? "bg-[#164e63] text-white" : ""
                   }`}
                   onClick={() => handleTabChange("transfer")}
                 >
@@ -233,7 +269,7 @@ const CGBundles = (props: Props) => {
                       className="bg-gray-100 rounded-sm border border-zinc-600"
                     />
                   </div>
-                  <div className="w-1/3 mx-auto h-9 mt-10">
+                  <div className="w-full mx-auto h-9 mt-10">
                     <button
                       type="submit"
                       disabled={isPending}
@@ -247,35 +283,36 @@ const CGBundles = (props: Props) => {
               {selectedTab === "transfer" && (
                 <form
                   className="flex flex-col"
-                  // onSubmit={handleSubmit(handleBuyBundle)}
+                  onSubmit={handleSubmit(handleBuyWithTransfer)}
                 >
                   <div className="w-full mt-2">
                     <TextInput
                       label=""
                       placeholder="username"
                       register={register}
-                      fieldName={"paywith"}
-                      error={errors.paywith}
+                      fieldName={"user_name"}
+                      error={errors.user_name}
                       className="bg-gray-100 rounded-sm border border-zinc-600"
                     />
                   </div>
                   <div className="w-full">
                     <TextInput
-                      label="Amount"
+                      label=""
+                      type="number"
                       placeholder="amount"
                       register={register}
-                      fieldName={"paywith"}
-                      error={errors.paywith}
+                      fieldName={"amount"}
+                      error={errors.amount}
                       className="bg-gray-100 rounded-sm border border-zinc-600"
                     />
                   </div>
-                  <div className="w-1/3 mx-auto h-9 mt-10">
+                  <div className="w-full mx-auto h-9 mt-10">
                     <button
                       type="submit"
-                      disabled={isPending}
+                      disabled={pending}
                       className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
                     >
-                      {isPending ? <Spinner /> : "Pay"}
+                      {pending ? <Spinner /> : "Pay"}
                     </button>
                   </div>
                 </form>
