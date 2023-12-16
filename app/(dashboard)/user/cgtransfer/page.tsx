@@ -16,6 +16,7 @@ import Modal from "react-modal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
+import { useRouter } from "next/navigation";
 
 // Styles for modal
 const customStyles: Modal.Styles = {
@@ -40,6 +41,8 @@ const customStyles: Modal.Styles = {
 type Props = {};
 
 const CGTransfer = (props: Props) => {
+  const router = useRouter();
+
   const [cGData, setCGData] = useState<CGbundles[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { openModal, closeModal, isOpen } = useModal();
@@ -56,9 +59,11 @@ const CGTransfer = (props: Props) => {
   });
 
   const handleBuyButtonClick = (bundle: CGbundles) => {
-    setSelectedBundle(bundle);
     openModal();
+    setSelectedBundle(bundle?.id);
   };
+
+  console.log(selectedBundle?.id, "ygydgy");
 
   useEffect(() => {
     const fetchCGData = async () => {
@@ -84,8 +89,9 @@ const CGTransfer = (props: Props) => {
     (values: CGFormTransferValues) => {
       const payloads = {
         ...values,
-        cgwallet_id: selectedBundle?.id?.toString(),
+        cgwallet_id: selectedBundle?.toString(),
       };
+
       buyBundleWithTransfer(payloads, {
         onError: (error: unknown) => {
           if (error instanceof Error) {
@@ -96,8 +102,11 @@ const CGTransfer = (props: Props) => {
         },
         onSuccess: (response: any) => {
           console.log(response?.data);
-          toast.success(response?.data?.message);
+          toast.success(response?.data);
           closeModal();
+          setTimeout(() => {
+            router.push("/user/cgwallet");
+          }, 5000);
         },
       });
     },
@@ -152,6 +161,7 @@ const CGTransfer = (props: Props) => {
                 >
                   Transfer
                 </button>
+                
               </td>
             </tr>
           ))}

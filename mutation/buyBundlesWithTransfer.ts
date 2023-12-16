@@ -26,7 +26,7 @@ export const buyBundlesWithTransfer = async ({ cgwallet_id, user_name, amount }:
     if (response?.data?.success === 1) {
       return {
         success: true,
-        data: response.data?.data?.user,
+        data: response.data?.message,
         message: response.data?.message,
       };
     } else {
