@@ -60,7 +60,7 @@ const CGTransfer = (props: Props) => {
 
   const handleBuyButtonClick = (bundle: CGbundles) => {
     openModal();
-    setSelectedBundle(bundle?.id);
+    setSelectedBundle(bundle);
   };
 
   console.log(selectedBundle?.id, "ygydgy");
@@ -161,7 +161,6 @@ const CGTransfer = (props: Props) => {
                 >
                   Transfer
                 </button>
-                
               </td>
             </tr>
           ))}
