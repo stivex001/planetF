@@ -1,8 +1,7 @@
 {
+  "/page": "app/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/user/cgtransfer/page": "app/(dashboard)/user/cgtransfer/page.js",
-  "/(dashboard)/user/cgwallet/page": "app/(dashboard)/user/cgwallet/page.js",
-  "/(dashboard)/user/cgBundles/page": "app/(dashboard)/user/cgBundles/page.js",
   "/(dashboard)/user/fundwallet/page": "app/(dashboard)/user/fundwallet/page.js"
 }
