@@ -1,7 +1,8 @@
 {
-  "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/user/fundwallet/page": "app/(dashboard)/user/fundwallet/page.js"
+  "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js",
+  "/(dashboard)/user/(billspayment)/buy-datapin/page": "app/(dashboard)/user/(billspayment)/buy-datapin/page.js",
+  "/(dashboard)/user/(billspayment)/buy-electricity/page": "app/(dashboard)/user/(billspayment)/buy-electricity/page.js",
+  "/(dashboard)/user/(billspayment)/betting/page": "app/(dashboard)/user/(billspayment)/betting/page.js",
+  "/(dashboard)/user/(billspayment)/result-checker/page": "app/(dashboard)/user/(billspayment)/result-checker/page.js"
 }

@@ -10,6 +10,7 @@ import { FiRefreshCcw } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useUser } from "@/context/user-context";
+import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 
 type Props = {};
 
@@ -23,7 +24,6 @@ const page = (props: Props) => {
   const [accounts, setAccounts] = useState<Account[] | null>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedText, setCopiedText] = useState<Array<string>>([]);
-
 
   const { user, loading } = useUser();
 
@@ -56,6 +56,53 @@ const page = (props: Props) => {
     };
     fetchirtualData();
   }, []);
+
+  const config = {
+    public_key: "",
+    tx_ref: "1234",
+    amount: 0,
+    currency: "NGN",
+    payment_options: "card,mobilemoney,ussd",
+    customer: {
+      email: "stephenadeyemo@gmail.com",
+      phone_number: "08162174754",
+      name: `baistevoo`,
+    },
+    // meta: {
+    //   transactionId: Date.now(),
+    //   transactionTypes: "PAYMENT",
+    //   amount: enteredAmount,
+    //   userId: currentUser?.data?.user?.id,
+    // },
+    customizations: {
+      title: "5stardatahub",
+      description: "Payment for items in cart",
+      logo: "https://st2.https://public-files-paystack-prod.s3.eu-west-1.amazonaws.com/integration-logos/TIVCK4thz5y5Xfq76dvc.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
+    },
+  };
+
+  const handleFlutterPayment = useFlutterwave(config);
+
+  const payWithFlutterwave = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    // config.amount = enteredAmount;
+
+    handleFlutterPayment({
+      callback: async (response) => {
+        console.log(response, "flutter payment success");
+
+        // Handle the payment success case and show a confirmation message
+        // if (response?.status === "successful") {
+        //   navigate("/user");
+        // }
+
+        closePaymentModal();
+      },
+      onClose: () => {
+        console.log("Payment modal closed");
+      },
+    });
+  };
 
   if (isLoading) {
     return <ScreenLoader />;

@@ -31,7 +31,25 @@ export const transferCGBundleSchema = yup.object().shape({
 });
 
 export const forgotPasswordSchemaOne = yup.object().shape({
-  user_name: yup.string().required("Enter Your Username"),
+  provider: yup.string().required("Select a Provider"),
+});
+
+export const buyAirtimeSchema = yup.object().shape({
+  provider: yup.string().required("Select a Provider"),
+  amount: yup.string().required("Price is required"),
+  country: yup.string().required("Country is required"),
+  payment: yup.string(),
+  promo: yup.string(),
+  ref: yup.string(),
+  number: yup
+    .string()
+    .required("Phone number is required")
+    .test("is-valid-phone", "Not a valid phone number", (phone) => {
+      if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+        return true;
+      }
+      return false;
+    }),
 });
 
 export type SignUpFormValues = yup.InferType<typeof signUpSchema>;
@@ -46,16 +64,22 @@ export type ForgotPasswordFormOneValues = yup.InferType<
   typeof forgotPasswordSchemaOne
 >;
 
+export type BuyAirtimeFormValues = yup.InferType<
+  typeof buyAirtimeSchema
+>;
+
 export type AuthFormTypes =
   | SignUpFormValues
   | SigninFormValues
   | CGFormValues
   | CGFormTransferValues
-  | ForgotPasswordFormOneValues;
+  | ForgotPasswordFormOneValues
+  | BuyAirtimeFormValues;
 
 export type AuthFormFields =
   | keyof SignUpFormValues
   | keyof SigninFormValues
   | keyof CGFormValues
   | keyof CGFormTransferValues
-  | keyof ForgotPasswordFormOneValues;
+  | keyof ForgotPasswordFormOneValues
+  | keyof BuyAirtimeFormValues;
