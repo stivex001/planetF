@@ -30,9 +30,21 @@ const navbarLinks = [
   {
     id: 2,
     icon: <FiBox size={24} className="-ml-3 xl:ml-0" />,
-    title: "Saved Beneficiary",
-    url: "/user/beneficiary",
+    title: "Bills Payment",
+    url: "/user/payment",
     arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
+    sublinks: [
+      { id: 1, title: "Buy Airtime", url: "/user/buy-airtime" },
+      { id: 2, title: "Buy Airtime Pin", url: "/user/buy-airtimepin" },
+      { id: 3, title: "Buy Data", url: "/user/buy-data" },
+      { id: 4, title: "Buy Data Pin", url: "/user/buy-datapin" },
+      { id: 5, title: "Buy TV", url: "/user/buy-tv" },
+      { id: 6, title: "Buy Electricity", url: "/user/buy-electricity" },
+      { id: 7, title: "Buy Electricity", url: "/user/buy-electricity" },
+      { id: 8, title: "Betting Topup", url: "/user/betting" },
+      { id: 9, title: "Result Checker", url: "/user/result-checker" },
+
+    ],
   },
   {
     id: 3,
