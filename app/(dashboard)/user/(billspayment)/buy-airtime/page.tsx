@@ -6,9 +6,11 @@ import { TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
 import { BuyAirtimeFormValues, buyAirtimeSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
+import { toast } from "react-toastify";
+import { useBuyAirtime } from "@/hooks/billsPayments/useBuyAirtime";
 
 type Props = {};
 
@@ -34,6 +36,27 @@ const BuyAirtime = (props: Props) => {
     resolver: yupResolver(buyAirtimeSchema),
   });
 
+  const { mutate: buyAirtime, isPending } = useBuyAirtime();
+
+  const handleBuyAirtime = useCallback(
+    (values: BuyAirtimeFormValues) => {
+      buyAirtime(values, {
+        onError: (error: unknown) => {
+          if (error instanceof Error) {
+            console.log(error?.message);
+            toast.error(error?.message);
+          }
+        },
+        onSuccess: (response: any) => {
+          console.log(response?.data);
+          toast.success(response?.data?.message);
+          
+        },
+      });
+    },
+    [buyAirtime]
+  );
+
   const {
     formState: { errors },
     handleSubmit,
@@ -51,7 +74,6 @@ const BuyAirtime = (props: Props) => {
 
   const isLoading = false;
   const isError = false;
-  const isPending = false;
 
   return (
     <div className="  rounded-md  w-full ">
@@ -62,7 +84,7 @@ const BuyAirtime = (props: Props) => {
 
         <form
           className="mt-8 flex flex-col gap-4 w-1/2 "
-          // onSubmit={handleSubmit(handleSignUp)}
+          onSubmit={handleSubmit(handleBuyAirtime)}
         >
           <div className="w-full ">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
@@ -133,7 +155,8 @@ const BuyAirtime = (props: Props) => {
             <CustomButton
               type="submit"
               className={clsx({
-                "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80": true,
+                "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
+                  true,
                 "opacity-70 cursor-not-allowed": isPending,
               })}
               disabled={isPending}
