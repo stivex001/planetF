@@ -40,7 +40,6 @@ const navbarLinks = [
       { id: 4, title: "Buy Data Pin", url: "/user/buy-datapin" },
       { id: 5, title: "Buy TV", url: "/user/buy-tv" },
       { id: 6, title: "Buy Electricity", url: "/user/buy-electricity" },
-      { id: 7, title: "Buy Electricity", url: "/user/buy-electricity" },
       { id: 8, title: "Betting Topup", url: "/user/betting" },
       { id: 9, title: "Result Checker", url: "/user/result-checker" },
 
