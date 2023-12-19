@@ -31,7 +31,7 @@ export const transferCGBundleSchema = yup.object().shape({
 });
 
 export const forgotPasswordSchemaOne = yup.object().shape({
-  provider: yup.string().required("Select a Provider"),
+  user_name: yup.string().required("Select a Provider"),
 });
 
 export const buyAirtimeSchema = yup.object().shape({
