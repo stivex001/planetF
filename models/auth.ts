@@ -74,15 +74,37 @@ export const buyTvSchema = yup.object().shape({
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
-  number: yup
+  number: yup.string().required("IUC number is required"),
+  // .test("is-valid-phone", "Not a valid phone number", (phone) => {
+  //   if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+  //     return true;
+  //   }
+  //   return false;
+  // }),
+});
+
+export const buyElectricitySchema = yup.object().shape({
+  provider: yup.string(),
+  payment: yup.string(),
+  promo: yup.string(),
+  ref: yup.string(),
+  amount: yup.string().required("Price is required"),
+  number: yup.string().required("Meter number is required"),
+  // .test("is-valid-phone", "Not a valid phone number", (phone) => {
+  //   if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+  //     return true;
+  //   }
+  //   return false;
+  // }),
+  phone: yup
     .string()
     .required("Phone number is required")
-    // .test("is-valid-phone", "Not a valid phone number", (phone) => {
-    //   if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
-    //     return true;
-    //   }
-    //   return false;
-    // }),
+    .test("is-valid-phone", "Not a valid phone number", (phone) => {
+      if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+        return true;
+      }
+      return false;
+    }),
 });
 
 export type SignUpFormValues = yup.InferType<typeof signUpSchema>;
@@ -97,16 +119,14 @@ export type ForgotPasswordFormOneValues = yup.InferType<
   typeof forgotPasswordSchemaOne
 >;
 
-export type BuyAirtimeFormValues = yup.InferType<
-  typeof buyAirtimeSchema
->;
+export type BuyAirtimeFormValues = yup.InferType<typeof buyAirtimeSchema>;
 
-export type BuyDataFormValues = yup.InferType<
-  typeof buyDataSchema
->;
+export type BuyDataFormValues = yup.InferType<typeof buyDataSchema>;
 
-export type BuyTvFormValues = yup.InferType<
-  typeof buyTvSchema
+export type BuyTvFormValues = yup.InferType<typeof buyTvSchema>;
+
+export type BuyElectricityFormValues = yup.InferType<
+  typeof buyElectricitySchema
 >;
 
 export type AuthFormTypes =
@@ -118,6 +138,7 @@ export type AuthFormTypes =
   | BuyAirtimeFormValues
   | BuyDataFormValues
   | BuyTvFormValues
+  | BuyElectricityFormValues;
 
 export type AuthFormFields =
   | keyof SignUpFormValues
@@ -128,3 +149,4 @@ export type AuthFormFields =
   | keyof BuyAirtimeFormValues
   | keyof BuyDataFormValues
   | keyof BuyTvFormValues
+  | keyof BuyElectricityFormValues;
