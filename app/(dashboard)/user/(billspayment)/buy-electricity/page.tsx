@@ -218,7 +218,7 @@ const BuyElectricity = (props: Props) => {
               })}
               disabled={isPending || isLoading}
             >
-              {isPending ? <Spinner /> : "Buy Airtime"}
+              {isPending ? <Spinner /> : "Buy Electricity"}
             </CustomButton>
           </div>
         </form>

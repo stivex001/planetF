@@ -211,7 +211,7 @@ const BuyData = (props: Props) => {
               })}
               disabled={isPending || isLoading}
             >
-              {isPending ? <Spinner /> : "Buy Airtime"}
+              {isPending ? <Spinner /> : "Buy Data"}
             </CustomButton>
           </div>
         </form>
