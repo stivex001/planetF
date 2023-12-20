@@ -5,9 +5,9 @@ import { FieldError } from "react-hook-form";
 
 interface DropDownProps {
   options: { key: string; label: string }[];
-  currentValue: string | undefined;
+  currentValue?: string | undefined;
   onSelect: (value: string) => void;
-  error: string | FieldError | undefined;
+  error?: string | FieldError | undefined;
   placeholder?: string;
   label?: string;
   buttonstyle?: string;
