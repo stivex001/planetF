@@ -69,6 +69,23 @@ export const buyDataSchema = yup.object().shape({
     }),
 });
 
+export const buyCheckerSchema = yup.object().shape({
+  coded: yup.string(),
+  quantity: yup.string(),
+  payment: yup.string(),
+  promo: yup.string(),
+  ref: yup.string(),
+  number: yup
+    .string()
+    .required("Phone number is required")
+    .test("is-valid-phone", "Not a valid phone number", (phone) => {
+      if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+        return true;
+      }
+      return false;
+    }),
+});
+
 export const buyTvSchema = yup.object().shape({
   coded: yup.string(),
   payment: yup.string(),
@@ -123,6 +140,8 @@ export type BuyAirtimeFormValues = yup.InferType<typeof buyAirtimeSchema>;
 
 export type BuyDataFormValues = yup.InferType<typeof buyDataSchema>;
 
+export type BuyCheckerFormValues = yup.InferType<typeof buyCheckerSchema>;
+
 export type BuyTvFormValues = yup.InferType<typeof buyTvSchema>;
 
 export type BuyElectricityFormValues = yup.InferType<
@@ -138,7 +157,8 @@ export type AuthFormTypes =
   | BuyAirtimeFormValues
   | BuyDataFormValues
   | BuyTvFormValues
-  | BuyElectricityFormValues;
+  | BuyElectricityFormValues
+  | BuyCheckerFormValues;
 
 export type AuthFormFields =
   | keyof SignUpFormValues
@@ -149,4 +169,5 @@ export type AuthFormFields =
   | keyof BuyAirtimeFormValues
   | keyof BuyDataFormValues
   | keyof BuyTvFormValues
-  | keyof BuyElectricityFormValues;
+  | keyof BuyElectricityFormValues
+  | keyof BuyCheckerFormValues;

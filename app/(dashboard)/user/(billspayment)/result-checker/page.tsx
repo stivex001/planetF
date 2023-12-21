@@ -4,7 +4,12 @@ import CustomButton from "@/components/Form/CustomButton";
 import { DropDown } from "@/components/Form/Dropdown";
 import { TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
-import { BuyDataFormValues, buyDataSchema } from "@/models/auth";
+import {
+  BuyCheckerFormValues,
+  BuyDataFormValues,
+  buyCheckerSchema,
+  buyDataSchema,
+} from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,6 +19,7 @@ import { useBuyAirtime } from "@/hooks/billsPayments/useBuyAirtime";
 import { useBuyData } from "@/hooks/billsPayments/useBuyData";
 import { ScreenLoader } from "@/components/ScreenLoader";
 import { getData } from "@/query/getdata";
+import { useCheckResult } from "@/hooks/billsPayments/useCheckResult";
 
 type Props = {};
 
@@ -26,63 +32,36 @@ interface BuyDataProps {
 const categories = [
   {
     id: "1",
-    name: "MTN",
+    name: "WAEC",
   },
   {
     id: "2",
-    name: "GLO",
-  },
-  {
-    id: "3",
-    name: "airtel",
-  },
-  {
-    id: "4",
-    name: "9mobile",
+    name: "NECO",
   },
 ];
 
 const ResultChecker = (props: Props) => {
-  const form = useForm<BuyDataFormValues>({
+  const form = useForm<BuyCheckerFormValues>({
     defaultValues: {
       coded: "",
-      country: "",
+      quantity: "",
       payment: "",
       promo: "0",
       ref: "",
       number: "",
     },
     mode: "all",
-    resolver: yupResolver(buyDataSchema),
+    resolver: yupResolver(buyCheckerSchema),
   });
 
-  const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const { mutate: buyData, isPending } = useBuyData();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        if (selectedCategory) {
-          const data = await getData(selectedCategory);
-          console.log(data, "data");
-          setData(data);
-        }
-        setIsLoading(false);
-      } catch (error: any) {
-        toast.error(error);
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [selectedCategory]);
+  const { mutate: buyChecker, isPending } = useCheckResult();
 
   const handleBuyData = useCallback(
-    (values: BuyDataFormValues) => {
-      buyData(values, {
+    (values: BuyCheckerFormValues) => {
+      buyChecker(values, {
         onError: (error: unknown) => {
           if (error instanceof Error) {
             console.log(error?.message);
@@ -95,7 +74,7 @@ const ResultChecker = (props: Props) => {
         },
       });
     },
-    [buyData]
+    [buyChecker]
   );
 
   const {
@@ -108,17 +87,9 @@ const ResultChecker = (props: Props) => {
     register,
   } = form;
 
-  const selectDataCategory = (selectedValue: string) => {
-    setSelectedCategory(selectedValue);
-  };
-
-  const handleSelectedData = (selectedValue: string) => {
-    const selectedCategory = data?.find(
-      (category) => category?.coded === selectedValue
-    );
-    if (selectedCategory) {
-      setValue("coded", selectedCategory?.coded);
-    }
+  const selectProductCategory = (category: string) => {
+    setValue("coded", category);
+    clearErrors("coded");
   };
 
   return (
@@ -146,30 +117,10 @@ const ResultChecker = (props: Props) => {
                 })) || []
               }
               placeholder={"Select exam Provider"}
-              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
+              onSelect={selectProductCategory}
               buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
             />
           </div>
-
-          {isLoading ? (
-            <div >
-              <Spinner />
-            </div>
-          ) : (
-            data.length > 0 && (
-              <DropDown
-                options={
-                  data?.map((category) => ({
-                    key: category?.coded,
-                    label: `${category?.network} - ${category?.name}`,
-                  })) || []
-                }
-                placeholder={"----Choose---"}
-                onSelect={handleSelectedData}
-                buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-              />
-            )
-          )}
 
           <div className="w-full">
             <TextInput
@@ -183,11 +134,11 @@ const ResultChecker = (props: Props) => {
           </div>
           <div className="w-full">
             <TextInput
-              label="Country"
-              placeholder="e.g NG"
+              label="Quantity"
+              placeholder="e.g 2"
               register={register}
-              fieldName={"country"}
-              error={errors.country}
+              fieldName={"quantity"}
+              error={errors.quantity}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
