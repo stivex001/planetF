@@ -35,12 +35,12 @@ const navbarLinks = [
     arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
     sublinks: [
       { id: 1, title: "Buy Airtime", url: "/user/buy-airtime" },
-      { id: 2, title: "Buy Airtime Pin", url: "/user/buy-airtimepin" },
+      // { id: 2, title: "Buy Airtime Pin", url: "/user/buy-airtimepin" },
       { id: 3, title: "Buy Data", url: "/user/buy-data" },
-      { id: 4, title: "Buy Data Pin", url: "/user/buy-datapin" },
+      // { id: 4, title: "Buy Data Pin", url: "/user/buy-datapin" },
       { id: 5, title: "Buy TV", url: "/user/buy-tv" },
       { id: 6, title: "Buy Electricity", url: "/user/buy-electricity" },
-      { id: 8, title: "Betting Topup", url: "/user/betting" },
+      // { id: 8, title: "Betting Topup", url: "/user/betting" },
       { id: 9, title: "Result Checker", url: "/user/result-checker" },
 
     ],
