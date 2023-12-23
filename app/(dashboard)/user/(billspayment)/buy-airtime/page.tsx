@@ -6,20 +6,20 @@ import { TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
 import { BuyAirtimeFormValues, buyAirtimeSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import { toast } from "react-toastify";
 import { useBuyAirtime } from "@/hooks/billsPayments/useBuyAirtime";
+import { getAirtime } from "@/query/getAirtime";
 
 type Props = {};
 
-const categories = [
-  {
-    id: "1",
-    name: "MTN",
-  },
-];
+interface BuyDataProps {
+  id: string;
+  name: string;
+  network: string;
+}
 
 const BuyAirtime = (props: Props) => {
   const form = useForm<BuyAirtimeFormValues>({
@@ -36,7 +36,28 @@ const BuyAirtime = (props: Props) => {
     resolver: yupResolver(buyAirtimeSchema),
   });
 
+  const [data, setData] = useState<BuyDataProps[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { mutate: buyAirtime, isPending } = useBuyAirtime();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getAirtime();
+        console.log(data);
+        
+        setData(data);
+
+        setIsLoading(false);
+      } catch (error: any) {
+        toast.error(error);
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleBuyAirtime = useCallback(
     (values: BuyAirtimeFormValues) => {
@@ -50,7 +71,6 @@ const BuyAirtime = (props: Props) => {
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data?.message);
-          
         },
       });
     },
@@ -67,18 +87,23 @@ const BuyAirtime = (props: Props) => {
     register,
   } = form;
 
-  const selectProductCategory = (category: string) => {
-    setValue("provider", category);
-    clearErrors("provider");
+  const selectDataCategory = (selectedValue: string) => {
+    setSelectedCategory(selectedValue);
   };
 
-  const isLoading = false;
-  const isError = false;
+  const handleSelectedData = (selectedValue: string) => {
+    const selectedCategory = data?.find(
+      (category) => category?.network == selectedValue
+    );
+    if (selectedCategory) {
+      setValue("provider", selectedCategory?.network);
+    }
+  };
 
   return (
     <div className="  rounded-md  w-full ">
-      <div className="w-11/12 mx-auto">
-        <h2 className="text-center text-2xl font-bold xl:text-left xl:text-3xl">
+      <div className="w-full lg:w-11/12 mx-auto">
+        <h2 className="lg:text-center text-2xl font-bold xl:text-left xl:text-3xl">
           Airtime TopUp
         </h2>
 
@@ -92,22 +117,20 @@ const BuyAirtime = (props: Props) => {
             </label>
             {isLoading ? (
               <Spinner />
-            ) : isError ? (
-              <div>Error loading categories</div>
             ) : (
-              <DropDown
-                options={
-                  categories?.map((category) => ({
-                    key: category.id,
-                    label: category.name,
-                  })) || []
-                }
-                currentValue={getValues("provider")}
-                placeholder={"Select network Provider"}
-                onSelect={selectProductCategory}
-                error={errors.provider}
-                buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-              />
+              data.length > 0 && (
+                <DropDown
+                  options={
+                    data?.map((category) => ({
+                      key: category?.network,
+                      label: category?.network,
+                    })) || []
+                  }
+                  placeholder={"----Choose---"}
+                  onSelect={handleSelectedData}
+                  buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
+                />
+              )
             )}
           </div>
           <div className="w-full">
@@ -151,7 +174,7 @@ const BuyAirtime = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-          <div className="w-full mx-auto h-9 mt-20">
+          <div className="w-full mx-auto h-9 my-10">
             <CustomButton
               type="submit"
               className={clsx({

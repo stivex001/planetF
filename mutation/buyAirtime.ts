@@ -1,3 +1,4 @@
+import { useToken } from "@/hooks/auth/useToken";
 import { BuyAirtimeFormValues, SignUpFormValues } from "@/models/auth";
 import { BASE_URL } from "@/utils/baseUrl";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -12,23 +13,27 @@ interface ApiResponseType {
 export const buyAirtime = async ({
   provider,
   country,
-  payment,
   promo,
-  ref,
   number,
   amount,
 }: BuyAirtimeFormValues) => {
+  const { token } = useToken();
   try {
     const response: AxiosResponse<ApiResponseType> = await axios.post(
       `${BASE_URL}/airtime`,
       {
         provider,
         country,
-        payment,
+        payment: "wallet",
         promo,
-        ref,
+        ref: Date.now(),
         number,
         amount,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     console.log(response, "ressssss");
