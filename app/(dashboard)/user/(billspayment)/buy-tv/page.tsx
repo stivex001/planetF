@@ -23,6 +23,7 @@ interface BuyDataProps {
   coded: string;
   name: string;
   network: string;
+  price: string
 }
 
 const categories = [
@@ -155,7 +156,7 @@ const BuyTV = (props: Props) => {
                 options={
                   data?.map((category) => ({
                     key: category?.coded,
-                    label: `${category?.name}`,
+                    label: `${category?.name} -₦${category?.price}`,
                   })) || []
                 }
                 placeholder={"----Choose---"}
