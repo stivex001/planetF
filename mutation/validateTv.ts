@@ -31,7 +31,7 @@ export const validateTv = async ({
         },
       }
     );
-    console.log(response, "ressssss");
+    console.log(response.data, "ressssss");
 
     if (response?.data?.success === 1) {
       return {

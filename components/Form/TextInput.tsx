@@ -66,8 +66,8 @@ export const ReadOnlyTextInput = ({
   className,
 }: {
   label: string;
-  placeholder: string;
-  value: string;
+  placeholder?: string;
+  value?: string;
   className?: string;
 }) => {
   return (
@@ -77,8 +77,8 @@ export const ReadOnlyTextInput = ({
       </label>
       <input
         readOnly={true}
-        value={value}
-        placeholder={placeholder}
+        value={value ?? ''}
+        placeholder={placeholder ?? ''}
         className={`w-full h-14 rounded-lg py-2 px-6  placeholder:text-gray-400 outline-none text-sm sm:leading-6 border cursor-not-allowed ${className}`}
       />
     </div>

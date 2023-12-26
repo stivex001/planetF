@@ -2,9 +2,14 @@
 
 import CustomButton from "@/components/Form/CustomButton";
 import { DropDown } from "@/components/Form/Dropdown";
-import { TextInput } from "@/components/Form/TextInput";
+import { ReadOnlyTextInput, TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
-import { BuyDataFormValues, BuyTvFormValues, buyDataSchema, buyTvSchema } from "@/models/auth";
+import {
+  BuyDataFormValues,
+  BuyTvFormValues,
+  buyDataSchema,
+  buyTvSchema,
+} from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,6 +21,10 @@ import { ScreenLoader } from "@/components/ScreenLoader";
 import { getData } from "@/query/getdata";
 import { useBuyTv } from "@/hooks/billsPayments/useBuyTv";
 import { getTv } from "@/query/getTv";
+import { useValidateTv } from "@/hooks/billsPayments/useValidateTv";
+import axios from "axios";
+import { BASE_URL } from "@/utils/baseUrl";
+import { useToken } from "@/hooks/auth/useToken";
 
 type Props = {};
 
@@ -23,8 +32,13 @@ interface BuyDataProps {
   coded: string;
   name: string;
   network: string;
-  price: string
+  price: string;
 }
+
+interface ValidatedData {
+  customerName: string; 
+}
+
 
 const categories = [
   {
@@ -37,9 +51,8 @@ const categories = [
   },
   {
     id: "3",
-    name: "startimes"
-  }
-  
+    name: "startimes",
+  },
 ];
 
 const BuyTV = (props: Props) => {
@@ -55,9 +68,13 @@ const BuyTV = (props: Props) => {
     resolver: yupResolver(buyTvSchema),
   });
 
+  const { token } = useToken();
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [validatedData, setValidatedData] = useState<ValidatedData | null>(null);
+  const [isValidated, setIsValidated] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
 
   const { mutate: buyTv, isPending } = useBuyTv();
 
@@ -80,21 +97,60 @@ const BuyTV = (props: Props) => {
   }, [selectedCategory]);
 
   const handleBuyData = useCallback(
-    (values: BuyTvFormValues) => {
-      buyTv(values, {
-        onError: (error: unknown) => {
-          if (error instanceof Error) {
-            console.log(error?.message);
-            toast.error(error?.message);
+    async (values: BuyTvFormValues) => {
+      setIsValidated(false);
+      setIsValidating(true)
+      try {
+        // Validate the TV before proceeding with the purchase
+        const validationValues = {
+          provider: selectedCategory,
+          number: values.number,
+          service: "tv",
+        };
+
+        const validationResponse = await axios.post(
+          `${BASE_URL}/validate`,
+          validationValues,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        },
-        onSuccess: (response: any) => {
-          console.log(response?.data);
-          toast.success(response?.data?.message);
-        },
-      });
+        );
+
+        console.log(validationResponse?.data, "res");
+
+        if (validationResponse?.data?.success === 1) {
+          setValidatedData(validationResponse?.data?.details);
+          setIsValidated(true);
+          setIsValidating(false)
+          toast.success(validationResponse?.data?.message);
+          // Validation successful, proceed with the TV purchase
+          buyTv(values, {
+            onError: (error: unknown) => {
+              if (error instanceof Error) {
+                console.log(error?.message);
+                toast.error(error?.message);
+              }
+            },
+            onSuccess: (response: any) => {
+              console.log(response?.data);
+              toast.success(response?.data?.message);
+            },
+          });
+        } else {
+          // Validation failed, display an error message or handle it accordingly
+          toast.error(validationResponse?.data?.message);
+        }
+      } catch (error: unknown) {
+        // Handle errors from TV validation or TV purchase
+        if (error instanceof Error) {
+          console.error(error.message);
+          toast.error(error.message);
+        }
+      }
     },
-    [buyTv]
+    [buyTv, selectedCategory]
   );
 
   const {
@@ -133,7 +189,7 @@ const BuyTV = (props: Props) => {
         >
           <div className="w-full ">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-               Provider
+              Provider
             </label>
 
             <DropDown
@@ -151,7 +207,7 @@ const BuyTV = (props: Props) => {
           </div>
 
           {isLoading ? (
-            <div >
+            <div>
               <Spinner />
             </div>
           ) : (
@@ -180,16 +236,17 @@ const BuyTV = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-          {/* <div className="w-full ">
-            <TextInput
-              label="Promo (optional)"
-              placeholder="Enter your promo code"
-              register={register}
-              fieldName={"promo"}
-              error={errors.promo}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
-            />
-          </div> */}
+          {isValidated && (
+            <div className="w-full ">
+              <ReadOnlyTextInput
+                label="Customer Name"
+                value={validatedData?.customerName}
+                placeholder={validatedData?.customerName}
+                className="bg-gray-100 rounded-sm border border-zinc-600"
+              />
+            </div>
+          )}
+
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
               type="submit"
@@ -198,9 +255,9 @@ const BuyTV = (props: Props) => {
                   true,
                 "opacity-70 cursor-not-allowed": isPending,
               })}
-              disabled={isPending || isLoading}
+              disabled={isPending || isLoading || isValidating}
             >
-              {isPending ? <Spinner /> : "Buy Tv"}
+              {(isPending || isValidating) ? <Spinner /> : "Buy Tv"}
             </CustomButton>
           </div>
         </form>
