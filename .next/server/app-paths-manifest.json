@@ -1,1 +1,4 @@
-{}
+{
+  "/not-found": "app/not-found.js",
+  "/(dashboard)/user/(billspayment)/buy-electricity/page": "app/(dashboard)/user/(billspayment)/buy-electricity/page.js"
+}

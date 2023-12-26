@@ -21,7 +21,6 @@ import { ScreenLoader } from "@/components/ScreenLoader";
 import { getData } from "@/query/getdata";
 import { useBuyTv } from "@/hooks/billsPayments/useBuyTv";
 import { getTv } from "@/query/getTv";
-import { useValidateTv } from "@/hooks/billsPayments/useValidateTv";
 import axios from "axios";
 import { BASE_URL } from "@/utils/baseUrl";
 import { useToken } from "@/hooks/auth/useToken";
