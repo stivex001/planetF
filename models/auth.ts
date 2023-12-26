@@ -91,13 +91,13 @@ export const buyTvSchema = yup.object().shape({
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
-  number: yup.string().required("IUC number is required"),
-  // .test("is-valid-phone", "Not a valid phone number", (phone) => {
-  //   if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
-  //     return true;
-  //   }
-  //   return false;
-  // }),
+  number: yup.string().required("IUC number is required")
+  .test("is-valid-phone", "Not a valid IUC number", (phone) => {
+    if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+      return true;
+    }
+    return false;
+  }),
 });
 
 export const buyElectricitySchema = yup.object().shape({
@@ -113,6 +113,29 @@ export const buyElectricitySchema = yup.object().shape({
   //   }
   //   return false;
   // }),
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .test("is-valid-phone", "Not a valid phone number", (phone) => {
+      if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+        return true;
+      }
+      return false;
+    }),
+});
+
+export const validateTvSchema = yup.object().shape({
+  provider: yup.string(),
+  service: yup.string(),
+  number: yup
+    .string()
+    .required("Meter number is required")
+    .test("is-valid-phone", "Not a IUC number", (phone) => {
+      if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+        return true;
+      }
+      return false;
+    }),
   phone: yup
     .string()
     .required("Phone number is required")
@@ -144,6 +167,8 @@ export type BuyCheckerFormValues = yup.InferType<typeof buyCheckerSchema>;
 
 export type BuyTvFormValues = yup.InferType<typeof buyTvSchema>;
 
+export type ValidateTvFormValues = yup.InferType<typeof validateTvSchema>;
+
 export type BuyElectricityFormValues = yup.InferType<
   typeof buyElectricitySchema
 >;
@@ -158,7 +183,8 @@ export type AuthFormTypes =
   | BuyDataFormValues
   | BuyTvFormValues
   | BuyElectricityFormValues
-  | BuyCheckerFormValues;
+  | BuyCheckerFormValues
+  | ValidateTvFormValues;
 
 export type AuthFormFields =
   | keyof SignUpFormValues
@@ -170,4 +196,5 @@ export type AuthFormFields =
   | keyof BuyDataFormValues
   | keyof BuyTvFormValues
   | keyof BuyElectricityFormValues
-  | keyof BuyCheckerFormValues;
+  | keyof BuyCheckerFormValues
+  | keyof ValidateTvFormValues;

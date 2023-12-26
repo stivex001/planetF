@@ -35,6 +35,10 @@ const categories = [
     id: "2",
     name: "DSTV",
   },
+  {
+    id: "3",
+    name: "startimes"
+  }
   
 ];
 
@@ -176,7 +180,7 @@ const BuyTV = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-          <div className="w-full ">
+          {/* <div className="w-full ">
             <TextInput
               label="Promo (optional)"
               placeholder="Enter your promo code"
@@ -185,7 +189,7 @@ const BuyTV = (props: Props) => {
               error={errors.promo}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
-          </div>
+          </div> */}
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
               type="submit"
