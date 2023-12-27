@@ -1,5 +1,6 @@
 import { SigninFormValues } from "@/models/auth";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 
 const BASE_URL = process.env.NEXT_PUBLIC_PLANETF_API;
 
@@ -24,7 +25,7 @@ export const signinWithEmail = async ({
     );
 
     if (response?.data?.success === 1) {
-      localStorage.setItem("token", response?.data?.token);
+      Cookies.set("token", response?.data?.token);
       return { success: true, data: response?.data };
     } else {
       throw new Error(response?.data?.message);

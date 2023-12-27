@@ -7,6 +7,8 @@ import { FaEdit, FaLock } from "react-icons/fa";
 import { LuToggleRight } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+
 
 type Props = {
   user: {
@@ -22,7 +24,7 @@ const UserModal = ({ user }: Props) => {
 
   const handleLogout = () => {
     toast.success("You have successfully Loggedout");
-    localStorage.removeItem("token");
+    Cookies.remove("token");
 
     setTimeout(() => {
       router.push("/login");

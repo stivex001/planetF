@@ -1,6 +1,7 @@
+import Cookies from "js-cookie";
+
 export const useToken = () => {
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token = Cookies.get('token');
 
   return { token };
 };
