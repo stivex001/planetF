@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import SubNavs from "@/components/SubNavs";
 import Sidebar from "@/components/Sidebar";
 
-const roboto = Roboto({ subsets: ["latin"], weight: '700' });
+const roboto = Roboto({ subsets: ["latin"], weight: "700" });
 
 export const metadata: Metadata = {
   title: "PlanetF",
@@ -20,15 +20,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={roboto.className}>
         <Navbar />
-        {/* <SubNavs /> */}
 
         <div className="flex">
           <Sidebar />
           <div className="pt-10 sm:pt-36 bg-slate-100 w-full md:w-11/12 xl:w-[80%] px-6">
             {children}
           </div>
-          
-          </div>
+        </div>
       </body>
     </html>
   );
