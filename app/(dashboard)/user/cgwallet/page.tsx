@@ -1,7 +1,6 @@
 "use client";
 
 import CustomCard from "@/components/CustomCard";
-import MovingBanner from "@/components/MovingBanner";
 import { ScreenLoader } from "@/components/ScreenLoader";
 import Transactions from "@/components/Transactions";
 import { getCGs } from "@/query/getCGs";
@@ -69,7 +68,6 @@ const CGWallet = (props: Props) => {
           </CustomCard>
         ))}
       </div>
-      <MovingBanner />
       <Transactions />
     </main>
   );

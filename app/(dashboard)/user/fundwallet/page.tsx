@@ -150,7 +150,7 @@ const page = (props: Props) => {
           </span>
         </CustomCard> */}
       </div>
-      <MovingBanner />
+
       <Transactions />
     </main>
   );

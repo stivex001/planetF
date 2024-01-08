@@ -85,7 +85,7 @@ const SalesReport = (props: Props) => {
           </div>
         </CustomCard>
       </div>
-      <MovingBanner />
+     
       <Transactions />
       <DashboardChart />
     </main>

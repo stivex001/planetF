@@ -22,7 +22,6 @@ const UserContext = createContext<{ user: any | null; loading: boolean }>({
 });
 
 export const UserProvider = ({ children }: UserDataProps) => {
-  const { token } = useToken();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -30,10 +29,7 @@ export const UserProvider = ({ children }: UserDataProps) => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        if (!token) {
-          setLoading(false);
-          return;
-        }
+        const { token } = await useToken();
 
         const response: AxiosResponse = await axios.get(
           `${BASE_URL}/dashboard`,
@@ -47,15 +43,16 @@ export const UserProvider = ({ children }: UserDataProps) => {
         console.log(response.data, "redssfwf");
 
         setUser(response?.data?.data);
+        setLoading(false);
       } catch (error: unknown) {
         console.log(error, "errr");
 
         if (error instanceof AxiosError) {
+          setLoading(false);
           throw new Error(error?.response?.data?.error?.message);
-          setLoading(false);
         } else if (error instanceof Error) {
-          throw error;
           setLoading(false);
+          throw error;
         } else throw new Error("Error occurred while logging in");
       }
     };

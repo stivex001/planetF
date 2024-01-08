@@ -7,12 +7,13 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useUser } from "@/context/user-context";
 import { ScreenLoader } from "./ScreenLoader";
 
-const MovingBanner = () => {
+interface UserProps {
+  user: {
+    news: string;
+  };
+}
 
-  const { user, loading } = useUser();
-
-  
-
+const MovingBanner = ({ user }: UserProps) => {
   // useEffect(() => {
   //   const mySwiper = new Swiper(".swiper-container", {
   //     direction: "horizontal",
@@ -31,11 +32,6 @@ const MovingBanner = () => {
   //     mySwiper?.destroy();
   //   };
   // }, []);
-
-  if (loading) {
-    return <ScreenLoader />;
-  }
-
 
   return (
     <section className="py-5 px-5 my-7">
@@ -61,9 +57,7 @@ const MovingBanner = () => {
                 Lorem Ipsum is simply dummy text
               </h1> */}
               {/* <span className="text-slate-400 ">20 hours ago</span> */}
-              <p className="text-slate-500 mt-1 text-justify">
-               {user?.news}
-              </p>
+              <p className="text-slate-500 mt-1 text-justify">{user?.news}</p>
               {/* <div className="flex items-center justify-between mt-5">
                 <button className="transition duration-200 rounded-md font-medium bg-[#64748b]/50  py-1 px-7 text-[#64748b]">
                   View

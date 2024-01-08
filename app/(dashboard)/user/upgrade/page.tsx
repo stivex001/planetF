@@ -15,7 +15,7 @@ const Upgrade = (props: Props) => {
           <span>Reload Data</span>
         </div>
       </div>
-      <MovingBanner />
+     
       <Transactions />
     </main>
   )
