@@ -13,7 +13,7 @@ export const middleware = async (request: NextRequest) => {
 
     if (loggedin && (pathname === "/login" || pathname === "/")) {
       // If logged in and trying to access login or home, redirect to /user/fundwallet
-      return NextResponse.redirect(new URL("/user/fundwallet", request.url));
+      return NextResponse.redirect(new URL("/user", request.url));
     }
 
     // Allow the user to continue to the requested page

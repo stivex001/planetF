@@ -1,5 +1,6 @@
 "use client";
 
+import { useToken } from "@/hooks/auth/useToken";
 import { BASE_URL } from "@/utils/baseUrl";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import {
@@ -15,13 +16,13 @@ interface UserDataProps {
   children: ReactNode;
 }
 
-
 const UserContext = createContext<{ user: any | null; loading: boolean }>({
   user: null,
   loading: false,
 });
 
 export const UserProvider = ({ children }: UserDataProps) => {
+  const { token } = useToken();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -29,8 +30,6 @@ export const UserProvider = ({ children }: UserDataProps) => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
-
         if (!token) {
           setLoading(false);
           return;
@@ -45,8 +44,7 @@ export const UserProvider = ({ children }: UserDataProps) => {
           }
         );
 
-        console.log(response.data, 'redssfwf');
-        
+        console.log(response.data, "redssfwf");
 
         setUser(response?.data?.data);
       } catch (error: unknown) {

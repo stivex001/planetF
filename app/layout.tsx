@@ -29,7 +29,7 @@ export default function RootLayout({
               <body className={inter.className}>
                 <div>{children}</div>
                 <ToastContainer
-                  position="top-right"
+                  position="top-center"
                   autoClose={5000}
                   hideProgressBar={true}
                   closeOnClick={false}

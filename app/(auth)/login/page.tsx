@@ -99,7 +99,7 @@ const Login = (props: Props) => {
           >
             <input
               type="text"
-              placeholder="username"
+              placeholder="Enter your username or email or phone number"
               {...register("user_name")}
               className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
@@ -114,7 +114,7 @@ const Login = (props: Props) => {
             <div className="relative">
               <input
                 type={!showText ? "password" : "text"}
-                placeholder="Password"
+                placeholder="Enter Your Password"
                 {...register("password")}
                 className="w-full text-sm border border-slate-200 px-4 py-3 rounded-md"
               />
