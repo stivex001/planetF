@@ -1,6 +1,7 @@
 {
-  "/not-found": "app/not-found.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/(dashboard)/user/fundwallet/page": "app/(dashboard)/user/fundwallet/page.js",
-  "/(dashboard)/user/commission/page": "app/(dashboard)/user/commission/page.js"
+  "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js"
 }
