@@ -23,8 +23,10 @@ const Dashboard = ({ user }: UserProps) => {
   console.log(user?.balances, "userrrrssss");
 
   const formatCurrency = (value: any) => {
-    return Number(value).toFixed(2);
+    const parsedValue = Number(value);
+    return isNaN(parsedValue) ? "0.00" : parsedValue?.toFixed(2);
   };
+
 
   const wallet = formatCurrency(user?.balances?.wallet);
   const bonus = formatCurrency(user?.balances?.bonus);
@@ -105,7 +107,10 @@ const Dashboard = ({ user }: UserProps) => {
       </CustomCard>
 
       <CustomCard className="">
-        <Link href='/user/transactions' className="flex items-center justify-between">
+        <Link
+          href="/user/transactions"
+          className="flex items-center justify-between"
+        >
           <IoWalletOutline size={30} />
 
           <div>
