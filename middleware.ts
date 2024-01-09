@@ -6,13 +6,17 @@ export const middleware = async (request: NextRequest) => {
     const loggedin = request.cookies.get("token");
     const pathname = request.nextUrl.pathname;
 
-    if (!loggedin && pathname !== "/login") {
-      // If not logged in and not on the login page, redirect to the login page
+    if (
+      !loggedin &&
+      pathname !== "/login" &&
+      pathname !== "/register" &&
+      pathname !== "/forgotpassword"
+    ) {
+      // If not logged in and not on the allowed pages, redirect to the login page
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
     if (loggedin && (pathname === "/login" || pathname === "/")) {
-      // If logged in and trying to access login or home, redirect to /user/fundwallet
       return NextResponse.redirect(new URL("/user", request.url));
     }
 
