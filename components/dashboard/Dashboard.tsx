@@ -5,6 +5,7 @@ import CustomCard from "../CustomCard";
 import { IoWalletOutline } from "react-icons/io5";
 import { useUser } from "@/context/user-context";
 import { ScreenLoader } from "../ScreenLoader";
+import Link from "next/link";
 
 interface UserProps {
   user: {
@@ -13,7 +14,7 @@ interface UserProps {
       bonus: string;
       points: string;
       agent_commision: string;
-      general_market: string
+      general_market: string;
     };
   };
 }
@@ -104,17 +105,16 @@ const Dashboard = ({ user }: UserProps) => {
       </CustomCard>
 
       <CustomCard className="">
-        <div className="flex items-center justify-between">
-          <div>
-            <IoWalletOutline size={30} />
-          </div>
+        <Link href='/user/transactions' className="flex items-center justify-between">
+          <IoWalletOutline size={30} />
+
           <div>
             <h4 className="text-2xl font-bold text-right">0</h4>
             <p className="text-base font-semibold capitalize text-right">
               Transaction Count
             </p>
           </div>
-        </div>
+        </Link>
       </CustomCard>
     </div>
   );
