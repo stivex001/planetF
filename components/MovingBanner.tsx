@@ -6,6 +6,7 @@ import "swiper/swiper-bundle.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useUser } from "@/context/user-context";
 import { ScreenLoader } from "./ScreenLoader";
+import Image from "next/image";
 
 interface UserProps {
   user: {
@@ -37,6 +38,7 @@ const MovingBanner = ({ user }: UserProps) => {
           <div className="swiper-wrapper">
             <div className="swiper-slide bg-white shadow-xl p-7 cursor-pointer duration-200">
               <p className="text-slate-500 mt-1 text-justify">{user?.news}</p>
+              <Image src="https://4ZMUn4Gupgm6AJZQYfkH7cUxH2c22i2LJYueIWox.jpg" alt="" width={100} height={100} />
             </div>
           </div>
         </div>
