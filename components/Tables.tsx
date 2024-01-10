@@ -1,17 +1,43 @@
 "use client";
 
+import { useModal } from "@/context/useModal";
 import { Transactions } from "@/types/transaction";
 import { format } from "date-fns";
 import React, { FC, useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import Modal from "react-modal";
+import CustomButton from "./Form/CustomButton";
 
 type Props = {};
+
+const customStyles: Modal.Styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Adjust the overlay color and opacity
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  content: {
+    borderRadius: "10px",
+    overflow: "auto", // Enable scrolling if content overflows
+    outline: "none",
+    padding: "20px",
+  },
+};
 
 const Tables: FC<{ transactionData: Transactions[] }> = ({
   transactionData,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedItem, setSelectedItem] = useState<Transactions | null>(null);
+
+  const { openModal, closeModal, isOpen } = useModal();
 
   const itemsPerPage = 5;
 
@@ -40,6 +66,11 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
+  };
+
+  const handleViewClick = (row: Transactions) => {
+    setSelectedItem(row);
+    openModal();
   };
 
   return (
@@ -111,6 +142,12 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
               >
                 channel
               </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left font-bold text-lg capitalize tracking-wider"
+              >
+                Action
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -123,10 +160,10 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
                     {row?.name}
                   </td>
-                  <td className="px-6 py-4 text-[#163e63] text-xl font-semibold ">
+                  <td className="px-6 py-4  text-[#163e63] text-xl font-semibold ">
                     {row?.description}
                   </td>
-                  <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
+                  <td className="px-6 py-4 text-[#163e63] text-xl font-semibold ">
                     ₦{Number(row?.amount).toFixed(2)}
                   </td>
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
@@ -143,6 +180,9 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
                   </td>
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
                     App
+                  </td>
+                  <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
+                    <button onClick={() => handleViewClick(row)}>View</button>
                   </td>
                 </tr>
               ))
@@ -193,6 +233,76 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
           )}
         </table>
       </div>
+
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          ariaHideApp={false}
+          shouldCloseOnOverlayClick={true}
+          shouldCloseOnEsc={true}
+          contentLabel="Export file"
+          overlayClassName={`fixed inset-0 z-50 overflow-auto`}
+          className="w-full max-w-md p-6 m-4 "
+        >
+          {/* <button
+            type="button"
+            onClick={closeModal}
+            className="absolute bottom-80 right-72 text-sm text-white px-4 h-12 bg-[#164e63] rounded-lg"
+          >
+            Close
+          </button> */}
+          <div className="z-30 w-[550px]  absolute bottom-24    bg-white rounded-lg shadow">
+            <div className="flex flex-col gap-12 py-10 justify-center">
+              <div className="w-5/6 mx-auto flex flex-col gap-10 ">
+                <div className="w-full flex items-center justify-between leading-6">
+                  <h2 className=" block text-sm font-medium">ID: </h2>
+                  <span className="w-[60%]">{selectedItem?.id}</span>
+                </div>
+
+                <div className="w-full flex items-center justify-between leading-6">
+                  <h2 className=" block text-sm font-medium">Name: </h2>
+                  <span className="w-[60%]"> {selectedItem?.name}</span>
+                </div>
+
+                <div className="w-full flex items-center justify-between leading-6">
+                  <h2 className=" block text-sm font-medium">Amount: </h2>
+                  <span className="w-[60%]">
+                    {" "}
+                    ₦{Number(selectedItem?.amount).toFixed(2)}
+                  </span>
+                </div>
+
+                <div className="w-full flex items-center justify-between leading-6">
+                  <h2 className=" block text-sm font-medium">Description: </h2>
+                  <span className="w-[60%]">{selectedItem?.description}</span>
+                </div>
+
+                <div className="w-full flex items-center justify-between leading-6">
+                  <h2 className=" block text-sm font-medium">Date: </h2>
+                  <span className="w-[60%]">
+                    {selectedItem?.created_at &&
+                      format(
+                        new Date(selectedItem?.created_at),
+                        "MMM dd, yyyy HH:mm:ss"
+                      )}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-10 justify-center">
+                  <CustomButton className="bg-[#164e63] w-28 h-8 text-xs font-medium">
+                    Export as PDF
+                  </CustomButton>
+                  <CustomButton className="bg-[#164e63] w-28 h-8 text-xs font-medium">
+                    Export as Excel
+                  </CustomButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

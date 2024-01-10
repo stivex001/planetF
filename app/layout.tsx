@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import AuthProviders from "@/context/auth-session";
 import { ToastContainer } from "react-toastify";
@@ -8,7 +8,7 @@ import QueryProviders from "@/context/query-provider";
 import { UserProvider } from "@/context/user-context";
 import { ModalProvider } from "@/context/useModal";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Poppins({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
   title: "PlanetF",
@@ -26,7 +26,7 @@ export default function RootLayout({
         <UserProvider>
           <ModalProvider>
             <QueryProviders>
-              <body className={inter.className}>
+              <body className={font.className}>
                 <div>{children}</div>
                 <ToastContainer
                   position="top-center"
