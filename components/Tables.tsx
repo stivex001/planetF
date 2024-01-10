@@ -7,6 +7,15 @@ import React, { FC, useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Modal from "react-modal";
 import CustomButton from "./Form/CustomButton";
+import { CSVLink } from "react-csv";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFDownloadLink,
+} from "@react-pdf/renderer";
 
 type Props = {};
 
@@ -71,6 +80,85 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
   const handleViewClick = (row: Transactions) => {
     setSelectedItem(row);
     openModal();
+  };
+
+  const handleCsvExport = () => {
+    alert('export')
+    const csvData = filteredData?.map((row) => ({
+      ID: row?.id,
+      Service: row?.name,
+      Description: row?.description,
+      Amount: `₦${Number(row?.amount).toFixed(2)}`,
+      // Add other fields as needed
+    }));
+
+    if (csvData) {
+      const headers = [
+        { label: "ID", key: "ID" },
+        { label: "Service", key: "Service" },
+        { label: "Description", key: "Description" },
+        { label: "Amount", key: "Amount" },
+        // Add other headers as needed
+      ];
+
+      const csvOptions = {
+        headers,
+        separator: ",",
+      };
+
+      return (
+        <CSVLink data={csvData} filename={"exported_data.csv"} {...csvOptions}>
+          Export to CSV
+        </CSVLink>
+      );
+    }
+  };
+
+  const handlePdfExport = () => {
+    alert('export')
+    // Create a component for rendering PDF content
+    const PdfDocument = () => (
+      <Document>
+        <Page size="A4" style={styles.page}>
+          <View style={styles.section}>
+            <Text>ID: {selectedItem?.id}</Text>
+            <Text>Name: {selectedItem?.name}</Text>
+            <Text>Amount: ₦{Number(selectedItem?.amount).toFixed(2)}</Text>
+            <Text>Description: {selectedItem?.description}</Text>
+            <Text>
+              {selectedItem?.created_at &&
+                format(
+                  new Date(selectedItem?.created_at),
+                  "MMM dd, yyyy HH:mm:ss"
+                )}
+            </Text>
+            {/* Add other fields as needed */}
+          </View>
+        </Page>
+      </Document>
+    );
+
+    // Styles for the PDF document
+    const styles = StyleSheet.create({
+      page: {
+        flexDirection: "row",
+        backgroundColor: "#fff",
+      },
+      section: {
+        margin: 10,
+        padding: 10,
+        flexGrow: 1,
+      },
+    });
+
+    // Use PDFDownloadLink to trigger the download
+    return (
+      <PDFDownloadLink document={<PdfDocument />} fileName="exported_data.pdf">
+        {({ blob, url, loading, error }) =>
+          loading ? "Loading document..." : "Export to PDF"
+        }
+      </PDFDownloadLink>
+    );
   };
 
   return (
@@ -291,11 +379,17 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
                 </div>
 
                 <div className="flex items-center gap-10 justify-center">
-                  <CustomButton className="bg-[#164e63] w-28 h-8 text-xs font-medium">
-                    Export as PDF
+                  <CustomButton
+                    onClick={handlePdfExport}
+                    className="bg-[#164e63] w-28 h-8 text-xs font-medium"
+                  >
+                    Export to PDF
                   </CustomButton>
-                  <CustomButton className="bg-[#164e63] w-28 h-8 text-xs font-medium">
-                    Export as Excel
+                  <CustomButton
+                    onClick={handleCsvExport}
+                    className="bg-[#164e63] w-28 h-8 text-xs font-medium"
+                  >
+                    Export to Excel
                   </CustomButton>
                 </div>
               </div>
