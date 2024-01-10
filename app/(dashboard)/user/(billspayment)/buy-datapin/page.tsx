@@ -46,7 +46,6 @@ const BuyDataPin = (props: Props) => {
   const form = useForm<BuyDataFormValues>({
     defaultValues: {
       coded: "",
-      country: "",
       payment: "",
       promo: "0",
       ref: "",
@@ -181,7 +180,7 @@ const BuyDataPin = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-          <div className="w-full">
+          {/* <div className="w-full">
             <TextInput
               label="Country"
               placeholder="e.g NG"
@@ -190,7 +189,7 @@ const BuyDataPin = (props: Props) => {
               error={errors.country}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
-          </div>
+          </div> */}
           <div className="w-full ">
             <TextInput
               label="Promo (optional)"

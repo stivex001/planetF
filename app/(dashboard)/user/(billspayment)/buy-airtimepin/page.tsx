@@ -25,7 +25,6 @@ const BuyAirtimePin = (props: Props) => {
   const form = useForm<BuyAirtimeFormValues>({
     defaultValues: {
       provider: "",
-      country: "",
       payment: "",
       promo: "0",
       ref: "",
@@ -131,7 +130,7 @@ const BuyAirtimePin = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-          <div className="w-full">
+          {/* <div className="w-full">
             <TextInput
               label="Country"
               placeholder="e.g NG"
@@ -140,7 +139,7 @@ const BuyAirtimePin = (props: Props) => {
               error={errors.country}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
-          </div>
+          </div> */}
           <div className="w-full ">
             <TextInput
               label="Promo (optional)"

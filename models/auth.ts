@@ -36,16 +36,29 @@ export const forgotPasswordSchemaOne = yup.object().shape({
 
 export const buyAirtimeSchema = yup.object().shape({
   provider: yup.string(),
-  amount: yup.string().required("Price is required"),
-  country: yup.string().required("Country is required"),
+  amount: yup
+    .string()
+    .required("Amount is required")
+    .test(
+      "is-valid-number",
+      "Amount must be a valid number",
+      (value: string) => {
+        if (!isNaN(Number(value))) {
+          return true;
+        }
+        return false;
+      }
+    ),
+
+  // country: yup.string().required("Country is required"),
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
   number: yup
     .string()
     .required("Phone number is required")
-    .test("is-valid-phone", "Not a valid phone number", (phone) => {
-      if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+    .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
+      if (!isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11) {
         return true;
       }
       return false;
@@ -54,7 +67,7 @@ export const buyAirtimeSchema = yup.object().shape({
 
 export const buyDataSchema = yup.object().shape({
   coded: yup.string(),
-  country: yup.string().required("Country is required"),
+  // country: yup.string().required("Country is required"),
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
@@ -91,13 +104,15 @@ export const buyTvSchema = yup.object().shape({
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
-  number: yup.string().required("IUC number is required")
-  .test("is-valid-phone", "Not a valid IUC number", (phone) => {
-    if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
-      return true;
-    }
-    return false;
-  }),
+  number: yup
+    .string()
+    .required("IUC number is required")
+    .test("is-valid-phone", "Not a valid IUC number", (phone) => {
+      if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+        return true;
+      }
+      return false;
+    }),
 });
 
 export const buyElectricitySchema = yup.object().shape({

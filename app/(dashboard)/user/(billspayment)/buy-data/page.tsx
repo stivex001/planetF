@@ -47,7 +47,6 @@ const BuyData = (props: Props) => {
   const form = useForm<BuyDataFormValues>({
     defaultValues: {
       coded: "",
-      country: "",
       payment: "",
       promo: "0",
       ref: "",

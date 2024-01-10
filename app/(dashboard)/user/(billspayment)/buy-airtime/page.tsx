@@ -12,6 +12,14 @@ import clsx from "clsx";
 import { toast } from "react-toastify";
 import { useBuyAirtime } from "@/hooks/billsPayments/useBuyAirtime";
 import { getAirtime } from "@/query/getAirtime";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type Props = {};
 
@@ -25,7 +33,6 @@ const BuyAirtime = (props: Props) => {
   const form = useForm<BuyAirtimeFormValues>({
     defaultValues: {
       provider: "",
-      country: "",
       payment: "",
       promo: "0",
       ref: "",
@@ -47,7 +54,7 @@ const BuyAirtime = (props: Props) => {
       try {
         const data = await getAirtime();
         console.log(data);
-        
+
         setData(data);
 
         setIsLoading(false);
@@ -154,26 +161,7 @@ const BuyAirtime = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-          {/* <div className="w-full">
-            <TextInput
-              label="Country"
-              placeholder="e.g NG"
-              register={register}
-              fieldName={"country"}
-              error={errors.country}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
-            />
-          </div> */}
-          {/* <div className="w-full ">
-            <TextInput
-              label="Promo (optional)"
-              placeholder="Enter your promo code"
-              register={register}
-              fieldName={"promo"}
-              error={errors.promo}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
-            />
-          </div> */}
+
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
               type="submit"

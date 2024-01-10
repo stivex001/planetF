@@ -12,7 +12,6 @@ interface ApiResponseType {
 
 export const buyAirtime = async ({
   provider,
-  country,
   promo,
   number,
   amount,
@@ -23,7 +22,7 @@ export const buyAirtime = async ({
       `${BASE_URL}/airtime`,
       {
         provider,
-        country,
+        country: "NG",
         payment: "wallet",
         promo,
         ref: Date.now(),

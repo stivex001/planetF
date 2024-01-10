@@ -14,19 +14,14 @@ interface ApiResponseType {
   data: any;
 }
 
-export const buyData = async ({
-  coded,
-  country,
-  promo,
-  number,
-}: BuyDataFormValues) => {
+export const buyData = async ({ coded, promo, number }: BuyDataFormValues) => {
   const { token } = useToken();
   try {
     const response: AxiosResponse<ApiResponseType> = await axios.post(
       `${BASE_URL}/data`,
       {
         coded,
-        country,
+        country: "NG",
         payment: "wallet",
         promo,
         ref: Date.now(),
