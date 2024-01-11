@@ -83,7 +83,6 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
   };
 
   const handleCsvExport = () => {
-    alert('export')
     const csvData = filteredData?.map((row) => ({
       ID: row?.id,
       Service: row?.name,
@@ -115,7 +114,6 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
   };
 
   const handlePdfExport = () => {
-    alert('export')
     // Create a component for rendering PDF content
     const PdfDocument = () => (
       <Document>
