@@ -16,18 +16,22 @@ import Ad3 from "@/public/new.svg";
 
 interface UserProps {
   user: {
-    news: string;
+    others: {
+      banner: string;
+    };
   };
 }
 
 const MovingBanner = ({ user }: UserProps) => {
   console.log(user, "use");
 
+  const banner = user?.others?.banner;
+
   return (
     <section className="my-20">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-medium text-[#1e293b]">Important Note</h2>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <IoIosArrowBack
             size={40}
             className=" transition shadow-sm font-medium border rounded-md cursor-pointer border-slate-300 px-2 text-slate-600 "
@@ -36,9 +40,9 @@ const MovingBanner = ({ user }: UserProps) => {
             size={40}
             className=" transition shadow-sm font-medium border rounded-md cursor-pointer border-slate-300 px-2 text-slate-600 "
           />
-        </div>
+        </div> */}
       </div>
-      <div className="flex justify-center mt-10  mx-1 sm:mx-auto w-full ">
+      <div className="flex justify-center mt-10 w-1/2 mx-auto ">
         <Swiper
           spaceBetween={30}
           slidesPerView={1}
@@ -50,27 +54,38 @@ const MovingBanner = ({ user }: UserProps) => {
           modules={[Autoplay]}
           className=" rounded-lg"
         >
-          <SwiperSlide className="bg-[#164e63]">
-            <p className="text-white mt-1 text-justify py-10 w-3/4 mx-auto text-3xl ">
-              {user?.news}
-            </p>
+          <SwiperSlide className="flex mx-auto justify-center">
+            <Image
+              src={`https://softconnet.com.ng/banners/${banner}`}
+              alt=""
+              width={600}
+              height={500}
+              className="object-cover "
+            />
           </SwiperSlide>
 
-          <SwiperSlide className="bg-[#164e63]">
-            <p className="text-white mt-1 text-justify py-10 w-3/4 mx-auto text-3xl ">
-              {user?.news}
-            </p>
+          <SwiperSlide className="">
+            <Image
+              src="https://softconnet.com.ng/banners/4ZMUn4Gupgm6AJZQYfkH7cUxH2c22i2LJYueIWox.jpg"
+              alt=""
+              width={600}
+              height={500}
+              className="object-cover "
+            />
           </SwiperSlide>
 
-          <SwiperSlide className="bg-[#164e63]">
-            <p className="text-white mt-1 text-justify py-10 w-3/4 mx-auto text-3xl ">
-              {user?.news}
-            </p>
+          <SwiperSlide className="">
+            <Image
+              src="https://softconnet.com.ng/banners/4ZMUn4Gupgm6AJZQYfkH7cUxH2c22i2LJYueIWox.jpg"
+              alt=""
+              width={600}
+              height={500}
+              className="object-cover "
+            />
           </SwiperSlide>
         </Swiper>
       </div>
     </section>
-
   );
 };
 

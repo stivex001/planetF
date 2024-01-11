@@ -6,7 +6,7 @@ const nextConfig = {
       "images.pexels.com",
       "avatars.githubusercontent.com",
       "e7.pngegg.com",
-      "4zmun4gupgm6ajzqyfkh7cuxh2c22i2ljyueiwox.jpg"
+      "softconnet.com.ng"
     ],
   },
 };
