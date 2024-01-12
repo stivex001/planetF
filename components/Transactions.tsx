@@ -6,6 +6,7 @@ import { useTransaction } from "@/hooks/queries/useTransaction";
 import { ScreenLoader } from "./ScreenLoader";
 import { getTransaction } from "@/query/getTransactions";
 import { toast } from "react-toastify";
+import { CSVLink } from "react-csv";
 
 type Props = {};
 
@@ -45,15 +46,15 @@ const Transactions = (props: Props) => {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 bg-white shadow-sm transition duration-200 py-2 px-3 rounded-md cursor-pointer text-[#475569]">
               <FiFileText />
-              <span className=" font-medium whitespace-nowrap">
+              <CSVLink data={transactionData} className=" font-medium whitespace-nowrap">
                 Export to Excel
-              </span>
+              </CSVLink>
             </div>
             <div className="flex items-center gap-2 bg-white shadow-sm transition duration-200 py-2 px-3 rounded-md cursor-pointer text-[#475569]">
               <FiFileText />
-              <span className="font-medium whitespace-nowrap">
+              <CSVLink data={transactionData} className="font-medium whitespace-nowrap">
                 Export to PDF
-              </span>
+              </CSVLink>
             </div>
           </div>
         </div>

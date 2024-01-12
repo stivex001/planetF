@@ -10,9 +10,7 @@ import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import Image from "next/image";
-import Ad1 from "@/public/eee.svg";
-import Ad2 from "@/public/eeee.svg";
-import Ad3 from "@/public/new.svg";
+
 
 interface UserProps {
   user: {
@@ -66,7 +64,7 @@ const MovingBanner = ({ user }: UserProps) => {
 
           <SwiperSlide className="">
             <Image
-              src="https://softconnet.com.ng/banners/4ZMUn4Gupgm6AJZQYfkH7cUxH2c22i2LJYueIWox.jpg"
+              src={`https://softconnet.com.ng/banners/${banner}`}
               alt=""
               width={600}
               height={500}
@@ -76,7 +74,7 @@ const MovingBanner = ({ user }: UserProps) => {
 
           <SwiperSlide className="">
             <Image
-              src="https://softconnet.com.ng/banners/4ZMUn4Gupgm6AJZQYfkH7cUxH2c22i2LJYueIWox.jpg"
+              src={`https://softconnet.com.ng/banners/${banner}`}
               alt=""
               width={600}
               height={500}
