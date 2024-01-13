@@ -74,12 +74,12 @@ const navbarLinks = [
         url: "/user/airtime-converter",
         subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
       },
-      {
-        id: 11,
-        title: "Auto Buy",
-        url: "/user/auto-buy",
-        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
-      },
+      // {
+      //   id: 11,
+      //   title: "Auto Buy",
+      //   url: "/user/auto-buy",
+      //   subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      // },
     ],
   },
   {

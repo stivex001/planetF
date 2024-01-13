@@ -9,16 +9,20 @@ import { HiBars3BottomRight } from "react-icons/hi2";
 import UserModal from "./UserModal";
 import MobileNav from "./MobileNav";
 import { useUser } from "@/context/user-context";
+import { usePathname } from "next/navigation";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
+  const pathname = usePathname()
+  const lastPathname = pathname.split("/")[2];
+
   const [showModal, setShowModal] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const { user, loading } = useUser();
 
-  console.log(user?.user, "userrrr");
+  console.log(lastPathname, "userrrr");
 
   const handleModalClick = () => {
     setShowModal(!showModal);
@@ -47,8 +51,8 @@ const Navbar = (props: Props) => {
                 Application
               </Link>
               <IoIosArrowForward className="text-white/70 cursor-pointer" />
-              <Link href="/user" className="text-sm text-white/70 ">
-                Dashboard
+              <Link href={`/user/${lastPathname}`} className="text-sm text-white/70 capitalize">
+                {lastPathname}
               </Link>
             </div>
           </div>
