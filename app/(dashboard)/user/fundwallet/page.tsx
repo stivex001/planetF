@@ -139,11 +139,11 @@ const page = (props: Props) => {
             </CopyToClipboard>
           </CustomCard>
         ))}
-        <CustomCard className="flex justify-center items-center">
+        {/* <CustomCard className="flex justify-center items-center">
           <span className="text-4xl font-medium whitespace-nowrap ">
             Fund with card
           </span>
-        </CustomCard>
+        </CustomCard> */}
         {/* <CustomCard className="">
           <span className="text-xl font-medium  ">
             Transfer Wallet to Wallet move commission move referal bonus

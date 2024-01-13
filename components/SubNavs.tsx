@@ -12,6 +12,7 @@ import {
   FiLayout,
   FiSidebar,
 } from "react-icons/fi";
+import { FaArrowRightArrowLeft } from "react-icons/fa6";
 
 const navbarLinks = [
   {
@@ -34,15 +35,51 @@ const navbarLinks = [
     url: "/user/payment",
     arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
     sublinks: [
-      { id: 1, title: "Buy Airtime", url: "/user/buy-airtime" },
+      {
+        id: 1,
+        title: "Buy Airtime",
+        url: "/user/buy-airtime",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
       // { id: 2, title: "Buy Airtime Pin", url: "/user/buy-airtimepin" },
-      { id: 3, title: "Buy Data", url: "/user/buy-data" },
+      {
+        id: 3,
+        title: "Buy Data",
+        url: "/user/buy-data",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
       // { id: 4, title: "Buy Data Pin", url: "/user/buy-datapin" },
-      { id: 5, title: "Buy TV", url: "/user/buy-tv" },
-      { id: 6, title: "Buy Electricity", url: "/user/buy-electricity" },
+      {
+        id: 5,
+        title: "Buy TV",
+        url: "/user/buy-tv",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
+      {
+        id: 6,
+        title: "Buy Electricity",
+        url: "/user/buy-electricity",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
       // { id: 8, title: "Betting Topup", url: "/user/betting" },
-      { id: 9, title: "Result Checker", url: "/user/result-checker" },
-
+      {
+        id: 9,
+        title: "Result Checker",
+        url: "/user/result-checker",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
+      {
+        id: 10,
+        title: "Airtime To Cash",
+        url: "/user/airtime-converter",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
+      {
+        id: 11,
+        title: "Auto Buy",
+        url: "/user/auto-buy",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
     ],
   },
   {
@@ -151,8 +188,13 @@ const SubNavs = (props: Props) => {
               <ul className=" mt-2 p-3 bg-slate-100 border border-gray-200 rounded shadow flex flex-col gap-4   ">
                 {link.sublinks.map((sublink) => (
                   <li key={sublink.id}>
-                    <Link href={`${sublink.url}`} className="flex items-center  justify-center xl:justify-start gap-2">
-                      <FiActivity size={24} className="-ml-3 xl:ml-0" />
+                    <Link
+                      href={`${sublink.url}`}
+                      className="flex items-center  justify-center xl:justify-start gap-2"
+                    >
+
+
+                      <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />
                       <span className="hidden xl:flex text-sm font-medium text-[#164e63] hover:text-[#164e63]">
                         {sublink.title}
                       </span>

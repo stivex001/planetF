@@ -65,6 +65,37 @@ export const buyAirtimeSchema = yup.object().shape({
     }),
 });
 
+export const convertAirtimeSchema = yup.object().shape({
+  network: yup.string(),
+  receiver: yup.string(),
+  amount: yup
+    .string()
+    .required("Amount is required")
+    .test(
+      "is-valid-number",
+      "Amount must be a valid number",
+      (value: string) => {
+        if (!isNaN(Number(value))) {
+          return true;
+        }
+        return false;
+      }
+    ),
+
+  payment: yup.string(),
+  promo: yup.string(),
+  ref: yup.string(),
+  number: yup
+    .string()
+    .required("Phone number is required")
+    .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
+      if (!isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11) {
+        return true;
+      }
+      return false;
+    }),
+});
+
 export const buyDataSchema = yup.object().shape({
   coded: yup.string(),
   // country: yup.string().required("Country is required"),
@@ -176,6 +207,8 @@ export type ForgotPasswordFormOneValues = yup.InferType<
 
 export type BuyAirtimeFormValues = yup.InferType<typeof buyAirtimeSchema>;
 
+export type ConvertAirtimeFormValues = yup.InferType<typeof convertAirtimeSchema>;
+
 export type BuyDataFormValues = yup.InferType<typeof buyDataSchema>;
 
 export type BuyCheckerFormValues = yup.InferType<typeof buyCheckerSchema>;
@@ -199,6 +232,7 @@ export type AuthFormTypes =
   | BuyTvFormValues
   | BuyElectricityFormValues
   | BuyCheckerFormValues
+  | ConvertAirtimeFormValues
   | ValidateTvFormValues;
 
 export type AuthFormFields =
@@ -212,4 +246,5 @@ export type AuthFormFields =
   | keyof BuyTvFormValues
   | keyof BuyElectricityFormValues
   | keyof BuyCheckerFormValues
+  | keyof ConvertAirtimeFormValues
   | keyof ValidateTvFormValues;
