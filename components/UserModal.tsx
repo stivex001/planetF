@@ -12,7 +12,7 @@ import { UserProfile } from "@/types/auth";
 
 
 type Props = {
-  user: UserProfile
+  user: UserProfile | undefined
 };
 
 const UserModal = ({ user }: Props) => {
