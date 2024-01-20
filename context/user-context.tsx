@@ -1,6 +1,6 @@
 "use client";
 
-import { useToken } from "@/hooks/auth/useToken";
+// import { useToken } from "@/hooks/auth/useToken";
 import { BASE_URL } from "@/utils/baseUrl";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import {
@@ -10,7 +10,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 interface UserDataProps {
   children: ReactNode;
@@ -29,7 +29,7 @@ export const UserProvider = ({ children }: UserDataProps) => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const { token } = await useToken();
+        const token = await Cookies.get("token");
 
         const response: AxiosResponse = await axios.get(
           `${BASE_URL}/dashboard`,

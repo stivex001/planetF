@@ -130,22 +130,26 @@ const BuyTV = (props: Props) => {
               if (error instanceof Error) {
                 console.log(error?.message);
                 toast.error(error?.message);
+                setIsValidating(false)
               }
             },
             onSuccess: (response: any) => {
               console.log(response?.data);
               toast.success(response?.data?.message);
+              setIsValidating(false)
             },
           });
         } else {
           // Validation failed, display an error message or handle it accordingly
           toast.error(validationResponse?.data?.message);
+          setIsValidating(false)
         }
       } catch (error: unknown) {
         // Handle errors from TV validation or TV purchase
         if (error instanceof Error) {
           console.error(error.message);
           toast.error(error.message);
+          setIsValidating(false)
         }
       }
     },
