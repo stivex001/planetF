@@ -69,7 +69,7 @@ const ForgotPassword = (props: Props) => {
           </div>
           <div className="max-w-[296px] h-[205px]  ml-20">
             <Image
-              src="https://enigma-laravel.left4code.com/build/assets/illustration-bbfd1da0.svg"
+              src="https://softconnet.com.ng/img/PlanetfLogo.png"
               alt=""
               width={300}
               height={290}

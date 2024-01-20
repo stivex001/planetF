@@ -29,6 +29,7 @@ export const convertAirtime = async ({
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          version: '1.0',
         },
       }
     );

@@ -8,19 +8,20 @@ import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import UserModal from "./UserModal";
 import MobileNav from "./MobileNav";
-import { useUser } from "@/context/user-context";
 import { usePathname } from "next/navigation";
+import { useUser } from "@/hooks/auth/useUser";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const lastPathname = pathname.split("/")[2];
 
   const [showModal, setShowModal] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  const { user, loading } = useUser();
+  const { data: user } = useUser();
+  console.log(user);
 
   console.log(lastPathname, "userrrr");
 
@@ -39,19 +40,24 @@ const Navbar = (props: Props) => {
           <div className="flex items-center gap-[50px] lg:gap-[150px] ">
             <Link href="/user" className="flex items-center gap-2">
               <Image
-                src="https://enigma-laravel.left4code.com/build/assets/logo-9a88cec5.svg"
+                src="https://softconnet.com.ng/img/PlanetfLogo.png"
                 alt=""
                 width={20}
                 height={20}
               />
-              <span className="hidden xl:block text-white text-lg">Enigma</span>
+              <span className="hidden xl:block text-white text-lg">
+                PlanetF
+              </span>
             </Link>
             <div className="hidden md:flex items-center gap-2 ">
               <Link href="/user" className="text-sm text-white ">
                 Application
               </Link>
               <IoIosArrowForward className="text-white/70 cursor-pointer" />
-              <Link href={`/user/${lastPathname}`} className="text-sm text-white/70 capitalize">
+              <Link
+                href={`/user/${lastPathname}`}
+                className="text-sm text-white/70 capitalize"
+              >
                 {lastPathname}
               </Link>
             </div>
@@ -91,7 +97,7 @@ const Navbar = (props: Props) => {
           </div>
           {showModal && (
             <div className="hidden md:block absolute right-0 top-12">
-              <UserModal user={user}   />
+              {user && <UserModal user={user} />}
             </div>
           )}
         </nav>
@@ -142,7 +148,7 @@ const Navbar = (props: Props) => {
           </div>
           {showModal && (
             <div className=" md:hidden absolute right-6 top-14">
-              <UserModal user={user} />
+              {user && <UserModal user={user} />}
             </div>
           )}
         </nav>

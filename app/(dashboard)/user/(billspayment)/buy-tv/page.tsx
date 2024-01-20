@@ -145,7 +145,7 @@ const BuyTV = (props: Props) => {
           setIsValidating(false)
         }
       } catch (error: unknown) {
-        // Handle errors from TV validation or TV purchase
+        
         if (error instanceof Error) {
           console.error(error.message);
           toast.error(error.message);

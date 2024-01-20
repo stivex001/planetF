@@ -62,16 +62,16 @@ const Login = (props: Props) => {
         <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center ">
           <div className="flex items-center gap-2">
             <Image
-              src="https://enigma-laravel.left4code.com/build/assets/logo-9a88cec5.svg"
+              src="https://softconnet.com.ng/img/PlanetfLogo.png"
               alt=""
               width={20}
               height={20}
             />
-            <span className="text-white text-lg">Enigma</span>
+            <span className="text-white text-lg">PlanetF</span>
           </div>
           <div className="max-w-[296px] h-[205px]  ml-20">
             <Image
-              src="https://enigma-laravel.left4code.com/build/assets/illustration-bbfd1da0.svg"
+              src="https://softconnet.com.ng/img/PlanetfLogo.png"
               alt=""
               width={300}
               height={290}

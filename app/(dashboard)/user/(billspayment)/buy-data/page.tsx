@@ -21,7 +21,7 @@ interface BuyDataProps {
   coded: string;
   name: string;
   network: string;
-  price: string
+  price: string;
 }
 
 const categories = [
@@ -152,7 +152,7 @@ const BuyData = (props: Props) => {
           </div>
 
           {isLoading ? (
-            <div >
+            <div>
               <Spinner />
             </div>
           ) : (
@@ -179,6 +179,24 @@ const BuyData = (props: Props) => {
               fieldName={"number"}
               error={errors.number}
               className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
+          <div className="w-full ">
+            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+              Wallet
+            </label>
+
+            <DropDown
+              options={
+                categories?.map((category) => ({
+                  key: category.name,
+                  label: category.name,
+                  value: category.name,
+                })) || []
+              }
+              placeholder={"Select "}
+              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
+              buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
             />
           </div>
           {/* <div className="w-full">

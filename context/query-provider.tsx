@@ -18,9 +18,11 @@ export default function QueryProviders({ children }: Props) {
   const queryclient = new QueryClient({
     queryCache: new QueryCache({
       onError: (err) => {
+        console.log(err, "err");
+        
         if (
           err.message === "invalid signature" ||
-          err.message === "jwt malformed" ||
+          err.message === "Unauthenticated." ||
           err.message === "jwt expired"
         ) {
           Cookies.remove('token')

@@ -40,7 +40,7 @@ const navbarLinks = [
       { id: 5, title: "Buy TV", url: "/user/buy-tv" },
       { id: 6, title: "Buy Electricity", url: "/user/buy-electricity" },
       // { id: 8, title: "Betting Topup", url: "/user/betting" },
-      { id: 9, title: "Result Checker", url: "/user/result-checker" },
+      { id: 9, title: "Education", url: "/user/result-checker" },
     ],
   },
   {
@@ -50,13 +50,13 @@ const navbarLinks = [
     url: "/user/commission",
     arrowIcon: <IoIosArrowDown />,
   },
-  {
-    id: 4,
-    icon: <FiLayout size={24} />,
-    title: "Promocode",
-    url: "/user/promocode",
-    arrowIcon: <IoIosArrowDown />,
-  },
+  // {
+  //   id: 4,
+  //   icon: <FiLayout size={24} />,
+  //   title: "Promocode",
+  //   url: "/user/promocode",
+  //   arrowIcon: <IoIosArrowDown />,
+  // },
   {
     id: 5,
     icon: <BsInbox size={24} />,

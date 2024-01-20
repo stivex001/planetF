@@ -64,7 +64,7 @@ const navbarLinks = [
       // { id: 8, title: "Betting Topup", url: "/user/betting" },
       {
         id: 9,
-        title: "Result Checker",
+        title: "Education",
         url: "/user/result-checker",
         subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
       },
@@ -89,13 +89,13 @@ const navbarLinks = [
     url: "/user/commission",
     arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
   },
-  {
-    id: 4,
-    icon: <FiLayout size={24} className="-ml-3 xl:ml-0" />,
-    title: "Promocode",
-    url: "/user/promocode",
-    arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
-  },
+  // {
+  //   id: 4,
+  //   icon: <FiLayout size={24} className="-ml-3 xl:ml-0" />,
+  //   title: "Promocode",
+  //   url: "/user/promocode",
+  //   arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
+  // },
   {
     id: 5,
     icon: <BsInbox size={24} className="-ml-3 xl:ml-0" />,

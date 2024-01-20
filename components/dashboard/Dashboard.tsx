@@ -77,7 +77,7 @@ const Dashboard = ({ user }: UserProps) => {
           </div>
         </div>
       </CustomCard>
-      <CustomCard className="">
+      {/* <CustomCard className="">
         <div className="flex items-center justify-between">
           <div>
             <IoWalletOutline size={30} />
@@ -89,8 +89,8 @@ const Dashboard = ({ user }: UserProps) => {
             </p>
           </div>
         </div>
-      </CustomCard>
-      <CustomCard className="">
+      </CustomCard> */}
+      {/* <CustomCard className="">
         <div className="flex items-center justify-between">
           <div>
             <IoWalletOutline size={30} />
@@ -104,7 +104,7 @@ const Dashboard = ({ user }: UserProps) => {
             </p>
           </div>
         </div>
-      </CustomCard>
+      </CustomCard> */}
 
       <CustomCard className="">
         <Link

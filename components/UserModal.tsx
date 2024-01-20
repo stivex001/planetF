@@ -8,15 +8,11 @@ import { LuToggleRight } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { UserProfile } from "@/types/auth";
 
 
 type Props = {
-  user: {
-    user: {
-      user_name: string;
-      status: string;
-    };
-  };
+  user: UserProfile
 };
 
 const UserModal = ({ user }: Props) => {

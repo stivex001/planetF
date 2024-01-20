@@ -130,17 +130,17 @@ const CGTransfer = (props: Props) => {
   return (
     <main>
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-medium text-[#1e293b]">Bundles Transfer</h2>
-        <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
+        <h2 className="text-lg font-medium text-[#1e293b]">CG Transfer</h2>
+        {/* <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
           <FiRefreshCcw size={16} />
           <span>Reload Data</span>
-        </div>
+        </div> */}
       </div>
       <table className="w-1/2  border  mt-16 ">
         <thead className=" ">
           <tr className="text-left">
             <th className="py-2 px-4 border-b">ID</th>
-            <th className="py-2 px-4 border-b">Network</th>
+            <th className="py-2 px-4 border-b">Name</th>
             <th className="py-2 px-4 border-b">Balance</th>
             <th className="py-2 px-4 border-b">Action</th>
           </tr>
@@ -218,7 +218,7 @@ const CGTransfer = (props: Props) => {
                     disabled={pending}
                     className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
                   >
-                    {pending ? <Spinner /> : "Pay"}
+                    {pending ? <Spinner /> : "Submit"}
                   </button>
                 </div>
               </form>
