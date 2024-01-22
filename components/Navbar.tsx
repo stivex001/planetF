@@ -80,6 +80,7 @@ const Navbar = (props: Props) => {
               <AiOutlineBell size={24} className="text-slate-400/100" />
               <div className="bg-red-500 absolute top-0 right-1 w-2 h-2 rounded-full" />
             </div>
+
             <div
               className="w-8 h-8 rounded-full flex justify-center items-center relative cursor-pointer"
               onClick={handleModalClick}

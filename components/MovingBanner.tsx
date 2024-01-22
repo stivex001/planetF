@@ -3,14 +3,13 @@
 import React, { useEffect } from "react";
 
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { useUser } from "@/context/user-context";
 import { ScreenLoader } from "./ScreenLoader";
 import "swiper/css";
 import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import Image from "next/image";
-
+import { useUser } from "@/hooks/auth/useUser";
 
 interface UserProps {
   user: {
@@ -20,10 +19,14 @@ interface UserProps {
   };
 }
 
-const MovingBanner = ({ user }: UserProps) => {
-  console.log(user, "use");
+const MovingBanner = () => {
+  const { data: user, isLoading } = useUser();
 
   const banner = user?.others?.banner;
+
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
 
   return (
     <section className="my-20">

@@ -3,36 +3,27 @@
 import React from "react";
 import CustomCard from "../CustomCard";
 import { IoWalletOutline } from "react-icons/io5";
-import { useUser } from "@/context/user-context";
 import { ScreenLoader } from "../ScreenLoader";
 import Link from "next/link";
+import { useUser } from "@/hooks/auth/useUser";
 
-interface UserProps {
-  user: {
-    balances: {
-      wallet: string;
-      bonus: string;
-      points: string;
-      agent_commision: string;
-      general_market: string;
-    };
-  };
-}
-
-const Dashboard = ({ user }: UserProps) => {
-  console.log(user?.balances, "userrrrssss");
+const Dashboard = () => {
+  const { data: user, isLoading } = useUser();
 
   const formatCurrency = (value: any) => {
     const parsedValue = Number(value);
     return isNaN(parsedValue) ? "0.00" : parsedValue?.toFixed(2);
   };
 
-
   const wallet = formatCurrency(user?.balances?.wallet);
   const bonus = formatCurrency(user?.balances?.bonus);
   const agent_commision = formatCurrency(user?.balances?.agent_commision);
   const points = formatCurrency(user?.balances?.points);
   const general_market = formatCurrency(user?.balances?.general_market);
+
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
