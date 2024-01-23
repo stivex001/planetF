@@ -2,7 +2,7 @@
 
 import CustomButton from "@/components/Form/CustomButton";
 import { DropDown } from "@/components/Form/Dropdown";
-import { TextInput } from "@/components/Form/TextInput";
+import { ReadOnlyTextInput, TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
 import { BuyDataFormValues, buyDataSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,6 +14,11 @@ import { useBuyAirtime } from "@/hooks/billsPayments/useBuyAirtime";
 import { useBuyData } from "@/hooks/billsPayments/useBuyData";
 import { ScreenLoader } from "@/components/ScreenLoader";
 import { getData } from "@/query/getdata";
+import mtnImage from "@/images/mtn.png";
+import gloImage from "@/images/glo.png";
+import airtelImage from "@/images/airtel.png";
+import mobileImage from "@/images/9mobile.png";
+import Image from "next/image";
 
 type Props = {};
 
@@ -28,18 +33,22 @@ const categories = [
   {
     id: "1",
     name: "MTN",
+    img: mtnImage,
   },
   {
     id: "2",
     name: "GLO",
+    img: gloImage,
   },
   {
     id: "3",
     name: "airtel",
+    img: airtelImage,
   },
   {
     id: "4",
     name: "9mobile",
+    img: mobileImage,
   },
 ];
 
@@ -59,26 +68,23 @@ const BuyData = (props: Props) => {
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategoryData, setSelectedCategoryData] =
+    useState<BuyDataProps | null>(null);
 
   const { mutate: buyData, isPending } = useBuyData();
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const handleImageClick = async (categoryName: string) => {
+    try {
       setIsLoading(true);
-      try {
-        if (selectedCategory) {
-          const data = await getData(selectedCategory);
-          console.log(data, "data");
-          setData(data);
-        }
-        setIsLoading(false);
-      } catch (error: any) {
-        toast.error(error);
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [selectedCategory]);
+      const categoryData = await getData(categoryName);
+      setData(categoryData);
+      setSelectedCategory(categoryName);
+      setIsLoading(false);
+    } catch (error: any) {
+      toast.error(error.message);
+      setIsLoading(false);
+    }
+  };
 
   const handleBuyData = useCallback(
     (values: BuyDataFormValues) => {
@@ -118,6 +124,7 @@ const BuyData = (props: Props) => {
     );
     if (selectedCategory) {
       setValue("coded", selectedCategory?.coded);
+      setSelectedCategoryData(selectedCategory);
     }
   };
 
@@ -137,7 +144,21 @@ const BuyData = (props: Props) => {
               Network Provider
             </label>
 
-            <DropDown
+            <div className="flex items-center justify-between my-5 ">
+              {categories.map((category) => (
+                <Image
+                  key={category.id}
+                  src={category.img}
+                  alt={`${selectedCategory} Logo`}
+                  className="cursor-pointer"
+                  width={42}
+                  height={42}
+                  onClick={() => handleImageClick(category.name)}
+                />
+              ))}
+            </div>
+
+            {/* <DropDown
               options={
                 categories?.map((category) => ({
                   key: category.name,
@@ -148,7 +169,7 @@ const BuyData = (props: Props) => {
               placeholder={"Select network Provider"}
               onSelect={(selectedValue) => selectDataCategory(selectedValue)}
               buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-            />
+            /> */}
           </div>
 
           {isLoading ? (
@@ -156,12 +177,12 @@ const BuyData = (props: Props) => {
               <Spinner />
             </div>
           ) : (
-            data.length > 0 && (
+            data?.length > 0 && (
               <DropDown
                 options={
                   data?.map((category) => ({
                     key: category?.coded,
-                    label: `${category?.network} - ${category?.name} -₦${category?.price}`,
+                    label: `${category?.network} - ${category?.name} `,
                   })) || []
                 }
                 placeholder={"----Choose---"}
@@ -170,6 +191,17 @@ const BuyData = (props: Props) => {
               />
             )
           )}
+
+          <div className="w-full">
+            <ReadOnlyTextInput
+              label="Amount"
+              placeholder=""
+              value={
+                selectedCategoryData ? `₦ ${selectedCategoryData.price}` : ""
+              }
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
 
           <div className="w-full">
             <TextInput
