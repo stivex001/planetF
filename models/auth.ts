@@ -22,6 +22,7 @@ export const signInSchema = yup.object().shape({
 export const buyCGBundleSchema = yup.object().shape({
   bundle_id: yup.string(),
   paywith: yup.string(),
+  // receipt: yup.string(),
 });
 
 export const transferCGBundleSchema = yup.object().shape({

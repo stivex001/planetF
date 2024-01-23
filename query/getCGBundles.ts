@@ -18,8 +18,11 @@ export const getCGBundles = async (options?: GetCGBundlesOptions) => {
       params: options
     });
 
+    console.log(response?.data,"sfdtf");
+    
+
     if (response?.data?.success === 1) {
-      return response?.data?.data?.bundles;
+      return response?.data;
     } else {
       throw new Error(response?.data?.message);
     }

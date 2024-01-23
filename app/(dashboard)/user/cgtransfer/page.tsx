@@ -72,7 +72,12 @@ const CGTransfer = (props: Props) => {
         const data = await getCGs();
         console.log(data, "data");
 
-        setCGData(data?.data);
+        const modifiedData = data?.data.map((item: any, index: number) => ({
+          ...item,
+          id: index + 1,
+        }));
+
+        setCGData(modifiedData);
         setIsLoading(false);
       } catch (error: any) {
         toast.error(error);
@@ -131,10 +136,6 @@ const CGTransfer = (props: Props) => {
     <main>
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-medium text-[#1e293b]">CG Transfer</h2>
-        {/* <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
-          <FiRefreshCcw size={16} />
-          <span>Reload Data</span>
-        </div> */}
       </div>
       <table className="w-1/2  border  mt-16 ">
         <thead className=" ">
@@ -181,7 +182,7 @@ const CGTransfer = (props: Props) => {
           <button
             type="button"
             onClick={closeModal}
-            className="absolute top-28 right-10 text-sm text-white px-4 h-12 bg-[#164e63] rounded-lg"
+            className="absolute top-[270px] right-[360px] text-sm text-white px-4 h-12 bg-[#164e63] rounded-lg"
           >
             Close
           </button>
@@ -212,6 +213,7 @@ const CGTransfer = (props: Props) => {
                     className="bg-gray-100 rounded-sm border border-zinc-600"
                   />
                 </div>
+                <div></div>
                 <div className="w-full mx-auto h-9 mt-10">
                   <button
                     type="submit"

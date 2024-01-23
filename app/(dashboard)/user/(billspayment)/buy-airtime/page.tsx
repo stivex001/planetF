@@ -12,14 +12,6 @@ import clsx from "clsx";
 import { toast } from "react-toastify";
 import { useBuyAirtime } from "@/hooks/billsPayments/useBuyAirtime";
 import { getAirtime } from "@/query/getAirtime";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 type Props = {};
 
@@ -159,7 +151,7 @@ const BuyAirtime = (props: Props) => {
 
           <div className="w-full">
             <ReadOnlyTextInput
-              label="Amount to pay"
+              label="Discount"
               placeholder=""
               value={amountToPay !== null ? amountToPay.toFixed(2) : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
