@@ -1,7 +1,6 @@
 "use client";
 
 import CustomCard from "@/components/CustomCard";
-import MovingBanner from "@/components/MovingBanner";
 import { ScreenLoader } from "@/components/ScreenLoader";
 import Transactions from "@/components/Transactions";
 import { getVirtualacount } from "@/query/getVirtualaccounts";
@@ -11,6 +10,7 @@ import { toast } from "react-toastify";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useUser } from "@/context/user-context";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
+import { IoWalletOutline } from "react-icons/io5";
 
 type Props = {};
 
@@ -121,10 +121,22 @@ const page = (props: Props) => {
         {accounts?.map((account, index) => (
           <CustomCard className="" key={index}>
             <CopyToClipboard
-              text={`${account.account_number}`}
+              text={`${account?.account_number}`}
               onCopy={() => onCopy(index)}
             >
-              <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <IoWalletOutline size={30} />
+                </div>
+                <div className="flex flex-col">
+                  <h4 className="text-3xl font-bold text-right">{account?.account_number}</h4>
+                  <p className="text-base font-semibold capitalize text-right">
+                    {account?.bank_name}
+                  </p>
+                  <span className="text-base font-semibold capitalize text-right">{account?.account_name}</span>
+                </div>
+              </div>
+              {/* <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between h-20 ">
                   <h1 className="text-2xl  font-medium ">
                     {account.bank_name}
@@ -135,7 +147,7 @@ const page = (props: Props) => {
                   {account.account_number}
                 </h1>
                 <span className="text-base">{account?.account_name}</span>
-              </div>
+              </div> */}
             </CopyToClipboard>
           </CustomCard>
         ))}
