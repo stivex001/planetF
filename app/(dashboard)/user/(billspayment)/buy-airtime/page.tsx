@@ -2,7 +2,7 @@
 
 import CustomButton from "@/components/Form/CustomButton";
 import { DropDown } from "@/components/Form/Dropdown";
-import { TextInput } from "@/components/Form/TextInput";
+import { ReadOnlyTextInput, TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
 import { BuyAirtimeFormValues, buyAirtimeSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -27,6 +27,7 @@ interface BuyDataProps {
   id: string;
   name: string;
   network: string;
+  discount: number;
 }
 
 const BuyAirtime = (props: Props) => {
@@ -46,6 +47,8 @@ const BuyAirtime = (props: Props) => {
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [amountToPay, setAmountToPay] = useState<number | null>(null);
+
   const { mutate: buyAirtime, isPending } = useBuyAirtime();
 
   useEffect(() => {
@@ -66,6 +69,16 @@ const BuyAirtime = (props: Props) => {
     fetchData();
   }, []);
 
+  const {
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    getValues,
+    clearErrors,
+    setError,
+    register,
+  } = form;
+
   const handleBuyAirtime = useCallback(
     (values: BuyAirtimeFormValues) => {
       buyAirtime(values, {
@@ -84,16 +97,6 @@ const BuyAirtime = (props: Props) => {
     [buyAirtime]
   );
 
-  const {
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    getValues,
-    clearErrors,
-    setError,
-    register,
-  } = form;
-
   const selectDataCategory = (selectedValue: string) => {
     setSelectedCategory(selectedValue);
   };
@@ -102,8 +105,11 @@ const BuyAirtime = (props: Props) => {
     const selectedCategory = data?.find(
       (category) => category?.network == selectedValue
     );
+
+    console.log(selectedCategory, "net");
     if (selectedCategory) {
       setValue("provider", selectedCategory?.network);
+      setValue("amount", "");
     }
   };
 
@@ -147,6 +153,15 @@ const BuyAirtime = (props: Props) => {
               register={register}
               fieldName={"amount"}
               error={errors.amount}
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
+
+          <div className="w-full">
+            <ReadOnlyTextInput
+              label="Amount to pay"
+              placeholder=""
+              value={amountToPay !== null ? amountToPay.toFixed(2) : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
