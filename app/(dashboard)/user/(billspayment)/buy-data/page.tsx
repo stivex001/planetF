@@ -213,7 +213,7 @@ const BuyData = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-          <div className="w-full ">
+          {/* <div className="w-full ">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
               Wallet
             </label>
@@ -230,7 +230,7 @@ const BuyData = (props: Props) => {
               onSelect={(selectedValue) => selectDataCategory(selectedValue)}
               buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
             />
-          </div>
+          </div> */}
           {/* <div className="w-full">
             <TextInput
               label="Country"

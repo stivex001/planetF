@@ -12,8 +12,19 @@ import clsx from "clsx";
 import { toast } from "react-toastify";
 import { useBuyAirtime } from "@/hooks/billsPayments/useBuyAirtime";
 import { getAirtime } from "@/query/getAirtime";
+import mtnImage from "@/images/mtn.png";
+import gloImage from "@/images/glo.png";
+import airtelImage from "@/images/airtel.png";
+import mobileImage from "@/images/9mobile.png";
 
 type Props = {};
+
+const providerImages = {
+  MTN: mtnImage,
+  GLO: gloImage,
+  AIRTEL: airtelImage,
+  "9MOBILE": mobileImage,
+};
 
 interface BuyDataProps {
   id: string;
@@ -40,6 +51,9 @@ const BuyAirtime = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [amountToPay, setAmountToPay] = useState<number | null>(null);
+  const [enteredAmount, setEnteredAmount] = useState<number | null>(null);
+  const [discount, setDiscount] = useState<number | null>(null);
+
 
   const { mutate: buyAirtime, isPending } = useBuyAirtime();
 
@@ -102,6 +116,12 @@ const BuyAirtime = (props: Props) => {
     if (selectedCategory) {
       setValue("provider", selectedCategory?.network);
       setValue("amount", "");
+      
+
+      // const image = providerImages[selectedCategory?.network.toUpperCase()];
+
+      // console.log(image);
+
     }
   };
 
@@ -123,7 +143,7 @@ const BuyAirtime = (props: Props) => {
             {isLoading ? (
               <Spinner />
             ) : (
-              data.length > 0 && (
+              data?.length > 0 && (
                 <DropDown
                   options={
                     data?.map((category) => ({
