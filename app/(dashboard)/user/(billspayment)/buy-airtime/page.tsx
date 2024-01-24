@@ -185,7 +185,7 @@ const BuyAirtime = (props: Props) => {
 
           <div className="w-full">
             <ReadOnlyTextInput
-              label="Discount"
+              label="Cashback"
               placeholder=""
               value={getValues("discount")}
               className="bg-gray-100 rounded-sm border border-zinc-600"
@@ -201,6 +201,11 @@ const BuyAirtime = (props: Props) => {
               error={errors.number}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
+            <p className="text-red-500 text-base font-medium">
+              Dear Customer always be certain that you have entered the correct
+              number as PLANETF will not be responsible for any number entered
+              incorrectly. Thank You.{" "}
+            </p>
           </div>
 
           <div className="w-full mx-auto h-9 my-10">
@@ -246,7 +251,7 @@ const BuyAirtime = (props: Props) => {
               <span className="text-[#164e63]">{` ${formData?.name}`}</span>
             </div> */}
             <div className="flex items-center justify-between">
-              <p>discount: </p>
+              <p>Cashback: </p>
               <span className="text-[#164e63]">%{formData?.discount}</span>
             </div>
             <div className="flex items-center justify-between">

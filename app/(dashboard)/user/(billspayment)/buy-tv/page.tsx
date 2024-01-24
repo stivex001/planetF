@@ -308,7 +308,13 @@ const BuyTV = (props: Props) => {
               fieldName={"number"}
               error={errors.number}
               className="bg-gray-100 rounded-sm border border-zinc-600"
+
             />
+            <p className="text-red-500 text-base font-medium">
+              Dear Customer always be certain that you have entered the correct
+              number as PLANETF will not be responsible for any number entered
+              incorrectly. Thank You.{" "}
+            </p>
           </div>
           {isValidated && (
             <div className="w-full ">

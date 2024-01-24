@@ -234,6 +234,11 @@ const BuyData = (props: Props) => {
               error={errors.number}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
+            <p className="text-red-500 text-base font-medium">
+              Dear Customer always be certain that you have entered the correct
+              number as PLANETF will not be responsible for any number entered
+              incorrectly. Thank You.{" "}
+            </p>
           </div>
 
           <CustomButton
@@ -273,7 +278,7 @@ const BuyData = (props: Props) => {
               <span className="text-[#164e63]">{`${formData?.network} `}</span>
             </div>
             <div className="flex items-center justify-between">
-              <p>Details: </p>
+              <p>Plan: </p>
               <span className="text-[#164e63]">{` ${formData?.name}`}</span>
             </div>
             <div className="flex items-center justify-between">
