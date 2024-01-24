@@ -1,4 +1,7 @@
 {
   "/(dashboard)/user/(billspayment)/buy-data/page": "app/(dashboard)/user/(billspayment)/buy-data/page.js",
-  "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js"
+  "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js",
+  "/(dashboard)/user/(billspayment)/buy-electricity/page": "app/(dashboard)/user/(billspayment)/buy-electricity/page.js",
+  "/(dashboard)/user/(billspayment)/buy-tv/page": "app/(dashboard)/user/(billspayment)/buy-tv/page.js",
+  "/(dashboard)/user/page": "app/(dashboard)/user/page.js"
 }

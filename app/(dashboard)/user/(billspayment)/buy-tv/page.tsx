@@ -35,9 +35,8 @@ interface BuyDataProps {
 }
 
 interface ValidatedData {
-  customerName: string; 
+  customerName: string;
 }
-
 
 const categories = [
   {
@@ -71,7 +70,9 @@ const BuyTV = (props: Props) => {
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [validatedData, setValidatedData] = useState<ValidatedData | null>(null);
+  const [validatedData, setValidatedData] = useState<ValidatedData | null>(
+    null
+  );
   const [isValidated, setIsValidated] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
 
@@ -98,7 +99,7 @@ const BuyTV = (props: Props) => {
   const handleBuyData = useCallback(
     async (values: BuyTvFormValues) => {
       setIsValidated(false);
-      setIsValidating(true)
+      setIsValidating(true);
       try {
         // Validate the TV before proceeding with the purchase
         const validationValues = {
@@ -122,39 +123,109 @@ const BuyTV = (props: Props) => {
         if (validationResponse?.data?.success === 1) {
           setValidatedData(validationResponse?.data?.details);
           setIsValidated(true);
-          setIsValidating(false)
+          setIsValidating(false);
           toast.success(validationResponse?.data?.message);
-          // Validation successful, proceed with the TV purchase
-          buyTv(values, {
-            onError: (error: unknown) => {
-              if (error instanceof Error) {
-                console.log(error?.message);
-                toast.error(error?.message);
-                setIsValidating(false)
-              }
-            },
-            onSuccess: (response: any) => {
-              console.log(response?.data);
-              toast.success(response?.data?.message);
-              setIsValidating(false)
-            },
-          });
+
+          // Now, you can manually trigger the purchase based on your logic
+          // For example, you might show a confirmation modal and proceed only if confirmed
+          const userConfirmed = window.confirm("Proceed with TV purchase?");
+
+          if (userConfirmed) {
+            // Validation successful, proceed with the TV purchase
+            buyTv(values, {
+              onError: (error: unknown) => {
+                if (error instanceof Error) {
+                  console.log(error?.message);
+                  toast.error(error?.message);
+                  setIsValidating(false);
+                }
+              },
+              onSuccess: (response: any) => {
+                console.log(response?.data);
+                toast.success(response?.data?.message);
+                setIsValidating(false);
+              },
+            });
+          } else {
+            // Handle the case where the user did not confirm the purchase
+            setIsValidating(false);
+          }
         } else {
           // Validation failed, display an error message or handle it accordingly
           toast.error(validationResponse?.data?.message);
-          setIsValidating(false)
+          setIsValidating(false);
         }
       } catch (error: unknown) {
-        
         if (error instanceof Error) {
           console.error(error.message);
           toast.error(error.message);
-          setIsValidating(false)
+          setIsValidating(false);
         }
       }
     },
     [buyTv, selectedCategory]
   );
+
+  // const handleBuyData = useCallback(
+  //   async (values: BuyTvFormValues) => {
+  //     setIsValidated(false);
+  //     setIsValidating(true)
+  //     try {
+  //       // Validate the TV before proceeding with the purchase
+  //       const validationValues = {
+  //         provider: selectedCategory,
+  //         number: values.number,
+  //         service: "tv",
+  //       };
+
+  //       const validationResponse = await axios.post(
+  //         `${BASE_URL}/validate`,
+  //         validationValues,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       console.log(validationResponse?.data, "res");
+
+  //       if (validationResponse?.data?.success === 1) {
+  //         setValidatedData(validationResponse?.data?.details);
+  //         setIsValidated(true);
+  //         setIsValidating(false)
+  //         toast.success(validationResponse?.data?.message);
+  //         // Validation successful, proceed with the TV purchase
+  //         buyTv(values, {
+  //           onError: (error: unknown) => {
+  //             if (error instanceof Error) {
+  //               console.log(error?.message);
+  //               toast.error(error?.message);
+  //               setIsValidating(false)
+  //             }
+  //           },
+  //           onSuccess: (response: any) => {
+  //             console.log(response?.data);
+  //             toast.success(response?.data?.message);
+  //             setIsValidating(false)
+  //           },
+  //         });
+  //       } else {
+  //         // Validation failed, display an error message or handle it accordingly
+  //         toast.error(validationResponse?.data?.message);
+  //         setIsValidating(false)
+  //       }
+  //     } catch (error: unknown) {
+
+  //       if (error instanceof Error) {
+  //         console.error(error.message);
+  //         toast.error(error.message);
+  //         setIsValidating(false)
+  //       }
+  //     }
+  //   },
+  //   [buyTv, selectedCategory]
+  // );
 
   const {
     formState: { errors },
@@ -256,11 +327,18 @@ const BuyTV = (props: Props) => {
               className={clsx({
                 "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
                   true,
-                "opacity-70 cursor-not-allowed": isPending,
+                "opacity-70 cursor-not-allowed":
+                  isPending || isLoading || isValidating,
               })}
               disabled={isPending || isLoading || isValidating}
             >
-              {(isPending || isValidating) ? <Spinner /> : "Buy Tv"}
+              {isPending || isValidating ? (
+                <Spinner />
+              ) : isValidated ? (
+                "Buy TV"
+              ) : (
+                "Proceed"
+              )}
             </CustomButton>
           </div>
         </form>

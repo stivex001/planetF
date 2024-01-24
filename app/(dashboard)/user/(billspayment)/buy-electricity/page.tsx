@@ -86,6 +86,7 @@ const BuyElectricity = (props: Props) => {
     async (values: BuyElectricityFormValues) => {
       setIsValidated(false);
       setIsValidating(true);
+
       try {
         const validationValues = {
           provider: values.provider,
@@ -111,28 +112,38 @@ const BuyElectricity = (props: Props) => {
           setIsValidated(true);
           toast.success(validationResponse?.data?.message);
           setIsValidating(false);
-
-          buyElectricity(values, {
-            onError: (error: unknown) => {
-              if (error instanceof Error) {
-                console.log(error?.message);
-                toast.error(error?.message);
-                setIsValidating(false);
-              }
-            },
-            onSuccess: (response: any) => {
-              console.log(response?.data);
-              toast.success(response?.data?.message);
-              setIsValidating(false);
-            },
-          });
         } else {
           // Validation failed, display an error message or handle it accordingly
           toast.error(validationResponse?.data?.message);
           setIsValidating(false);
+          return; // Return here to prevent the purchase call if validation fails
         }
+
+        // If validation is successful, you can now manually make the purchase call
+        const purchaseValues = {
+          provider: values.provider,
+          number: values.number,
+          amount: values.amount,
+          phone: values.phone,
+        };
+
+        // Make the purchase call using buyElectricity function
+        buyElectricity(purchaseValues, {
+          onError: (error: unknown) => {
+            if (error instanceof Error) {
+              console.error(error?.message);
+              toast.error(error?.message);
+              setIsValidating(false);
+            }
+          },
+          onSuccess: (response: any) => {
+            console.log(response?.data);
+            toast.success(response?.data?.message);
+            setIsValidating(false);
+          },
+        });
       } catch (error: unknown) {
-        // Handle errors from TV validation or TV purchase
+        // Handle errors from validation or purchase
         if (error instanceof Error) {
           console.error(error.message);
           toast.error(error.message);
@@ -140,8 +151,69 @@ const BuyElectricity = (props: Props) => {
         }
       }
     },
-    [buyElectricity]
+    [buyElectricity, token]
   );
+
+  // const handleBuyData = useCallback(
+  //   async (values: BuyElectricityFormValues) => {
+  //     setIsValidated(false);
+  //     setIsValidating(true);
+  //     try {
+  //       const validationValues = {
+  //         provider: values.provider,
+  //         number: values.number,
+  //         service: "electricity",
+  //         type: "PREPAID",
+  //       };
+
+  //       const validationResponse = await axios.post(
+  //         `${BASE_URL}/validate`,
+  //         validationValues,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       console.log(validationResponse?.data, "res");
+
+  //       if (validationResponse?.data?.success === 1) {
+  //         setValidatedData(validationResponse?.data?.others);
+  //         setIsValidated(true);
+  //         toast.success(validationResponse?.data?.message);
+  //         setIsValidating(false);
+
+  //         buyElectricity(values, {
+  //           onError: (error: unknown) => {
+  //             if (error instanceof Error) {
+  //               console.log(error?.message);
+  //               toast.error(error?.message);
+  //               setIsValidating(false);
+  //             }
+  //           },
+  //           onSuccess: (response: any) => {
+  //             console.log(response?.data);
+  //             toast.success(response?.data?.message);
+  //             setIsValidating(false);
+  //           },
+  //         });
+  //       } else {
+  //         // Validation failed, display an error message or handle it accordingly
+  //         toast.error(validationResponse?.data?.message);
+  //         setIsValidating(false);
+  //       }
+  //     } catch (error: unknown) {
+  //       // Handle errors from TV validation or TV purchase
+  //       if (error instanceof Error) {
+  //         console.error(error.message);
+  //         toast.error(error.message);
+  //         setIsValidating(false);
+  //       }
+  //     }
+  //   },
+  //   [buyElectricity]
+  // );
 
   const {
     formState: { errors },
@@ -187,7 +259,7 @@ const BuyElectricity = (props: Props) => {
                 <Spinner />
               </div>
             ) : (
-              data.length > 0 && (
+              data?.length > 0 && (
                 <DropDown
                   options={
                     data?.map((category) => ({
@@ -252,11 +324,16 @@ const BuyElectricity = (props: Props) => {
               className={clsx({
                 "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
                   true,
-                "opacity-70 cursor-not-allowed": isPending,
+                "opacity-70 cursor-not-allowed":
+                  isPending || isLoading || isValidating,
               })}
               disabled={isPending || isLoading || isValidating}
             >
-              {isPending || isValidating ? <Spinner /> : "Buy Electricity"}
+              {isValidating
+                ? "Proceeding..."
+                : isPending
+                ? "Buying Electricity..."
+                : "Proceed"}
             </CustomButton>
           </div>
         </form>
