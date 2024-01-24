@@ -37,6 +37,7 @@ export const forgotPasswordSchemaOne = yup.object().shape({
 
 export const buyAirtimeSchema = yup.object().shape({
   provider: yup.string(),
+  discount: yup.string(),
   amount: yup
     .string()
     .required("Amount is required")

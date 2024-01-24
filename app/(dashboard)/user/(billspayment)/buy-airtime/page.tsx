@@ -17,6 +17,26 @@ import gloImage from "@/images/glo.png";
 import airtelImage from "@/images/airtel.png";
 import mobileImage from "@/images/9mobile.png";
 import Modal from "react-modal";
+import { useModal } from "@/context/useModal";
+
+const customStyles: Modal.Styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    opacity: "1",
+  },
+  content: {
+    borderRadius: "10px",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "50%",
+    marginRight: "-50%",
+    opacity: "1",
+  },
+};
 
 type Props = {};
 
@@ -43,6 +63,7 @@ const BuyAirtime = (props: Props) => {
       ref: "",
       number: "",
       amount: "",
+      discount: "",
     },
     mode: "all",
     resolver: yupResolver(buyAirtimeSchema),
@@ -50,11 +71,9 @@ const BuyAirtime = (props: Props) => {
 
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [confirmationValues, setConfirmationValues] = useState({});
+  const [formData, setFormData] = useState<BuyAirtimeFormValues | null>(null);
 
-  
+  const { openModal, closeModal, isOpen } = useModal();
 
   const { mutate: buyAirtime, isPending } = useBuyAirtime();
 
@@ -104,19 +123,19 @@ const BuyAirtime = (props: Props) => {
     [buyAirtime]
   );
 
-  const selectDataCategory = (selectedValue: string) => {
-    setSelectedCategory(selectedValue);
-  };
-
-  const handleSelectedData = (selectedValue: string) => {
+  const handleSelectedData = async (selectedValue: string) => {
     const selectedCategory = data?.find(
-      (category) => category?.network == selectedValue
+      (category) => category?.network === selectedValue
     );
 
     console.log(selectedCategory, "net");
+
     if (selectedCategory) {
+      const discount = selectedCategory?.discount?.toString();
+
       setValue("provider", selectedCategory?.network);
       setValue("amount", "");
+      setValue("discount", discount);
     }
   };
 
@@ -168,6 +187,7 @@ const BuyAirtime = (props: Props) => {
             <ReadOnlyTextInput
               label="Discount"
               placeholder=""
+              value={getValues("discount")}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -185,19 +205,77 @@ const BuyAirtime = (props: Props) => {
 
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
-              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                setFormData(getValues());
+                openModal();
+              }}
+              className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
+            >
+              Proceed
+            </CustomButton>
+          </div>
+        </form>
+      </div>
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          ariaHideApp={false}
+          shouldCloseOnOverlayClick={true}
+          shouldCloseOnEsc={true}
+          contentLabel="Start Project Modal"
+          overlayClassName={`left-0 bg-[#00000070] outline-none transition-all ease-in-out duration-500`}
+          className="w-full h-full flex items-center justify-center"
+        >
+          <button
+            type="button"
+            onClick={closeModal}
+            className="absolute top-[200px] right-[600px] text-lg text-white flex justify-center items-center w-10 h-10 bg-[#164e63] rounded-full"
+          >
+            X
+          </button>
+          <div className="bg-white px-10 py-20 flex flex-col gap-10 w-[30%]">
+            <div className="flex items-center justify-between">
+              <p>Network Provider: </p>
+              <span className="text-[#164e63]">{`${formData?.provider} `}</span>
+            </div>
+            {/* <div className="flex items-center justify-between">
+              <p>Details: </p>
+              <span className="text-[#164e63]">{` ${formData?.name}`}</span>
+            </div> */}
+            <div className="flex items-center justify-between">
+              <p>discount: </p>
+              <span className="text-[#164e63]">%{formData?.discount}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <p>Amount: </p>
+              <span className="text-[#164e63]">₦{formData?.amount}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <p>Phone Number: </p>
+              <span className="text-[#164e63]">{formData?.number}</span>
+            </div>
+
+            <CustomButton
+              onClick={() => {
+                if (formData) {
+                  handleBuyAirtime(formData);
+                }
+              }}
               className={clsx({
                 "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
                   true,
                 "opacity-70 cursor-not-allowed": isPending,
               })}
-              disabled={isPending}
+              disabled={isPending || isLoading}
             >
               {isPending ? <Spinner /> : "Buy Airtime"}
             </CustomButton>
           </div>
-        </form>
-      </div>
+        </Modal>
+      )}
     </div>
   );
 };
