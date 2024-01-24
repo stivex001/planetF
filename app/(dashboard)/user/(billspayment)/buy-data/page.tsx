@@ -19,8 +19,29 @@ import gloImage from "@/images/glo.png";
 import airtelImage from "@/images/airtel.png";
 import mobileImage from "@/images/9mobile.png";
 import Image from "next/image";
+import Modal from "react-modal";
+import { useModal } from "@/context/useModal";
 
 type Props = {};
+
+const customStyles: Modal.Styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    opacity: "1",
+  },
+  content: {
+    borderRadius: "10px",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "50%",
+    marginRight: "-50%",
+    opacity: "1",
+  },
+};
 
 interface BuyDataProps {
   coded: string;
@@ -60,6 +81,7 @@ const BuyData = (props: Props) => {
       promo: "0",
       ref: "",
       number: "",
+      name: "",
     },
     mode: "all",
     resolver: yupResolver(buyDataSchema),
@@ -70,6 +92,10 @@ const BuyData = (props: Props) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedCategoryData, setSelectedCategoryData] =
     useState<BuyDataProps | null>(null);
+
+  const [formData, setFormData] = useState<BuyDataFormValues | null>(null);
+
+  const { openModal, closeModal, isOpen } = useModal();
 
   const { mutate: buyData, isPending } = useBuyData();
 
@@ -114,16 +140,15 @@ const BuyData = (props: Props) => {
     register,
   } = form;
 
-  const selectDataCategory = (selectedValue: string) => {
-    setSelectedCategory(selectedValue);
-  };
-
   const handleSelectedData = (selectedValue: string) => {
     const selectedCategory = data?.find(
       (category) => category?.coded === selectedValue
     );
     if (selectedCategory) {
       setValue("coded", selectedCategory?.coded);
+      setValue("name", selectedCategory?.name);
+      setValue("network", selectedCategory?.network);
+      setValue("amount", selectedCategory?.price);
       setSelectedCategoryData(selectedCategory);
     }
   };
@@ -135,10 +160,7 @@ const BuyData = (props: Props) => {
           Data TopUp
         </h2>
 
-        <form
-          className="mt-8 flex flex-col gap-4 lg:w-1/2 "
-          onSubmit={handleSubmit(handleBuyData)}
-        >
+        <form className="mt-8 flex flex-col gap-4 lg:w-1/2 ">
           <div className="w-full ">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
               Network Provider
@@ -213,47 +235,62 @@ const BuyData = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-          {/* <div className="w-full ">
-            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-              Wallet
-            </label>
 
-            <DropDown
-              options={
-                categories?.map((category) => ({
-                  key: category.name,
-                  label: category.name,
-                  value: category.name,
-                })) || []
-              }
-              placeholder={"Select "}
-              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
-              buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-            />
-          </div> */}
-          {/* <div className="w-full">
-            <TextInput
-              label="Country"
-              placeholder="e.g NG"
-              register={register}
-              fieldName={"country"}
-              error={errors.country}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
-            />
-          </div> */}
-          {/* <div className="w-full ">
-            <TextInput
-              label="Promo (optional)"
-              placeholder="Enter your promo code"
-              register={register}
-              fieldName={"promo"}
-              error={errors.promo}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
-            />
-          </div> */}
-          <div className="w-full mx-auto h-9 my-10">
+          <CustomButton
+            onClick={(e) => {
+              e.preventDefault();
+              setFormData(getValues());
+              openModal();
+            }}
+            className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
+          >
+            Proceed
+          </CustomButton>
+        </form>
+      </div>
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          ariaHideApp={false}
+          shouldCloseOnOverlayClick={true}
+          shouldCloseOnEsc={true}
+          contentLabel="Start Project Modal"
+          overlayClassName={`left-0 bg-[#00000070] outline-none transition-all ease-in-out duration-500`}
+          className="w-full h-full flex items-center justify-center"
+        >
+          <button
+            type="button"
+            onClick={closeModal}
+            className="absolute top-[300px] right-[500px] text-lg text-white flex justify-center items-center w-10 h-10 bg-[#164e63] rounded-full"
+          >
+            X
+          </button>
+          <div className="bg-white px-10 py-20 flex flex-col gap-10 w-[30%]">
+            <div className="flex items-center justify-between">
+              <p>Network Provider: </p>
+              <span className="text-[#164e63]">{`${formData?.network} `}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <p>Details: </p>
+              <span className="text-[#164e63]">{` ${formData?.name}`}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <p>Amount: </p>
+              <span className="text-[#164e63]">₦{formData?.amount}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <p>Phone Number: </p>
+              <span className="text-[#164e63]">{formData?.number}</span>
+            </div>
+
             <CustomButton
-              type="submit"
+              onClick={() => {
+                if (formData) {
+                  handleBuyData(formData);
+                }
+              }}
               className={clsx({
                 "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
                   true,
@@ -264,10 +301,12 @@ const BuyData = (props: Props) => {
               {isPending ? <Spinner /> : "Buy Data"}
             </CustomButton>
           </div>
-        </form>
-      </div>
+        </Modal>
+      )}
     </div>
   );
 };
 
 export default BuyData;
+
+// onSubmit={handleSubmit(handleBuyData)}

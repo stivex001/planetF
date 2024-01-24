@@ -16,6 +16,7 @@ import mtnImage from "@/images/mtn.png";
 import gloImage from "@/images/glo.png";
 import airtelImage from "@/images/airtel.png";
 import mobileImage from "@/images/9mobile.png";
+import Modal from "react-modal";
 
 type Props = {};
 
@@ -50,10 +51,10 @@ const BuyAirtime = (props: Props) => {
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [amountToPay, setAmountToPay] = useState<number | null>(null);
-  const [enteredAmount, setEnteredAmount] = useState<number | null>(null);
-  const [discount, setDiscount] = useState<number | null>(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [confirmationValues, setConfirmationValues] = useState({});
 
+  
 
   const { mutate: buyAirtime, isPending } = useBuyAirtime();
 
@@ -116,12 +117,6 @@ const BuyAirtime = (props: Props) => {
     if (selectedCategory) {
       setValue("provider", selectedCategory?.network);
       setValue("amount", "");
-      
-
-      // const image = providerImages[selectedCategory?.network.toUpperCase()];
-
-      // console.log(image);
-
     }
   };
 
@@ -173,7 +168,6 @@ const BuyAirtime = (props: Props) => {
             <ReadOnlyTextInput
               label="Discount"
               placeholder=""
-              value={amountToPay !== null ? amountToPay.toFixed(2) : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>

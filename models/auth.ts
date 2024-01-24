@@ -99,7 +99,9 @@ export const convertAirtimeSchema = yup.object().shape({
 
 export const buyDataSchema = yup.object().shape({
   coded: yup.string(),
-  // country: yup.string().required("Country is required"),
+  name: yup.string(),
+  amount: yup.string(),
+  network: yup.string(),
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
