@@ -111,7 +111,7 @@ const BuyAirtime = () => {
     clearErrors,
     setError,
     register,
-    watch
+    watch,
   } = form;
 
   const handleBuyAirtime = useCallback(
@@ -131,7 +131,7 @@ const BuyAirtime = () => {
     },
     [buyAirtime]
   );
-  
+
   // const handleSelectedData = async (selectedValue: string) => {
   //   const selectedCategory = data?.find(
   //     (category) => category?.network === selectedValue
@@ -161,11 +161,7 @@ const BuyAirtime = () => {
   //   }
   // }, [watch, setValue, data, getValues]);
 
-
-
-
   const handleSelectedData = async (selectedValue: string) => {
-    
     const selectedCategory = data?.find(
       (category) => category?.network === selectedValue
     );
@@ -298,15 +294,18 @@ const BuyAirtime = () => {
           overlayClassName={`left-0 bg-[#00000070] outline-none transition-all ease-in-out duration-500`}
           className="w-full h-full flex items-center justify-center"
         >
-          <button
-            type="button"
-            onClick={closeModal}
-            className="absolute top-[200px] right-[600px] text-lg text-white flex justify-center items-center w-10 h-10 bg-[#164e63] rounded-full"
-          >
-            X
-          </button>
-          <div className="bg-white px-10 py-20 flex flex-col gap-10 w-[30%]">
-            <div className="flex items-center justify-between">
+          <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={closeModal}
+                className=" text-lg text-white flex justify-center items-center w-10 h-10 bg-[#164e63] rounded-full"
+              >
+                X
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Network Provider: </p>
               <span className="text-[#164e63]">{`${formData?.provider} `}</span>
             </div>
@@ -314,34 +313,35 @@ const BuyAirtime = () => {
               <p>Details: </p>
               <span className="text-[#164e63]">{` ${formData?.name}`}</span>
             </div> */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cashback: </p>
               <span className="text-[#164e63]">%{formData?.discount}</span>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
               <span className="text-[#164e63]">₦{formData?.amount}</span>
             </div>
-            <div className="flex items-center justify-between">
-              <p>Phone Number: </p>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Recipient Number: </p>
               <span className="text-[#164e63]">{formData?.number}</span>
             </div>
-
-            <CustomButton
-              onClick={() => {
-                if (formData) {
-                  handleBuyAirtime(formData);
-                }
-              }}
-              className={clsx({
-                "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
-                  true,
-                "opacity-70 cursor-not-allowed": isPending,
-              })}
-              disabled={isPending || isLoading}
-            >
-              {isPending ? <Spinner /> : "Buy Airtime"}
-            </CustomButton>
+            <div className="w-1/2 mx-auto">
+              <CustomButton
+                onClick={() => {
+                  if (formData) {
+                    handleBuyAirtime(formData);
+                  }
+                }}
+                className={clsx({
+                  "bg-[#164e63] border border-[#164e63] mx-auto text-white hover:opacity-80":
+                    true,
+                  "opacity-70 cursor-not-allowed": isPending,
+                })}
+                disabled={isPending || isLoading}
+              >
+                {isPending ? <Spinner /> : "Buy Airtime"}
+              </CustomButton>
+            </div>
           </div>
         </Modal>
       )}
