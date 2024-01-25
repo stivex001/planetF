@@ -18,6 +18,7 @@ import airtelImage from "@/images/airtel.png";
 import mobileImage from "@/images/9mobile.png";
 import Modal from "react-modal";
 import { useModal } from "@/context/useModal";
+import Image, { StaticImageData } from "next/image";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -38,13 +39,19 @@ const customStyles: Modal.Styles = {
   },
 };
 
-type Props = {};
+interface ProviderImages {
+  mtn: StaticImageData;
+  glo: StaticImageData;
+  airtel: StaticImageData;
+  "9mobile": StaticImageData;
+  [key: string]: StaticImageData; // Index signature
+}
 
-const providerImages = {
-  MTN: mtnImage,
-  GLO: gloImage,
-  AIRTEL: airtelImage,
-  "9MOBILE": mobileImage,
+const providerImages: ProviderImages = {
+  mtn: mtnImage,
+  glo: gloImage,
+  airtel: airtelImage,
+  "9mobile": mobileImage,
 };
 
 interface BuyDataProps {
@@ -54,7 +61,7 @@ interface BuyDataProps {
   discount: number;
 }
 
-const BuyAirtime = (props: Props) => {
+const BuyAirtime = () => {
   const form = useForm<BuyAirtimeFormValues>({
     defaultValues: {
       provider: "",
@@ -72,6 +79,7 @@ const BuyAirtime = (props: Props) => {
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<BuyAirtimeFormValues | null>(null);
+  const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
 
   const { openModal, closeModal, isOpen } = useModal();
 
@@ -103,6 +111,7 @@ const BuyAirtime = (props: Props) => {
     clearErrors,
     setError,
     register,
+    watch
   } = form;
 
   const handleBuyAirtime = useCallback(
@@ -122,8 +131,41 @@ const BuyAirtime = (props: Props) => {
     },
     [buyAirtime]
   );
+  
+  // const handleSelectedData = async (selectedValue: string) => {
+  //   const selectedCategory = data?.find(
+  //     (category) => category?.network === selectedValue
+  //   );
+
+  //   if (selectedCategory) {
+  //     setValue("provider", selectedCategory?.network);
+  //     setValue("amount", "");
+  //     setValue("discount", ""); // Reset discount
+  //     watch("amount"); // Trigger cashback calculation
+  //   }
+
+  //   setActiveNetwork(selectedValue);
+  // };
+
+  // useEffect(() => {
+  //   const amount = watch("amount");
+
+  //   const selectedCategory = data?.find(
+  //     (category) => category?.network === getValues("provider")
+  //   );
+
+  //   if (selectedCategory && amount) {
+  //     const discount = parseFloat(selectedCategory?.discount);
+  //     const discountedAmount = amount - (discount / 100) * amount;
+  //     setValue("discount", discountedAmount.toFixed(2));
+  //   }
+  // }, [watch, setValue, data, getValues]);
+
+
+
 
   const handleSelectedData = async (selectedValue: string) => {
+    
     const selectedCategory = data?.find(
       (category) => category?.network === selectedValue
     );
@@ -154,22 +196,44 @@ const BuyAirtime = (props: Props) => {
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
               Network Provider
             </label>
+
             {isLoading ? (
               <Spinner />
             ) : (
-              data?.length > 0 && (
-                <DropDown
-                  options={
-                    data?.map((category) => ({
-                      key: category?.network,
-                      label: category?.network,
-                    })) || []
-                  }
-                  placeholder={"----Choose---"}
-                  onSelect={handleSelectedData}
-                  buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-                />
-              )
+              <div className="flex items-center justify-between my-5">
+                {data?.map((category) => (
+                  <div key={category?.id} className="cursor-pointer">
+                    <button
+                      onClick={() => {
+                        handleSelectedData(category?.network);
+                        setActiveNetwork(category?.network);
+                      }}
+                      className={clsx("focus:outline-none", {
+                        "bg-[#164e63]/20 p-2 rounded-full":
+                          activeNetwork === category?.network,
+                      })}
+                    >
+                      <Image
+                        src={providerImages[category?.network]}
+                        alt={category.network}
+                        width={42}
+                        height={42}
+                      />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              // <DropDown
+              //   options={
+              //     data?.map((category) => ({
+              //       key: category?.network,
+              //       label: category?.network,
+              //     })) || []
+              //   }
+              //   placeholder={"----Choose---"}
+              //   onSelect={handleSelectedData}
+              //   buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
+              // />
             )}
           </div>
           <div className="w-full">
