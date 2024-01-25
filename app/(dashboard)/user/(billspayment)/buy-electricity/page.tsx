@@ -28,6 +28,17 @@ import { useToken } from "@/hooks/auth/useToken";
 
 type Props = {};
 
+const types = [
+  {
+    id: "1",
+    name: "PREPAID",
+  },
+  {
+    id: "2",
+    name: "POSTPAID",
+  },
+];
+
 interface BuyDataProps {
   code: string;
   name: string;
@@ -249,9 +260,26 @@ const BuyElectricity = (props: Props) => {
           className="mt-8 flex flex-col gap-4 lg:w-1/2 "
           onSubmit={handleSubmit(handleBuyData)}
         >
+          <div className="w-full">
+            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+              Type
+            </label>
+            <DropDown
+              options={
+                types?.map((category) => ({
+                  key: category.name,
+                  label: category.name,
+                  value: category.name,
+                })) || []
+              }
+              placeholder={"Select bill platform "}
+              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
+              buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
+            />
+          </div>
           <div>
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-              Electricity Provider
+              Platform
             </label>
 
             {isLoading ? (
@@ -288,6 +316,17 @@ const BuyElectricity = (props: Props) => {
 
           <div className="w-full">
             <TextInput
+              label="Amount"
+              placeholder="Enter Amount"
+              register={register}
+              fieldName={"amount"}
+              error={errors.amount}
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
+
+          <div className="w-full">
+            <TextInput
               label="Phone Number"
               placeholder="Enter your phone number"
               register={register}
@@ -302,16 +341,7 @@ const BuyElectricity = (props: Props) => {
             </p>
           </div>
 
-          <div className="w-full">
-            <TextInput
-              label="Amount"
-              placeholder="Enter Amount"
-              register={register}
-              fieldName={"amount"}
-              error={errors.amount}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
-            />
-          </div>
+          
 
           {isValidated && (
             <div className="w-full ">
