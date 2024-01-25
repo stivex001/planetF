@@ -94,6 +94,7 @@ const BuyData = (props: Props) => {
     useState<BuyDataProps | null>(null);
 
   const [formData, setFormData] = useState<BuyDataFormValues | null>(null);
+  const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
 
   const { openModal, closeModal, isOpen } = useModal();
 
@@ -168,15 +169,36 @@ const BuyData = (props: Props) => {
 
             <div className="flex items-center justify-between my-5 ">
               {categories.map((category) => (
-                <Image
-                  key={category.id}
-                  src={category.img}
-                  alt={`${selectedCategory} Logo`}
-                  className="cursor-pointer"
-                  width={42}
-                  height={42}
-                  onClick={() => handleImageClick(category.name)}
-                />
+                <div key={category.id}>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      handleImageClick(category.name);
+                      setActiveNetwork(category?.id);
+                    }}
+                    className={clsx("focus:outline-none", {
+                      "bg-[#164e63]/20 p-2 rounded-full":
+                        activeNetwork === category?.id,
+                    })}
+                  >
+                    <Image
+                      src={category.img}
+                      alt={`${selectedCategory} Logo`}
+                      className="cursor-pointer"
+                      width={42}
+                      height={42}
+                    />
+                  </button>
+                </div>
+                // <Image
+                //   key={category.id}
+                //   src={category.img}
+                //   alt={`${selectedCategory} Logo`}
+                //   className="cursor-pointer"
+                //   width={42}
+                //   height={42}
+                //   onClick={() => handleImageClick(category.name)}
+                // />
               ))}
             </div>
 

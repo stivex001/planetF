@@ -24,6 +24,10 @@ import { getTv } from "@/query/getTv";
 import axios from "axios";
 import { BASE_URL } from "@/utils/baseUrl";
 import { useToken } from "@/hooks/auth/useToken";
+import gotvImage from "@/images/gotv.png";
+import dstvImage from "@/images/dstv.png";
+import starImage from "@/images/startimes.png";
+import Image from "next/image";
 
 type Props = {};
 
@@ -42,14 +46,17 @@ const categories = [
   {
     id: "1",
     name: "GOTV",
+    img: gotvImage,
   },
   {
     id: "2",
     name: "DSTV",
+    img: dstvImage,
   },
   {
     id: "3",
     name: "startimes",
+    img: starImage,
   },
 ];
 
@@ -75,26 +82,43 @@ const BuyTV = (props: Props) => {
   );
   const [isValidated, setIsValidated] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
+  const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState<BuyTvFormValues | null>(null);
 
   const { mutate: buyTv, isPending } = useBuyTv();
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const handleImageClick = async (categoryName: string) => {
+    try {
       setIsLoading(true);
-      try {
-        if (selectedCategory) {
-          const data = await getTv(selectedCategory);
-          console.log(data, "data");
-          setData(data);
-        }
-        setIsLoading(false);
-      } catch (error: any) {
-        toast.error(error);
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [selectedCategory]);
+      const categoryData = await getTv(categoryName);
+      console.log(categoryData, "data");
+      setData(categoryData);
+      setSelectedCategory(categoryName);
+      setIsLoading(false);
+    } catch (error: any) {
+      toast.error(error.message);
+      setIsLoading(false);
+    }
+  };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       if (selectedCategory) {
+  //         const data = await getTv(selectedCategory);
+  //         console.log(data, "data");
+  //         setData(data);
+  //       }
+  //       setIsLoading(false);
+  //     } catch (error: any) {
+  //       toast.error(error);
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [selectedCategory]);
 
   const handleBuyData = useCallback(
     async (values: BuyTvFormValues) => {
@@ -263,10 +287,35 @@ const BuyTV = (props: Props) => {
         >
           <div className="w-full ">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-              Provider
+              Select Cable
             </label>
 
-            <DropDown
+            <div className="flex items-center justify-between my-5 ">
+              {categories.map((category) => (
+                <div key={category.id}>
+                  <button
+                    onClick={() => {
+                      handleImageClick(category.name);
+                      setActiveNetwork(category?.id);
+                    }}
+                    className={clsx("focus:outline-none", {
+                      "bg-[#164e63]/20 p-2 rounded-full":
+                        activeNetwork === category?.id,
+                    })}
+                  >
+                    <Image
+                      src={category.img}
+                      alt={`${selectedCategory} Logo`}
+                      className="cursor-pointer"
+                      width={42}
+                      height={42}
+                    />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* <DropDown
               options={
                 categories?.map((category) => ({
                   key: category.name,
@@ -277,7 +326,7 @@ const BuyTV = (props: Props) => {
               placeholder={"Select TV Provider"}
               onSelect={(selectedValue) => selectDataCategory(selectedValue)}
               buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-            />
+            /> */}
           </div>
 
           {isLoading ? (
@@ -293,7 +342,7 @@ const BuyTV = (props: Props) => {
                     label: `${category?.name} -₦${category?.price}`,
                   })) || []
                 }
-                placeholder={"----Choose---"}
+                placeholder={"Select package"}
                 onSelect={handleSelectedData}
                 buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
               />
@@ -302,13 +351,12 @@ const BuyTV = (props: Props) => {
 
           <div className="w-full">
             <TextInput
-              label="IUC Number"
-              placeholder="Enter your phone number"
+              label="Smart card number"
+              placeholder=""
               register={register}
               fieldName={"number"}
               error={errors.number}
               className="bg-gray-100 rounded-sm border border-zinc-600"
-
             />
             <p className="text-red-500 text-base font-medium">
               Dear Customer always be certain that you have entered the correct
