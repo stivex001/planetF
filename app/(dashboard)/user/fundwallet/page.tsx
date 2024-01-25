@@ -112,10 +112,7 @@ const page = (props: Props) => {
     <main>
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-medium text-[#1e293b]">Fund Wallet</h2>
-        {/* <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
-          <FiRefreshCcw size={16} />
-          <span>Reload Data</span>
-        </div> */}
+        
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {accounts?.map((account, index) => (
@@ -124,7 +121,7 @@ const page = (props: Props) => {
               text={`${account?.account_number}`}
               onCopy={() => onCopy(index)}
             >
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <div>
                   <IoWalletOutline size={30} />
                 </div>
@@ -135,8 +132,8 @@ const page = (props: Props) => {
                   </p>
                   <span className="text-base font-semibold capitalize text-right">{account?.account_name}</span>
                 </div>
-              </div>
-              {/* <div className="flex flex-col gap-3">
+              </div> */}
+              <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between h-20 ">
                   <h1 className="text-2xl  font-medium ">
                     {account.bank_name}
@@ -147,7 +144,7 @@ const page = (props: Props) => {
                   {account.account_number}
                 </h1>
                 <span className="text-base">{account?.account_name}</span>
-              </div> */}
+              </div>
             </CopyToClipboard>
           </CustomCard>
         ))}

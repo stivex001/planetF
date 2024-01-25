@@ -8,6 +8,7 @@ import { CGwallets } from "@/types/cg";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FiRefreshCcw } from "react-icons/fi";
+import { MdDataUsage } from "react-icons/md";
 import { toast } from "react-toastify";
 
 type Props = {};
@@ -22,7 +23,6 @@ const CGWallet = (props: Props) => {
       try {
         const data = await getCGs();
         console.log(data);
-        
 
         setCGData(data?.data);
         setIsLoading(false);
@@ -42,10 +42,10 @@ const CGWallet = (props: Props) => {
     <main>
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-medium text-[#1e293b]">CG Wallet</h2>
-        <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
+        {/* <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
           <FiRefreshCcw size={16} />
           <span>Reload Data</span>
-        </div>
+        </div> */}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {cGData?.map((data) => (
@@ -55,16 +55,26 @@ const CGWallet = (props: Props) => {
                 pathname: "/user/cgBundles",
                 query: {
                   network: data?.name.split(" ")[0],
-                  type: data?.name.split(" ")[1] 
-                  
+                  type: data?.name.split(" ")[1],
                 },
               }}
             >
-              <div className="flex flex-col gap-1" key={data?.id}>
+              <div className="flex items-center justify-between" key={data?.id}>
+                <div>
+                  <MdDataUsage  size={30} />
+                </div>
+                <div className="flex flex-col">
+                  <h4 className="text-3xl font-bold text-right">
+                    {data?.name}
+                  </h4>
+                  <p className="text-2xl font-semibold capitalize text-right">
+                    ({data?.balance})
+                  </p>
+                </div>
                 {/* <h1 className="text-2xl  font-medium"></h1> */}
-                <h1 className="text-4xl font-extrabold ">
+                {/* <h1 className="text-4xl font-extrabold ">
                   {data?.name} ({data?.balance})
-                </h1>
+                </h1> */}
               </div>
             </Link>
           </CustomCard>
