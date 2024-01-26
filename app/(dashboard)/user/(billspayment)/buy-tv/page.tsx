@@ -31,7 +31,6 @@ import Image from "next/image";
 import { useModal } from "@/context/useModal";
 import Modal from "react-modal";
 
-
 const customStyles: Modal.Styles = {
   overlay: {
     position: "fixed",
@@ -58,6 +57,7 @@ interface BuyDataProps {
   name: string;
   network: string;
   price: string;
+  type: string;
 }
 
 interface ValidatedData {
@@ -90,6 +90,8 @@ const BuyTV = (props: Props) => {
       promo: "0",
       ref: "",
       number: "",
+      type: "",
+      price: "",
     },
     mode: "all",
     resolver: yupResolver(buyTvSchema),
@@ -105,6 +107,7 @@ const BuyTV = (props: Props) => {
   const [isValidated, setIsValidated] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
+  const [buttonType, setButtonType] = useState<"validate" | "buy">("validate");
 
   const [formData, setFormData] = useState<BuyTvFormValues | null>(null);
 
@@ -126,95 +129,140 @@ const BuyTV = (props: Props) => {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       if (selectedCategory) {
-  //         const data = await getTv(selectedCategory);
-  //         console.log(data, "data");
-  //         setData(data);
-  //       }
-  //       setIsLoading(false);
-  //     } catch (error: any) {
-  //       toast.error(error);
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [selectedCategory]);
+  const handleValidateData = async (values: BuyTvFormValues) => {
+    setIsValidated(false);
+    setIsValidating(true);
+
+    try {
+      const validationValues = {
+        provider: selectedCategory,
+        number: values.number,
+        service: "tv",
+      };
+
+      const validationResponse = await axios.post(
+        `${BASE_URL}/validate`,
+        validationValues,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (validationResponse?.data?.success === 1) {
+        setValidatedData(validationResponse?.data?.details);
+        setIsValidated(true);
+        setIsValidating(false);
+        setButtonType("buy");
+        toast.success(validationResponse?.data?.message);
+      } else {
+        toast.error(validationResponse?.data?.message);
+        setIsValidating(false);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        toast.error(error.message);
+        setIsValidating(false);
+      }
+    }
+  };
 
   const handleBuyData = useCallback(
     async (values: BuyTvFormValues) => {
-      setIsValidated(false);
-      setIsValidating(true);
-      try {
-        // Validate the TV before proceeding with the purchase
-        const validationValues = {
-          provider: selectedCategory,
-          number: values.number,
-          service: "tv",
-        };
-
-        const validationResponse = await axios.post(
-          `${BASE_URL}/validate`,
-          validationValues,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        console.log(validationResponse?.data, "res");
-
-        if (validationResponse?.data?.success === 1) {
-          setValidatedData(validationResponse?.data?.details);
-          setIsValidated(true);
-          setIsValidating(false);
-          toast.success(validationResponse?.data?.message);
-
-          // Now, you can manually trigger the purchase based on your logic
-          // For example, you might show a confirmation modal and proceed only if confirmed
-          const userConfirmed = window.confirm("Proceed with TV purchase?");
-
-          if (userConfirmed) {
-            // Validation successful, proceed with the TV purchase
-            buyTv(values, {
-              onError: (error: unknown) => {
-                if (error instanceof Error) {
-                  console.log(error?.message);
-                  toast.error(error?.message);
-                  setIsValidating(false);
-                }
-              },
-              onSuccess: (response: any) => {
-                console.log(response?.data);
-                toast.success(response?.data?.message);
-                setIsValidating(false);
-              },
-            });
-          } else {
-            // Handle the case where the user did not confirm the purchase
+      if (isValidated) {
+        buyTv(values, {
+          onError: (error: unknown) => {
+            if (error instanceof Error) {
+              console.log(error?.message);
+              toast.error(error?.message);
+              setIsValidating(false);
+            }
+          },
+          onSuccess: (response: any) => {
+            console.log(response?.data);
+            toast.success(response?.data?.message);
             setIsValidating(false);
-          }
-        } else {
-          // Validation failed, display an error message or handle it accordingly
-          toast.error(validationResponse?.data?.message);
-          setIsValidating(false);
-        }
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error(error.message);
-          toast.error(error.message);
-          setIsValidating(false);
-        }
+          },
+        });
+      } else {
+        await handleValidateData(values);
       }
     },
-    [buyTv, selectedCategory]
+    [buyTv, selectedCategory, isValidated]
   );
 
   // const handleBuyData = useCallback(
+  //   async (values: BuyTvFormValues) => {
+  //     setIsValidated(false);
+  //     setIsValidating(true);
+  //     try {
+  //       // Validate the TV before proceeding with the purchase
+  //       const validationValues = {
+  //         provider: selectedCategory,
+  //         number: values.number,
+  //         service: "tv",
+  //       };
+
+  //       const validationResponse = await axios.post(
+  //         `${BASE_URL}/validate`,
+  //         validationValues,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       console.log(validationResponse?.data, "res");
+
+  //       if (validationResponse?.data?.success === 1) {
+  //         setValidatedData(validationResponse?.data?.details);
+  //         setIsValidated(true);
+  //         setIsValidating(false);
+  //         toast.success(validationResponse?.data?.message);
+
+  //         // Now, you can manually trigger the purchase based on your logic
+  //         // For example, you might show a confirmation modal and proceed only if confirmed
+  //         const userConfirmed = window.confirm("Proceed with TV purchase?");
+
+  //         if (userConfirmed) {
+  //           // Validation successful, proceed with the TV purchase
+  //           buyTv(values, {
+  //             onError: (error: unknown) => {
+  //               if (error instanceof Error) {
+  //                 console.log(error?.message);
+  //                 toast.error(error?.message);
+  //                 setIsValidating(false);
+  //               }
+  //             },
+  //             onSuccess: (response: any) => {
+  //               console.log(response?.data);
+  //               toast.success(response?.data?.message);
+  //               setIsValidating(false);
+  //             },
+  //           });
+  //         } else {
+  //           // Handle the case where the user did not confirm the purchase
+  //           setIsValidating(false);
+  //         }
+  //       } else {
+  //         // Validation failed, display an error message or handle it accordingly
+  //         toast.error(validationResponse?.data?.message);
+  //         setIsValidating(false);
+  //       }
+  //     } catch (error: unknown) {
+  //       if (error instanceof Error) {
+  //         console.error(error.message);
+  //         toast.error(error.message);
+  //         setIsValidating(false);
+  //       }
+  //     }
+  //   },
+  //   [buyTv, selectedCategory]
+  // );
+
   //   async (values: BuyTvFormValues) => {
   //     setIsValidated(false);
   //     setIsValidating(true)
@@ -293,8 +341,12 @@ const BuyTV = (props: Props) => {
     const selectedCategory = data?.find(
       (category) => category?.coded === selectedValue
     );
+    console.log(selectedCategory, "net");
     if (selectedCategory) {
       setValue("coded", selectedCategory?.coded);
+      setValue("name", selectedCategory?.name);
+      setValue("type", selectedCategory?.type);
+      setValue("price", selectedCategory?.price);
     }
   };
 
@@ -307,7 +359,7 @@ const BuyTV = (props: Props) => {
 
         <form
           className="mt-8 flex flex-col gap-4 lg:w-1/2 "
-          onSubmit={handleSubmit(handleBuyData)}
+          onSubmit={handleSubmit(handleValidateData)}
         >
           <div className="w-full ">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
@@ -338,19 +390,6 @@ const BuyTV = (props: Props) => {
                 </div>
               ))}
             </div>
-
-            {/* <DropDown
-              options={
-                categories?.map((category) => ({
-                  key: category.name,
-                  label: category.name,
-                  value: category.name,
-                })) || []
-              }
-              placeholder={"Select TV Provider"}
-              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
-              buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-            /> */}
           </div>
 
           {isLoading ? (
@@ -400,24 +439,33 @@ const BuyTV = (props: Props) => {
           )}
 
           <div className="w-full mx-auto h-9 my-10">
-            <CustomButton
-              type="submit"
-              className={clsx({
-                "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
-                  true,
-                "opacity-70 cursor-not-allowed":
-                  isPending || isLoading || isValidating,
-              })}
-              disabled={isPending || isLoading || isValidating}
-            >
-              {isPending || isValidating ? (
-                <Spinner />
-              ) : isValidated ? (
-                "Buy TV"
-              ) : (
-                "Proceed"
-              )}
-            </CustomButton>
+            {buttonType === "validate" && (
+              <CustomButton
+                type="submit"
+                className={clsx({
+                  "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
+                    true,
+                  "opacity-70 cursor-not-allowed":
+                    isPending || isLoading || isValidating,
+                })}
+                disabled={isPending || isLoading || isValidating}
+              >
+                {isPending || isValidating ? <Spinner /> : "Proceed"}
+              </CustomButton>
+            )}
+
+            {buttonType === "buy" && (
+              <CustomButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  setFormData(getValues());
+                  openModal();
+                }}
+                className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
+              >
+                Pay
+              </CustomButton>
+            )}
           </div>
         </form>
       </div>
@@ -444,20 +492,27 @@ const BuyTV = (props: Props) => {
               </button>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Network Provider: </p>
-              {/* <span className="text-[#164e63]">{`${formData?.network} `}</span> */}
+              <p>Type: </p>
+              <span className="text-[#164e63] uppercase">{`${formData?.type} `}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Plan: </p>
-              {/* <span className="text-[#164e63]">{` ${formData?.name}`}</span> */}
+              <p>Package: </p>
+              <span className="text-[#164e63]">{` ${formData?.name}`}</span>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Smart Card Number: </p>
+              <span className="text-[#164e63]">{formData?.number}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
-              {/* <span className="text-[#164e63]">₦{formData?.amount}</span> */}
+              <span className="text-[#164e63]">₦{formData?.price}</span>
             </div>
+
             <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Phone Number: </p>
-              <span className="text-[#164e63]">{formData?.number}</span>
+              <p>Customer Name: </p>
+              <span className="text-[#164e63]">
+                {validatedData?.customerName}
+              </span>
             </div>
 
             <div className="w-1/2 mx-auto">
@@ -474,7 +529,7 @@ const BuyTV = (props: Props) => {
                 })}
                 disabled={isPending || isLoading}
               >
-                {isPending ? <Spinner /> : "Buy Data"}
+                {isPending ? <Spinner /> : "Pay"}
               </CustomButton>
             </div>
           </div>
@@ -485,3 +540,33 @@ const BuyTV = (props: Props) => {
 };
 
 export default BuyTV;
+
+{
+  /* <CustomButton
+                onClick={() => {
+                  if (formData) {
+                    buyTv(formData, {
+                      onError: (error: unknown) => {
+                        if (error instanceof Error) {
+                          console.log(error?.message);
+                          toast.error(error?.message);
+                        }
+                      },
+                      onSuccess: (response: any) => {
+                        console.log(response?.data);
+                        toast.success(response?.data?.message);
+                        closeModal(); 
+                      },
+                    });
+                  }
+                }}
+                className={clsx({
+                  "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
+                    true,
+                  "opacity-70 cursor-not-allowed": isPending,
+                })}
+                disabled={isPending || isLoading}
+              >
+                {isPending ? <Spinner /> : "Pay"}
+              </CustomButton> */
+}

@@ -1,4 +1,5 @@
 {
+  "/not-found": "app/not-found.js",
   "/(auth)/login/page": "app/(auth)/login/page.js",
   "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js",
   "/(dashboard)/user/(billspayment)/buy-data/page": "app/(dashboard)/user/(billspayment)/buy-data/page.js",

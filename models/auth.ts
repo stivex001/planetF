@@ -136,6 +136,9 @@ export const buyCheckerSchema = yup.object().shape({
 
 export const buyTvSchema = yup.object().shape({
   coded: yup.string(),
+  type: yup.string(),
+  price: yup.string(),
+  name: yup.string(),
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
