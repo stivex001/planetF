@@ -28,6 +28,28 @@ import gotvImage from "@/images/gotv.png";
 import dstvImage from "@/images/dstv.png";
 import starImage from "@/images/startimes.png";
 import Image from "next/image";
+import { useModal } from "@/context/useModal";
+import Modal from "react-modal";
+
+
+const customStyles: Modal.Styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    opacity: "1",
+  },
+  content: {
+    borderRadius: "10px",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "50%",
+    marginRight: "-50%",
+    opacity: "1",
+  },
+};
 
 type Props = {};
 
@@ -87,6 +109,8 @@ const BuyTV = (props: Props) => {
   const [formData, setFormData] = useState<BuyTvFormValues | null>(null);
 
   const { mutate: buyTv, isPending } = useBuyTv();
+
+  const { openModal, closeModal, isOpen } = useModal();
 
   const handleImageClick = async (categoryName: string) => {
     try {
@@ -397,6 +421,65 @@ const BuyTV = (props: Props) => {
           </div>
         </form>
       </div>
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          ariaHideApp={false}
+          shouldCloseOnOverlayClick={true}
+          shouldCloseOnEsc={true}
+          contentLabel="Start Project Modal"
+          overlayClassName={`left-0 bg-[#00000070] outline-none transition-all ease-in-out duration-500`}
+          className="w-full h-full flex items-center justify-center"
+        >
+          <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={closeModal}
+                className=" text-lg text-white flex justify-center items-center w-10 h-10 bg-[#164e63] rounded-full"
+              >
+                X
+              </button>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Network Provider: </p>
+              {/* <span className="text-[#164e63]">{`${formData?.network} `}</span> */}
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Plan: </p>
+              {/* <span className="text-[#164e63]">{` ${formData?.name}`}</span> */}
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Amount: </p>
+              {/* <span className="text-[#164e63]">₦{formData?.amount}</span> */}
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Phone Number: </p>
+              <span className="text-[#164e63]">{formData?.number}</span>
+            </div>
+
+            <div className="w-1/2 mx-auto">
+              <CustomButton
+                onClick={() => {
+                  if (formData) {
+                    handleBuyData(formData);
+                  }
+                }}
+                className={clsx({
+                  "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
+                    true,
+                  "opacity-70 cursor-not-allowed": isPending,
+                })}
+                disabled={isPending || isLoading}
+              >
+                {isPending ? <Spinner /> : "Buy Data"}
+              </CustomButton>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
