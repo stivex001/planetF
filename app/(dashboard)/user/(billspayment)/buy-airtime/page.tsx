@@ -126,6 +126,7 @@ const BuyAirtime = () => {
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data?.message);
+          closeModal()
         },
       });
     },

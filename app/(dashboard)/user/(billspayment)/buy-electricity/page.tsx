@@ -25,6 +25,27 @@ import { getElectricity } from "@/query/getElectricity";
 import axios from "axios";
 import { BASE_URL } from "@/utils/baseUrl";
 import { useToken } from "@/hooks/auth/useToken";
+import { useModal } from "@/context/useModal";
+import Modal from "react-modal";
+
+const customStyles: Modal.Styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    opacity: "1",
+  },
+  content: {
+    borderRadius: "10px",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "50%",
+    marginRight: "-50%",
+    opacity: "1",
+  },
+};
 
 type Props = {};
 
@@ -47,6 +68,7 @@ interface BuyDataProps {
 
 interface ValidatedData {
   customerName: string;
+  customerAddress: string;
 }
 
 const BuyElectricity = (props: Props) => {
@@ -73,8 +95,14 @@ const BuyElectricity = (props: Props) => {
   );
   const [isValidated, setIsValidated] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
+  const [buttonType, setButtonType] = useState<"validate" | "buy">("validate");
+  const [formData, setFormData] = useState<BuyElectricityFormValues | null>(
+    null
+  );
 
   const { mutate: buyElectricity, isPending } = useBuyElectricity();
+
+  const { openModal, closeModal, isOpen } = useModal();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,56 +121,56 @@ const BuyElectricity = (props: Props) => {
     fetchData();
   }, []);
 
-  const handleBuyData = useCallback(
-    async (values: BuyElectricityFormValues) => {
-      setIsValidated(false);
-      setIsValidating(true);
+  const handleValidateData = async (values: BuyElectricityFormValues) => {
+    setIsValidated(false);
+    setIsValidating(true);
 
-      try {
-        const validationValues = {
-          provider: values.provider,
-          number: values.number,
-          service: "electricity",
-          type: "PREPAID",
-        };
+    try {
+      const validationValues = {
+        provider: values.provider,
+        number: values.number,
+        service: "electricity",
+        type: "PREPAID",
+      };
 
-        const validationResponse = await axios.post(
-          `${BASE_URL}/validate`,
-          validationValues,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        console.log(validationResponse?.data, "res");
-
-        if (validationResponse?.data?.success === 1) {
-          setValidatedData(validationResponse?.data?.others);
-          setIsValidated(true);
-          toast.success(validationResponse?.data?.message);
-          setIsValidating(false);
-        } else {
-          // Validation failed, display an error message or handle it accordingly
-          toast.error(validationResponse?.data?.message);
-          setIsValidating(false);
-          return; // Return here to prevent the purchase call if validation fails
+      const validationResponse = await axios.post(
+        `${BASE_URL}/validate`,
+        validationValues,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
 
-        // If validation is successful, you can now manually make the purchase call
-        const purchaseValues = {
-          provider: values.provider,
-          number: values.number,
-          amount: values.amount,
-          phone: values.phone,
-        };
+      console.log(validationResponse, "res");
 
-        // Make the purchase call using buyElectricity function
-        buyElectricity(purchaseValues, {
+      if (validationResponse?.data?.success === 1) {
+        setValidatedData(validationResponse?.data?.others);
+        setIsValidated(true);
+        setIsValidating(false);
+        setButtonType("buy");
+        toast.success(validationResponse?.data?.message);
+      } else {
+        toast.error(validationResponse?.data?.message);
+        setIsValidating(false);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+        toast.error(error.message);
+        setIsValidating(false);
+      }
+    }
+  };
+
+  const handleBuyElectricity = useCallback(
+    async (values: BuyElectricityFormValues) => {
+      if (isValidated) {
+        buyElectricity(values, {
           onError: (error: unknown) => {
             if (error instanceof Error) {
-              console.error(error?.message);
+              console.log(error?.message);
               toast.error(error?.message);
               setIsValidating(false);
             }
@@ -151,24 +179,20 @@ const BuyElectricity = (props: Props) => {
             console.log(response?.data);
             toast.success(response?.data?.message);
             setIsValidating(false);
+            closeModal()
           },
         });
-      } catch (error: unknown) {
-        // Handle errors from validation or purchase
-        if (error instanceof Error) {
-          console.error(error.message);
-          toast.error(error.message);
-          setIsValidating(false);
-        }
+      } else {
+        await handleValidateData(values);
       }
     },
-    [buyElectricity, token]
+    [buyElectricity, selectedCategory, isValidated]
   );
 
-  // const handleBuyData = useCallback(
   //   async (values: BuyElectricityFormValues) => {
   //     setIsValidated(false);
   //     setIsValidating(true);
+
   //     try {
   //       const validationValues = {
   //         provider: values.provider,
@@ -194,28 +218,38 @@ const BuyElectricity = (props: Props) => {
   //         setIsValidated(true);
   //         toast.success(validationResponse?.data?.message);
   //         setIsValidating(false);
-
-  //         buyElectricity(values, {
-  //           onError: (error: unknown) => {
-  //             if (error instanceof Error) {
-  //               console.log(error?.message);
-  //               toast.error(error?.message);
-  //               setIsValidating(false);
-  //             }
-  //           },
-  //           onSuccess: (response: any) => {
-  //             console.log(response?.data);
-  //             toast.success(response?.data?.message);
-  //             setIsValidating(false);
-  //           },
-  //         });
   //       } else {
   //         // Validation failed, display an error message or handle it accordingly
   //         toast.error(validationResponse?.data?.message);
   //         setIsValidating(false);
+  //         return; // Return here to prevent the purchase call if validation fails
   //       }
+
+  //       // If validation is successful, you can now manually make the purchase call
+  //       const purchaseValues = {
+  //         provider: values.provider,
+  //         number: values.number,
+  //         amount: values.amount,
+  //         phone: values.phone,
+  //       };
+
+  //       // Make the purchase call using buyElectricity function
+  //       buyElectricity(purchaseValues, {
+  //         onError: (error: unknown) => {
+  //           if (error instanceof Error) {
+  //             console.error(error?.message);
+  //             toast.error(error?.message);
+  //             setIsValidating(false);
+  //           }
+  //         },
+  //         onSuccess: (response: any) => {
+  //           console.log(response?.data);
+  //           toast.success(response?.data?.message);
+  //           setIsValidating(false);
+  //         },
+  //       });
   //     } catch (error: unknown) {
-  //       // Handle errors from TV validation or TV purchase
+  //       // Handle errors from validation or purchase
   //       if (error instanceof Error) {
   //         console.error(error.message);
   //         toast.error(error.message);
@@ -223,7 +257,7 @@ const BuyElectricity = (props: Props) => {
   //       }
   //     }
   //   },
-  //   [buyElectricity]
+  //   [buyElectricity, token]
   // );
 
   const {
@@ -244,8 +278,10 @@ const BuyElectricity = (props: Props) => {
     const selectedCategory = data?.find(
       (category) => category?.code === selectedValue
     );
+    console.log(selectedCategory, "net");
     if (selectedCategory) {
       setValue("provider", selectedCategory?.code);
+      setValue("amount", "");
     }
   };
 
@@ -258,7 +294,7 @@ const BuyElectricity = (props: Props) => {
 
         <form
           className="mt-8 flex flex-col gap-4 lg:w-1/2 "
-          onSubmit={handleSubmit(handleBuyData)}
+          onSubmit={handleSubmit(handleValidateData)}
         >
           <div className="w-full">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
@@ -341,19 +377,27 @@ const BuyElectricity = (props: Props) => {
             </p>
           </div>
 
-          
-
           {isValidated && (
-            <div className="w-full ">
-              <ReadOnlyTextInput
-                label="Customer Name"
-                value={validatedData?.customerName}
-                placeholder={validatedData?.customerName}
-                className="bg-gray-100 rounded-sm border border-zinc-600"
-              />
-            </div>
+            <>
+              <div className="w-full ">
+                <ReadOnlyTextInput
+                  label="Customer Name"
+                  value={validatedData?.customerName}
+                  placeholder={validatedData?.customerName}
+                  className="bg-gray-100 rounded-sm border border-zinc-600"
+                />
+              </div>
+              <div className="w-full ">
+                <ReadOnlyTextInput
+                  label="Customer Address"
+                  value={validatedData?.customerAddress}
+                  placeholder={validatedData?.customerAddress}
+                  className="bg-gray-100 rounded-sm border border-zinc-600"
+                />
+              </div>
+            </>
           )}
-          <div className="w-full mx-auto h-9 my-10">
+          {/* <div className="w-full mx-auto h-9 my-10">
             <CustomButton
               type="submit"
               className={clsx({
@@ -370,9 +414,111 @@ const BuyElectricity = (props: Props) => {
                 ? "Buying Electricity..."
                 : "Proceed"}
             </CustomButton>
+          </div> */}
+          <div className="w-full mx-auto h-9 my-10">
+            {buttonType === "validate" && (
+              <CustomButton
+                type="submit"
+                className={clsx({
+                  "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
+                    true,
+                  "opacity-70 cursor-not-allowed":
+                    isPending || isLoading || isValidating,
+                })}
+                disabled={isPending || isLoading || isValidating}
+              >
+                {isPending || isValidating ? <Spinner /> : "Proceed"}
+              </CustomButton>
+            )}
+
+            {buttonType === "buy" && (
+              <CustomButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  setFormData(getValues());
+                  openModal();
+                }}
+                className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
+              >
+                Pay
+              </CustomButton>
+            )}
           </div>
         </form>
       </div>
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          ariaHideApp={false}
+          shouldCloseOnOverlayClick={true}
+          shouldCloseOnEsc={true}
+          contentLabel="Start Project Modal"
+          overlayClassName={`left-0 bg-[#00000070] outline-none transition-all ease-in-out duration-500`}
+          className="w-full h-full flex items-center justify-center"
+        >
+          <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={closeModal}
+                className=" text-lg text-white flex justify-center items-center w-10 h-10 bg-[#164e63] rounded-full"
+              >
+                X
+              </button>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Type: </p>
+              <span className="text-[#164e63] uppercase">{`PREPAID `}</span>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Disco: </p>
+              <span className="text-[#164e63]">{` ${formData?.provider}`}</span>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Meter Number: </p>
+              <span className="text-[#164e63]">{formData?.number}</span>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Amount: </p>
+              <span className="text-[#164e63]">₦{formData?.amount}</span>
+            </div>
+
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Customer Name: </p>
+              <span className="text-[#164e63]">
+                {validatedData?.customerName}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Customer Address: </p>
+              <span className="text-[#164e63]">
+                {validatedData?.customerAddress}
+              </span>
+            </div>
+
+            <div className="w-1/2 mx-auto">
+              <CustomButton
+                onClick={() => {
+                  if (formData) {
+                    handleBuyElectricity(formData);
+                  }
+                }}
+                className={clsx({
+                  "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
+                    true,
+                  "opacity-70 cursor-not-allowed": isPending,
+                })}
+                disabled={isPending || isLoading}
+              >
+                {isPending ? <Spinner /> : "Pay"}
+              </CustomButton>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
