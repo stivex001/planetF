@@ -120,6 +120,7 @@ export const buyDataSchema = yup.object().shape({
 export const buyCheckerSchema = yup.object().shape({
   coded: yup.string(),
   quantity: yup.string(),
+  amount: yup.string(),
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),

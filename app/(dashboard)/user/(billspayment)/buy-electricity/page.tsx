@@ -179,7 +179,7 @@ const BuyElectricity = (props: Props) => {
             console.log(response?.data);
             toast.success(response?.data?.message);
             setIsValidating(false);
-            closeModal()
+            closeModal();
           },
         });
       } else {
@@ -188,77 +188,6 @@ const BuyElectricity = (props: Props) => {
     },
     [buyElectricity, selectedCategory, isValidated]
   );
-
-  //   async (values: BuyElectricityFormValues) => {
-  //     setIsValidated(false);
-  //     setIsValidating(true);
-
-  //     try {
-  //       const validationValues = {
-  //         provider: values.provider,
-  //         number: values.number,
-  //         service: "electricity",
-  //         type: "PREPAID",
-  //       };
-
-  //       const validationResponse = await axios.post(
-  //         `${BASE_URL}/validate`,
-  //         validationValues,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       console.log(validationResponse?.data, "res");
-
-  //       if (validationResponse?.data?.success === 1) {
-  //         setValidatedData(validationResponse?.data?.others);
-  //         setIsValidated(true);
-  //         toast.success(validationResponse?.data?.message);
-  //         setIsValidating(false);
-  //       } else {
-  //         // Validation failed, display an error message or handle it accordingly
-  //         toast.error(validationResponse?.data?.message);
-  //         setIsValidating(false);
-  //         return; // Return here to prevent the purchase call if validation fails
-  //       }
-
-  //       // If validation is successful, you can now manually make the purchase call
-  //       const purchaseValues = {
-  //         provider: values.provider,
-  //         number: values.number,
-  //         amount: values.amount,
-  //         phone: values.phone,
-  //       };
-
-  //       // Make the purchase call using buyElectricity function
-  //       buyElectricity(purchaseValues, {
-  //         onError: (error: unknown) => {
-  //           if (error instanceof Error) {
-  //             console.error(error?.message);
-  //             toast.error(error?.message);
-  //             setIsValidating(false);
-  //           }
-  //         },
-  //         onSuccess: (response: any) => {
-  //           console.log(response?.data);
-  //           toast.success(response?.data?.message);
-  //           setIsValidating(false);
-  //         },
-  //       });
-  //     } catch (error: unknown) {
-  //       // Handle errors from validation or purchase
-  //       if (error instanceof Error) {
-  //         console.error(error.message);
-  //         toast.error(error.message);
-  //         setIsValidating(false);
-  //       }
-  //     }
-  //   },
-  //   [buyElectricity, token]
-  // );
 
   const {
     formState: { errors },
@@ -397,24 +326,7 @@ const BuyElectricity = (props: Props) => {
               </div>
             </>
           )}
-          {/* <div className="w-full mx-auto h-9 my-10">
-            <CustomButton
-              type="submit"
-              className={clsx({
-                "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
-                  true,
-                "opacity-70 cursor-not-allowed":
-                  isPending || isLoading || isValidating,
-              })}
-              disabled={isPending || isLoading || isValidating}
-            >
-              {isValidating
-                ? "Proceeding..."
-                : isPending
-                ? "Buying Electricity..."
-                : "Proceed"}
-            </CustomButton>
-          </div> */}
+
           <div className="w-full mx-auto h-9 my-10">
             {buttonType === "validate" && (
               <CustomButton
