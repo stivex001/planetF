@@ -44,7 +44,7 @@ interface ProviderImages {
   glo: StaticImageData;
   airtel: StaticImageData;
   "9mobile": StaticImageData;
-  [key: string]: StaticImageData; 
+  [key: string]: StaticImageData;
 }
 
 const providerImages: ProviderImages = {
@@ -126,7 +126,7 @@ const BuyAirtime = () => {
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data?.message);
-          closeModal()
+          closeModal();
         },
       });
     },

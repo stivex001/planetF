@@ -213,7 +213,7 @@ const SubNavs = (props: Props) => {
                   <li key={sublink.id}>
                     <Link
                       href={`${sublink.url}`}
-                      className="flex items-center  justify-center xl:justify-start gap-2"
+                      className="flex items-center  justify-center xl:justify-start gap-2 text-[#164e63]"
                     >
                       {sublink?.subIcon}
                       <span className="hidden xl:flex text-sm font-medium text-[#164e63] hover:text-[#164e63]">

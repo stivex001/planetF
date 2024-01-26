@@ -11,6 +11,10 @@ import {
   FiSidebar,
 } from "react-icons/fi";
 import Link from "next/link";
+import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import { FaGraduationCap, FaPhoneAlt } from "react-icons/fa";
+import { MdOutlineElectricalServices, MdReport } from "react-icons/md";
+import { IoPhonePortraitOutline, IoTvSharp } from "react-icons/io5";
 
 const navbarLinks = [
   {
@@ -20,10 +24,30 @@ const navbarLinks = [
     url: "/user",
     arrowIcon: <IoIosArrowDown />,
     sublinks: [
-      { id: 1, title: "Fund Wallet", url: "/user/fundwallet" },
-      { id: 2, title: "CG Transfer", url: "/user/cgtransfer" },
-      { id: 3, title: "CG Wallet", url: "/user/cgwallet" },
-      { id: 4, title: "Sales Report", url: "/user/salesreport" },
+      {
+        id: 1,
+        title: "Fund Wallet",
+        url: "/user/fundwallet",
+        subIcon: <FiActivity size={24} />,
+      },
+      {
+        id: 2,
+        title: "CG Transfer",
+        url: "/user/cgtransfer",
+        subIcon: <FiActivity size={24} />,
+      },
+      {
+        id: 3,
+        title: "CG Wallet",
+        url: "/user/cgwallet",
+        subIcon: <FiActivity size={24} />,
+      },
+      {
+        id: 4,
+        title: "Sales Report",
+        url: "/user/salesreport",
+        subIcon: <MdReport size={24} />,
+      },
     ],
   },
   {
@@ -33,14 +57,45 @@ const navbarLinks = [
     url: "/user/payment",
     arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
     sublinks: [
-      { id: 1, title: "Buy Airtime", url: "/user/buy-airtime" },
+      {
+        id: 1,
+        title: "Buy Airtime",
+        url: "/user/buy-airtime",
+        subIcon: <FaPhoneAlt size={24} />,
+      },
       // { id: 2, title: "Buy Airtime Pin", url: "/user/buy-airtimepin" },
-      { id: 3, title: "Buy Data", url: "/user/buy-data" },
+      {
+        id: 3,
+        title: "Buy Data",
+        url: "/user/buy-data",
+        subIcon: <IoPhonePortraitOutline size={24} />,
+      },
       // { id: 4, title: "Buy Data Pin", url: "/user/buy-datapin" },
-      { id: 5, title: "Buy TV", url: "/user/buy-tv" },
-      { id: 6, title: "Buy Electricity", url: "/user/buy-electricity" },
+      {
+        id: 5,
+        title: "Buy TV",
+        url: "/user/buy-tv",
+        subIcon: <IoTvSharp size={24} />,
+      },
+      {
+        id: 6,
+        title: "Buy Electricity",
+        url: "/user/buy-electricity",
+        subIcon: <MdOutlineElectricalServices size={24} />,
+      },
       // { id: 8, title: "Betting Topup", url: "/user/betting" },
-      { id: 9, title: "Education", url: "/user/result-checker" },
+      {
+        id: 9,
+        title: "Education",
+        url: "/user/result-checker",
+        subIcon: <FaGraduationCap size={24} />,
+      },
+      {
+        id: 10,
+        title: "Airtime To Cash",
+        url: "/user/airtime-converter",
+        subIcon: <FaArrowRightArrowLeft size={24}  />,
+      },
     ],
   },
   {
@@ -162,7 +217,7 @@ const MobileNav = ({ setShowMobileMenu, showMobileMenu }: Props) => {
                           href={`${sublink.url}`}
                           className="flex items-center justify-start gap-2 text-white"
                         >
-                          <FiActivity size={24} />
+                          {sublink?.subIcon}
                           <span className="flex text-sm font-medium text-white">
                             {sublink.title}
                           </span>
