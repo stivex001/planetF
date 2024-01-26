@@ -186,7 +186,7 @@ const BuyAirtime = () => {
         </h2>
 
         <form
-          className="mt-8 flex flex-col gap-4 w-1/2 "
+          className="mt-8 flex flex-col gap-4 md:w-1/2 "
           onSubmit={handleSubmit(handleBuyAirtime)}
         >
           <div className="w-full ">
