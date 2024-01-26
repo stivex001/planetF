@@ -13,6 +13,9 @@ import {
   FiSidebar,
 } from "react-icons/fi";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import { FaGraduationCap, FaPhoneAlt, FaWallet } from "react-icons/fa";
+import { IoPhonePortraitOutline, IoTvSharp } from "react-icons/io5";
+import { MdOutlineElectricalServices, MdReport } from "react-icons/md";
 
 const navbarLinks = [
   {
@@ -22,10 +25,30 @@ const navbarLinks = [
     url: "/user",
     arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
     sublinks: [
-      { id: 1, title: "Fund Wallet", url: "/user/fundwallet" },
-      { id: 2, title: "CG Transfer", url: "/user/cgtransfer" },
-      { id: 3, title: "CG Wallet", url: "/user/cgwallet" },
-      { id: 4, title: "Sales Report", url: "/user/salesreport" },
+      {
+        id: 1,
+        title: "Fund Wallet",
+        url: "/user/fundwallet",
+        subIcon: <FaWallet size={24} className="-ml-3 xl:ml-0" />,
+      },
+      {
+        id: 2,
+        title: "CG Transfer",
+        url: "/user/cgtransfer",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
+      {
+        id: 3,
+        title: "CG Wallet",
+        url: "/user/cgwallet",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
+      {
+        id: 4,
+        title: "Sales Report",
+        url: "/user/salesreport",
+        subIcon: <MdReport size={24} className="-ml-3 xl:ml-0" />,
+      },
     ],
   },
   {
@@ -39,34 +62,34 @@ const navbarLinks = [
         id: 1,
         title: "Buy Airtime",
         url: "/user/buy-airtime",
-        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+        subIcon: <FaPhoneAlt size={24} className="-ml-3 xl:ml-0" />,
       },
       // { id: 2, title: "Buy Airtime Pin", url: "/user/buy-airtimepin" },
       {
         id: 3,
         title: "Buy Data",
         url: "/user/buy-data",
-        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+        subIcon: <IoPhonePortraitOutline size={24} className="-ml-3 xl:ml-0" />,
       },
       // { id: 4, title: "Buy Data Pin", url: "/user/buy-datapin" },
       {
         id: 5,
         title: "Buy TV",
         url: "/user/buy-tv",
-        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+        subIcon: <IoTvSharp size={24} className="-ml-3 xl:ml-0" />,
       },
       {
         id: 6,
         title: "Buy Electricity",
         url: "/user/buy-electricity",
-        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+        subIcon: <MdOutlineElectricalServices size={24} className="-ml-3 xl:ml-0" />,
       },
       // { id: 8, title: "Betting Topup", url: "/user/betting" },
       {
         id: 9,
         title: "Education",
         url: "/user/result-checker",
-        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+        subIcon: <FaGraduationCap size={24} className="-ml-3 xl:ml-0" />,
       },
       {
         id: 10,
@@ -192,9 +215,7 @@ const SubNavs = (props: Props) => {
                       href={`${sublink.url}`}
                       className="flex items-center  justify-center xl:justify-start gap-2"
                     >
-
-
-                      <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />
+                      {sublink?.subIcon}
                       <span className="hidden xl:flex text-sm font-medium text-[#164e63] hover:text-[#164e63]">
                         {sublink.title}
                       </span>

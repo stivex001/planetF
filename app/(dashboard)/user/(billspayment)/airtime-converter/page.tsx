@@ -4,24 +4,41 @@ import CustomButton from "@/components/Form/CustomButton";
 import { DropDown } from "@/components/Form/Dropdown";
 import { TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
-import { BuyAirtimeFormValues, ConvertAirtimeFormValues, buyAirtimeSchema, convertAirtimeSchema } from "@/models/auth";
+import {
+  BuyAirtimeFormValues,
+  ConvertAirtimeFormValues,
+  buyAirtimeSchema,
+  convertAirtimeSchema,
+} from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import { toast } from "react-toastify";
 import { getAirtime } from "@/query/getAirtime";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useConvertAirtime } from "@/hooks/billsPayments/useConvertAirtime";
+import Image, { StaticImageData } from "next/image";
+import mtnImage from "@/images/mtn.png";
+import gloImage from "@/images/glo.png";
+import airtelImage from "@/images/airtel.png";
+import mobileImage from "@/images/9mobile.png";
 
 type Props = {};
+
+interface ProviderImages {
+  mtn: StaticImageData;
+  glo: StaticImageData;
+  airtel: StaticImageData;
+  "9mobile": StaticImageData;
+  [key: string]: StaticImageData;
+}
+
+const providerImages: ProviderImages = {
+  mtn: mtnImage,
+  glo: gloImage,
+  airtel: airtelImage,
+  "9mobile": mobileImage,
+};
 
 interface BuyDataProps {
   id: string;
@@ -45,6 +62,8 @@ const AirtimeConverter = (props: Props) => {
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [formData, setFormData] = useState<BuyAirtimeFormValues | null>(null);
+  const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const { mutate: convertAirtime, isPending } = useConvertAirtime();
 
   useEffect(() => {
@@ -125,22 +144,33 @@ const AirtimeConverter = (props: Props) => {
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
               Network Provider
             </label>
+
             {isLoading ? (
               <Spinner />
             ) : (
-              data.length > 0 && (
-                <DropDown
-                  options={
-                    data?.map((category) => ({
-                      key: category?.network,
-                      label: category?.network,
-                    })) || []
-                  }
-                  placeholder={"----Choose---"}
-                  onSelect={handleSelectedData}
-                  buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-                />
-              )
+              <div className="flex items-center justify-between my-5">
+                {data?.map((category) => (
+                  <div key={category?.id} className="cursor-pointer">
+                    <button
+                      onClick={() => {
+                        handleSelectedData(category?.network);
+                        setActiveNetwork(category?.network);
+                      }}
+                      className={clsx("focus:outline-none", {
+                        "bg-[#164e63]/20 p-2 rounded-full":
+                          activeNetwork === category?.network,
+                      })}
+                    >
+                      <Image
+                        src={providerImages[category?.network]}
+                        alt={category.network}
+                        width={42}
+                        height={42}
+                      />
+                    </button>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
           <div className="w-full">

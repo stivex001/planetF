@@ -44,7 +44,7 @@ interface ProviderImages {
   glo: StaticImageData;
   airtel: StaticImageData;
   "9mobile": StaticImageData;
-  [key: string]: StaticImageData; // Index signature
+  [key: string]: StaticImageData; 
 }
 
 const providerImages: ProviderImages = {
