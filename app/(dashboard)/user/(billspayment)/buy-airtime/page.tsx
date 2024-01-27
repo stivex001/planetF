@@ -80,6 +80,9 @@ const BuyAirtime = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<BuyAirtimeFormValues | null>(null);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<BuyDataProps | null>(
+    null
+  );
 
   const { openModal, closeModal, isOpen } = useModal();
 
@@ -133,50 +136,38 @@ const BuyAirtime = () => {
     [buyAirtime]
   );
 
-  // const handleSelectedData = async (selectedValue: string) => {
-  //   const selectedCategory = data?.find(
-  //     (category) => category?.network === selectedValue
-  //   );
-
-  //   if (selectedCategory) {
-  //     setValue("provider", selectedCategory?.network);
-  //     setValue("amount", "");
-  //     setValue("discount", ""); // Reset discount
-  //     watch("amount"); // Trigger cashback calculation
-  //   }
-
-  //   setActiveNetwork(selectedValue);
-  // };
-
-  // useEffect(() => {
-  //   const amount = watch("amount");
-
-  //   const selectedCategory = data?.find(
-  //     (category) => category?.network === getValues("provider")
-  //   );
-
-  //   if (selectedCategory && amount) {
-  //     const discount = parseFloat(selectedCategory?.discount);
-  //     const discountedAmount = amount - (discount / 100) * amount;
-  //     setValue("discount", discountedAmount.toFixed(2));
-  //   }
-  // }, [watch, setValue, data, getValues]);
-
   const handleSelectedData = async (selectedValue: string) => {
-    const selectedCategory = data?.find(
+    const category = data?.find(
       (category) => category?.network === selectedValue
     );
 
-    console.log(selectedCategory, "net");
+    console.log(category, "net");
 
-    if (selectedCategory) {
-      const discount = selectedCategory?.discount?.toString();
+    if (category) {
+      setSelectedCategory(category);
+      const discount = category?.discount?.toString();
 
       setValue("provider", selectedCategory?.network);
       setValue("amount", "");
-      setValue("discount", discount);
+      // setValue("discount", discount);
     }
   };
+
+  const amount = watch("amount");
+
+  useEffect(() => {
+    if (amount !== undefined && selectedCategory) {
+      const amountValue = parseFloat(amount);
+
+      if (!isNaN(amountValue) && isFinite(amountValue)) {
+        const cashback =
+          amountValue - (selectedCategory.discount / 100) * amountValue;
+        setValue("discount", cashback.toFixed(2));
+      } else {
+        setValue("discount", "");
+      }
+    }
+  }, [amount, selectedCategory, setValue]);
 
   return (
     <div className="  rounded-md  w-full ">
@@ -233,12 +224,16 @@ const BuyAirtime = () => {
               // />
             )}
           </div>
-          <div className="w-full">
+          <div className="w-full relative">
+            {/* <span className="absolute top-12 z-50 flex items-center pl-3 ">
+              ₦
+            </span> */}
             <TextInput
               label="Amount"
               placeholder="Enter your Amount"
               register={register}
               fieldName={"amount"}
+              value={amount && `₦${amount}`}
               error={errors.amount}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
@@ -248,7 +243,7 @@ const BuyAirtime = () => {
             <ReadOnlyTextInput
               label="Cashback"
               placeholder=""
-              value={getValues("discount")}
+              value={getValues("discount") && `₦${getValues("discount")}`}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -315,12 +310,12 @@ const BuyAirtime = () => {
               <span className="text-[#164e63]">{` ${formData?.name}`}</span>
             </div> */}
             <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Cashback: </p>
-              <span className="text-[#164e63]">%{formData?.discount}</span>
-            </div>
-            <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
               <span className="text-[#164e63]">₦{formData?.amount}</span>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Cashback: </p>
+              <span className="text-[#164e63]">₦{formData?.discount}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Recipient Number: </p>
