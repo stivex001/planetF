@@ -119,7 +119,9 @@ const BuyAirtime = () => {
 
   const handleBuyAirtime = useCallback(
     (values: BuyAirtimeFormValues) => {
-      buyAirtime(values, {
+      const payload = { ...values, amount: getValues("discount") || amount };
+
+      buyAirtime(payload, {
         onError: (error: unknown) => {
           if (error instanceof Error) {
             console.log(error?.message);
@@ -145,11 +147,9 @@ const BuyAirtime = () => {
 
     if (category) {
       setSelectedCategory(category);
-      const discount = category?.discount?.toString();
 
-      setValue("provider", selectedCategory?.network);
+      setValue("provider", category?.network);
       setValue("amount", "");
-      // setValue("discount", discount);
     }
   };
 
