@@ -52,7 +52,6 @@ export const buyAirtimeSchema = yup.object().shape({
       }
     ),
 
-  // country: yup.string().required("Country is required"),
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
