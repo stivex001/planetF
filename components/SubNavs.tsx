@@ -110,7 +110,7 @@ const navbarLinks = [
     icon: <FiActivity size={24} className="-ml-3 xl:ml-0" />,
     title: "Commission List",
     url: "/user/commission",
-    arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
+    // arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
   },
   // {
   //   id: 4,

@@ -9,3 +9,18 @@ export interface Transactions {
   f_wallet: string;
   description: string;
 }
+
+export interface Commissions {
+  per_page: number;
+  data: {
+    id?: number;
+    type: string;
+    created_at: string;
+    updated_at: string;
+    amount: string;
+    balance: string;
+    prevBalance: string;
+    description: string;
+  }[];
+}
+
