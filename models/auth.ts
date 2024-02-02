@@ -35,6 +35,10 @@ export const forgotPasswordSchemaOne = yup.object().shape({
   user_name: yup.string().required("Select a Provider"),
 });
 
+export const reportSchema = yup.object().shape({
+  date: yup.string(),
+});
+
 export const buyAirtimeSchema = yup.object().shape({
   provider: yup.string(),
   discount: yup.string(),
@@ -208,13 +212,17 @@ export type CGFormTransferValues = yup.InferType<typeof transferCGBundleSchema>;
 
 export type SigninFormValues = yup.InferType<typeof signInSchema>;
 
+export type ReportFormValues = yup.InferType<typeof reportSchema>;
+
 export type ForgotPasswordFormOneValues = yup.InferType<
   typeof forgotPasswordSchemaOne
 >;
 
 export type BuyAirtimeFormValues = yup.InferType<typeof buyAirtimeSchema>;
 
-export type ConvertAirtimeFormValues = yup.InferType<typeof convertAirtimeSchema>;
+export type ConvertAirtimeFormValues = yup.InferType<
+  typeof convertAirtimeSchema
+>;
 
 export type BuyDataFormValues = yup.InferType<typeof buyDataSchema>;
 
@@ -240,6 +248,7 @@ export type AuthFormTypes =
   | BuyElectricityFormValues
   | BuyCheckerFormValues
   | ConvertAirtimeFormValues
+  | ReportFormValues
   | ValidateTvFormValues;
 
 export type AuthFormFields =
@@ -253,5 +262,6 @@ export type AuthFormFields =
   | keyof BuyTvFormValues
   | keyof BuyElectricityFormValues
   | keyof BuyCheckerFormValues
-  | keyof ConvertAirtimeFormValues
+  | keyof ValidateTvFormValues
+  | keyof ReportFormValues
   | keyof ValidateTvFormValues;

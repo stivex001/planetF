@@ -24,3 +24,14 @@ export interface Commissions {
   }[];
 }
 
+export interface ReportData {
+  data: number;
+  data_amount: number;
+  airtime: number;
+  airtime_amount: number;
+  tv: number;
+  tv_amount: number;
+  electricity: number;
+  electricity_amount: number;
+  date: string;
+}
