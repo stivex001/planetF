@@ -1,7 +1,3 @@
 {
-  "/(dashboard)/user/cgtransfer/page": "app/(dashboard)/user/cgtransfer/page.js",
-  "/(dashboard)/user/cgwallet/page": "app/(dashboard)/user/cgwallet/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/user/page": "app/(dashboard)/user/page.js",
   "/(dashboard)/user/salesreport/page": "app/(dashboard)/user/salesreport/page.js"
 }
