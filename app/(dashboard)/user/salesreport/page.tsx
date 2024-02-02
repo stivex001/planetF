@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { IoWalletOutline } from "react-icons/io5";
 import CustomCard from "@/components/CustomCard";
 import { useModal } from "@/context/useModal";
@@ -10,6 +10,8 @@ import { fetchDailyReprt } from "@/mutation/fetchDailyReport";
 import Report from "@/components/reports/Report";
 import { toast } from "react-toastify";
 import { ReportData } from "@/types/transaction";
+import { fetchMontlyReprt } from "@/mutation/fetchMontlyReport";
+import { fetchYearlyReport } from "@/mutation/fetchYearlyReport";
 
 type Props = {};
 
@@ -25,6 +27,8 @@ const SalesReport = (props: Props) => {
   const { openModal, closeModal, isOpen } = useModal();
   const [loading, setLoading] = useState(false);
   const [dailyReport, setDailyReport] = useState<ReportData | null>(null);
+  const [montlyReport, setMontlyReport] = useState<ReportData | null>(null);
+  const [yearlyReport, setYearlyReport] = useState<ReportData | null>(null);
 
   const handleTabClick = (tab: string) => {
     setSelectedTab(tab);
@@ -43,7 +47,22 @@ const SalesReport = (props: Props) => {
           setDailyReport(response?.data?.data || null);
           setLoading(false);
           break;
-        // Add cases for "monthly" and "yearly" if needed
+
+        case "monthly":
+          const montlyResponse = await fetchMontlyReprt({
+            date: date.toISOString(),
+          });
+          setMontlyReport(montlyResponse?.data?.data || null);
+          setLoading(false);
+          break;
+
+        case "yearly":
+          const yearlyResponse = await fetchYearlyReport({
+            date: date.toISOString(),
+          });
+          setYearlyReport(yearlyResponse?.data?.data || null);
+          setLoading(false);
+          break;
         default:
           break;
       }
@@ -112,7 +131,45 @@ const SalesReport = (props: Props) => {
     }
   };
 
-  console.log(dailyReport, "daily");
+  const fetchInitialData = async (tab: string) => {
+    setLoading(true);
+    try {
+      // Fetch initial data based on the selected tab
+      switch (tab) {
+        case "daily":
+          const dailyResponse = await fetchDailyReprt({
+            date: selectedDate.toISOString(),
+          });
+          setDailyReport(dailyResponse?.data?.data || null);
+          break;
+
+        case "monthly":
+          const montlyResponse = await fetchMontlyReprt({
+            date: selectedDate.toISOString(),
+          });
+          setMontlyReport(montlyResponse?.data?.data || null);
+          break;
+
+        case "yearly":
+          const yearlyResponse = await fetchYearlyReport({
+            date: selectedDate.toISOString(),
+          });
+          setYearlyReport(yearlyResponse?.data?.data || null);
+          break;
+        default:
+          break;
+      }
+    } catch (error: any) {
+      console.error("Error fetching initial data:", error);
+      toast.error(error?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInitialData(selectedTab);
+  }, [selectedTab]);
 
   return (
     <main className="w-full">
@@ -176,6 +233,18 @@ const SalesReport = (props: Props) => {
       {selectedTab === "daily" && (
         <div className="my-20">
           <Report report={dailyReport} loading={loading} />
+        </div>
+      )}
+
+      {selectedTab === "monthly" && (
+        <div className="my-20">
+          <Report report={montlyReport} loading={loading} />
+        </div>
+      )}
+
+      {selectedTab === "yearly" && (
+        <div className="my-20">
+          <Report report={yearlyReport} loading={loading} />
         </div>
       )}
     </main>
