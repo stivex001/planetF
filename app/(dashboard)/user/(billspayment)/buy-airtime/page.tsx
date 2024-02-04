@@ -352,9 +352,12 @@ const BuyAirtime = () => {
               <span className="text-[#164e63]">₦{formData?.discount}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Recipient Number: </p>
-              <span className="text-[#164e63]">{formData?.number}</span>
+              <p>Recipient Numbers: </p>
+              <span className="text-[#164e63]">
+                {value?.map((option) => option.value).join(", ")}
+              </span>
             </div>
+
             <div className="w-1/2 mx-auto">
               <CustomButton
                 onClick={() => {
