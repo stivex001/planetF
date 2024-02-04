@@ -84,10 +84,9 @@ const BuyAirtime = () => {
       payment: "",
       promo: "0",
       ref: "",
-      number: "",
+      number: [""],
       amount: "",
       discount: "",
-      numbers: [""],
     },
     mode: "all",
     resolver: yupResolver(buyAirtimeSchema),
@@ -100,8 +99,6 @@ const BuyAirtime = () => {
   const [selectedCategory, setSelectedCategory] = useState<BuyDataProps | null>(
     null
   );
-  const [phoneNumbers, setPhoneNumbers] = useState<string[]>([""]);
-  const [errorNum, setErrorNum] = useState(false);
   const [inputValue, setInputValue] = React.useState("");
   const [value, setValues] = React.useState<readonly Option[]>([]);
 
@@ -118,31 +115,6 @@ const BuyAirtime = () => {
         setInputValue("");
         event.preventDefault();
     }
-  };
-
-  const handleAddPhoneNumber = () => {
-    const lastPhoneNumber = phoneNumbers[phoneNumbers.length - 1];
-
-    if (lastPhoneNumber.trim() === "") {
-      // Display an error message or prevent adding a new input
-      setErrorNum(true);
-      toast.error("Phone number cannot be empty");
-    } else {
-      setPhoneNumbers([...phoneNumbers, ""]);
-      setErrorNum(false);
-    }
-  };
-
-  const handleRemovePhoneNumber = (index: number) => {
-    const updatedPhoneNumbers = [...phoneNumbers];
-    updatedPhoneNumbers.splice(index, 1);
-    setPhoneNumbers(updatedPhoneNumbers);
-  };
-
-  const handlePhoneNumberChange = (value: string, index: number) => {
-    const updatedPhoneNumbers = [...phoneNumbers];
-    updatedPhoneNumbers[index] = value;
-    setPhoneNumbers(updatedPhoneNumbers);
   };
 
   const { openModal, closeModal, isOpen } = useModal();
@@ -180,7 +152,13 @@ const BuyAirtime = () => {
 
   const handleBuyAirtime = useCallback(
     (values: BuyAirtimeFormValues) => {
-      const payload = { ...values, amount: getValues("discount") || amount };
+      const phoneNumbers = value.map((option) => option.value);
+
+      const payload = {
+        ...values,
+        amount: getValues("discount") || amount,
+        number: phoneNumbers,
+      };
 
       buyAirtime(payload, {
         onError: (error: unknown) => {
@@ -196,7 +174,7 @@ const BuyAirtime = () => {
         },
       });
     },
-    [buyAirtime]
+    [buyAirtime, getValues, value]
   );
 
   const handleSelectedData = async (selectedValue: string) => {

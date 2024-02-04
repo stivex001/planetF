@@ -59,16 +59,16 @@ export const buyAirtimeSchema = yup.object().shape({
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
+  // number: yup
+  //   .string()
+  //   .required("Phone number is required")
+  //   .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
+  //     if (!isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11) {
+  //       return true;
+  //     }
+  //     return false;
+  //   }),
   number: yup
-    .string()
-    .required("Phone number is required")
-    .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
-      if (!isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11) {
-        return true;
-      }
-      return false;
-    }),
-  numbers: yup
     .array()
     .of(
       yup
