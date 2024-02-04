@@ -19,6 +19,8 @@ import mobileImage from "@/images/9mobile.png";
 import Modal from "react-modal";
 import { useModal } from "@/context/useModal";
 import Image, { StaticImageData } from "next/image";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -71,6 +73,7 @@ const BuyAirtime = () => {
       number: "",
       amount: "",
       discount: "",
+      numbers: [""],
     },
     mode: "all",
     resolver: yupResolver(buyAirtimeSchema),
@@ -83,6 +86,33 @@ const BuyAirtime = () => {
   const [selectedCategory, setSelectedCategory] = useState<BuyDataProps | null>(
     null
   );
+  const [phoneNumbers, setPhoneNumbers] = useState<string[]>([""]);
+  const [errorNum, setErrorNum] = useState(false);
+
+  const handleAddPhoneNumber = () => {
+    const lastPhoneNumber = phoneNumbers[phoneNumbers.length - 1];
+
+    if (lastPhoneNumber.trim() === "") {
+      // Display an error message or prevent adding a new input
+      setErrorNum(true);
+      toast.error("Phone number cannot be empty");
+    } else {
+      setPhoneNumbers([...phoneNumbers, ""]);
+      setErrorNum(false);
+    }
+  };
+
+  const handleRemovePhoneNumber = (index: number) => {
+    const updatedPhoneNumbers = [...phoneNumbers];
+    updatedPhoneNumbers.splice(index, 1);
+    setPhoneNumbers(updatedPhoneNumbers);
+  };
+
+  const handlePhoneNumberChange = (value: string, index: number) => {
+    const updatedPhoneNumbers = [...phoneNumbers];
+    updatedPhoneNumbers[index] = value;
+    setPhoneNumbers(updatedPhoneNumbers);
+  };
 
   const { openModal, closeModal, isOpen } = useModal();
 
@@ -211,17 +241,6 @@ const BuyAirtime = () => {
                   </div>
                 ))}
               </div>
-              // <DropDown
-              //   options={
-              //     data?.map((category) => ({
-              //       key: category?.network,
-              //       label: category?.network,
-              //     })) || []
-              //   }
-              //   placeholder={"----Choose---"}
-              //   onSelect={handleSelectedData}
-              //   buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-              // />
             )}
           </div>
           <div className="w-full relative">
@@ -235,7 +254,7 @@ const BuyAirtime = () => {
               fieldName={"amount"}
               value={amount && `₦${amount}`}
               error={errors.amount}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
+              className="bg-gray-100 rounded-sm border border-zinc-600 "
             />
           </div>
 
@@ -248,7 +267,60 @@ const BuyAirtime = () => {
             />
           </div>
 
-          <div className="w-full">
+          <div className="w-full relative mb-8">
+            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+              Phone Numbers
+            </label>
+            <div className="relative w-full bg-gray-100 border rounded-sm border-zinc-600 py-2 px-6 placeholder:text-gray-400 outline-none text-sm sm:leading-6">
+              {phoneNumbers.map((phoneNumber, index) => (
+                <div className="w-full flex items-center gap-5" key={index}>
+                  <input
+                    type="number"
+                    placeholder="Enter phone number"
+                    value={phoneNumber}
+                    {...register("number")}
+                    className="outline-none w-full bg-transparent"
+                    onChange={(e) =>
+                      handlePhoneNumberChange(e.target.value, index)
+                    }
+                  />
+                  {index !== phoneNumbers.length - 1 && (
+                    <button
+                      type="button"
+                      className="bg-red-500 w-5 h-5 rounded-full flex items-center justify-center text-white text-lg"
+                      onClick={() => handleRemovePhoneNumber(index)}
+                    >
+                      -
+                    </button>
+                  )}
+                  {index === phoneNumbers.length - 1 && (
+                    <button
+                      type="button"
+                      onClick={handleAddPhoneNumber}
+                      className="bg-[#164e63] w-5 h-5 rounded-full flex items-center justify-center text-white text-lg"
+                    >
+                      +
+                    </button>
+                  )}
+                </div>
+              ))}
+              {errorNum && (
+                <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                  <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                    !
+                  </div>
+                  <p>Phone number cannot be empty</p>
+                </div>
+              )}
+            </div>
+            <p className="text-red-500 text-base font-medium mt-5">
+              Dear Customer always be certain that you have entered the correct
+              number as PLANETF will not be responsible for any number entered
+              incorrectly. Thank You.{" "}
+            </p>
+          </div>
+
+          {/* <div className="w-full">
             <TextInput
               label="Phone Number"
               placeholder="Enter your phone number"
@@ -262,7 +334,7 @@ const BuyAirtime = () => {
               number as PLANETF will not be responsible for any number entered
               incorrectly. Thank You.{" "}
             </p>
-          </div>
+          </div> */}
 
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
