@@ -6,7 +6,12 @@ import { ReadOnlyTextInput, TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
 import { BuyAirtimeFormValues, buyAirtimeSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  KeyboardEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import { toast } from "react-toastify";
@@ -19,8 +24,7 @@ import mobileImage from "@/images/9mobile.png";
 import Modal from "react-modal";
 import { useModal } from "@/context/useModal";
 import Image, { StaticImageData } from "next/image";
-import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
+import CreatableSelect from "react-select/creatable";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -63,6 +67,16 @@ interface BuyDataProps {
   discount: number;
 }
 
+interface Option {
+  readonly label: string;
+  readonly value: string;
+}
+
+const createOption = (label: string) => ({
+  label,
+  value: label,
+});
+
 const BuyAirtime = () => {
   const form = useForm<BuyAirtimeFormValues>({
     defaultValues: {
@@ -88,6 +102,23 @@ const BuyAirtime = () => {
   );
   const [phoneNumbers, setPhoneNumbers] = useState<string[]>([""]);
   const [errorNum, setErrorNum] = useState(false);
+  const [inputValue, setInputValue] = React.useState("");
+  const [value, setValues] = React.useState<readonly Option[]>([]);
+
+  const components = {
+    DropdownIndicator: null,
+  };
+
+  const handleKeyDown: KeyboardEventHandler = (event) => {
+    if (!inputValue) return;
+    switch (event.key) {
+      case "Enter":
+      case "Tab":
+        setValues((prev) => [...prev, createOption(inputValue)]);
+        setInputValue("");
+        event.preventDefault();
+    }
+  };
 
   const handleAddPhoneNumber = () => {
     const lastPhoneNumber = phoneNumbers[phoneNumbers.length - 1];
@@ -257,7 +288,6 @@ const BuyAirtime = () => {
               className="bg-gray-100 rounded-sm border border-zinc-600 "
             />
           </div>
-
           <div className="w-full">
             <ReadOnlyTextInput
               label="Cashback"
@@ -266,75 +296,29 @@ const BuyAirtime = () => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-
           <div className="w-full relative mb-8">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
               Phone Numbers
             </label>
-            <div className="relative w-full bg-gray-100 border rounded-sm border-zinc-600 py-2 px-6 placeholder:text-gray-400 outline-none text-sm sm:leading-6">
-              {phoneNumbers.map((phoneNumber, index) => (
-                <div className="w-full flex items-center gap-5" key={index}>
-                  <input
-                    type="number"
-                    placeholder="Enter phone number"
-                    value={phoneNumber}
-                    {...register("number")}
-                    className="outline-none w-full bg-transparent"
-                    onChange={(e) =>
-                      handlePhoneNumberChange(e.target.value, index)
-                    }
-                  />
-                  {index !== phoneNumbers.length - 1 && (
-                    <button
-                      type="button"
-                      className="bg-red-500 w-5 h-5 rounded-full flex items-center justify-center text-white text-lg"
-                      onClick={() => handleRemovePhoneNumber(index)}
-                    >
-                      -
-                    </button>
-                  )}
-                  {index === phoneNumbers.length - 1 && (
-                    <button
-                      type="button"
-                      onClick={handleAddPhoneNumber}
-                      className="bg-[#164e63] w-5 h-5 rounded-full flex items-center justify-center text-white text-lg"
-                    >
-                      +
-                    </button>
-                  )}
-                </div>
-              ))}
-              {errorNum && (
-                <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
-                  <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
-                    !
-                  </div>
-                  <p>Phone number cannot be empty</p>
-                </div>
-              )}
-            </div>
+            <CreatableSelect
+              components={components}
+              inputValue={inputValue}
+              isClearable
+              isMulti
+              menuIsOpen={false}
+              onChange={(newValue) => setValues(newValue)}
+              onInputChange={(newValue) => setInputValue(newValue)}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter phone number"
+              value={value}
+              className="relative w-full rounded-sm border-zinc-600 h-14  placeholder:text-gray-400 outline-none text-sm sm:leading-6"
+            />
             <p className="text-red-500 text-base font-medium mt-5">
               Dear Customer always be certain that you have entered the correct
               number as PLANETF will not be responsible for any number entered
               incorrectly. Thank You.{" "}
             </p>
           </div>
-
-          {/* <div className="w-full">
-            <TextInput
-              label="Phone Number"
-              placeholder="Enter your phone number"
-              register={register}
-              fieldName={"number"}
-              error={errors.number}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
-            />
-            <p className="text-red-500 text-base font-medium">
-              Dear Customer always be certain that you have entered the correct
-              number as PLANETF will not be responsible for any number entered
-              incorrectly. Thank You.{" "}
-            </p>
-          </div> */}
 
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
