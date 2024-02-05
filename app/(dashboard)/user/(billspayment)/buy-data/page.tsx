@@ -96,7 +96,7 @@ const BuyData = (props: Props) => {
       payment: "",
       promo: "0",
       ref: "",
-      number: [""],
+      number: "",
       name: "",
     },
     mode: "all",
@@ -157,7 +157,7 @@ const BuyData = (props: Props) => {
   };
 
   const handleBuyData = useCallback(() => {
-    const phoneNumbers = value.map((option) => option.value);
+    const phoneNumbers = value.map((option) => option.value).join(',');
   
     const payload = {
       ...getValues(),
