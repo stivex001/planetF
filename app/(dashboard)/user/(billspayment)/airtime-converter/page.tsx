@@ -22,6 +22,27 @@ import mtnImage from "@/images/mtn.png";
 import gloImage from "@/images/glo.png";
 import airtelImage from "@/images/airtel.png";
 import mobileImage from "@/images/9mobile.png";
+import { useModal } from "@/context/useModal";
+import Modal from "react-modal";
+
+const customStyles: Modal.Styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    opacity: "1",
+  },
+  content: {
+    borderRadius: "10px",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "50%",
+    marginRight: "-50%",
+    opacity: "1",
+  },
+};
 
 type Props = {};
 
@@ -62,9 +83,11 @@ const AirtimeConverter = (props: Props) => {
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [formData, setFormData] = useState<BuyAirtimeFormValues | null>(null);
+  const [formData, setFormData] = useState<ConvertAirtimeFormValues | null>(null);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const { mutate: convertAirtime, isPending } = useConvertAirtime();
+
+  const { openModal, closeModal, isOpen } = useModal();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -138,7 +161,7 @@ const AirtimeConverter = (props: Props) => {
         </p>
         <form
           className="mt-8 flex flex-col gap-4 md:w-1/2 "
-          onSubmit={handleSubmit(handleConvertAirtime)}
+          // onSubmit={handleSubmit(handleConvertAirtime)}
         >
           <div className="w-full ">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
@@ -152,7 +175,8 @@ const AirtimeConverter = (props: Props) => {
                 {data?.map((category) => (
                   <div key={category?.id} className="cursor-pointer">
                     <button
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault()
                         handleSelectedData(category?.network);
                         setActiveNetwork(category?.network);
                       }}
@@ -197,19 +221,75 @@ const AirtimeConverter = (props: Props) => {
 
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
-              type="submit"
-              className={clsx({
-                "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
-                  true,
-                "opacity-70 cursor-not-allowed": isPending,
-              })}
-              disabled={isPending}
+              onClick={(e) => {
+                e.preventDefault();
+                setFormData(getValues());
+                openModal();
+              }}
+              className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
             >
-              {isPending ? <Spinner /> : "Convert"}
+              Proceed
             </CustomButton>
           </div>
         </form>
       </div>
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          ariaHideApp={false}
+          shouldCloseOnOverlayClick={true}
+          shouldCloseOnEsc={true}
+          contentLabel="Start Project Modal"
+          overlayClassName={`left-0 bg-[#00000070] outline-none transition-all ease-in-out duration-500`}
+          className="w-full h-full flex items-center justify-center"
+        >
+          <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={closeModal}
+                className=" text-lg text-white flex justify-center items-center w-10 h-10 bg-[#164e63] rounded-full"
+              >
+                X
+              </button>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Network Provider: </p>
+              <span className="text-[#164e63]">{`${formData?.network} `}</span>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Amount: </p>
+              <span className="text-[#164e63]">₦{formData?.amount}</span>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Recipient Number: </p>
+              <span className="text-[#164e63]">
+                {formData?.number}
+              </span>
+            </div>
+
+            <div className="w-1/2 mx-auto">
+              <CustomButton
+                onClick={() => {
+                  if (formData) {
+                    handleConvertAirtime(formData);
+                  }
+                }}
+                className={clsx({
+                  "bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80":
+                    true,
+                  "opacity-70 cursor-not-allowed": isPending,
+                })}
+                disabled={isPending || isLoading}
+              >
+                {isPending ? <Spinner /> : "Convert"}
+              </CustomButton>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

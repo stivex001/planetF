@@ -69,23 +69,23 @@ export const buyAirtimeSchema = yup.object().shape({
   //     return false;
   //   }),
   number: yup
-    .array()
-    .of(
-      yup
-        .string()
-        .required("Phone number is required")
-        .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
-          if (
+    .string()
+    .required("Phone numbers are required")
+    .test(
+      "is-valid-phone",
+      "Not a valid phone numbers",
+      (phones: string) => {
+        // Validate each phone number in the string
+        const phoneArray = phones.split(",");
+        return phoneArray.every((phone) => {
+          return (
             !isNaN(Number(phone)) &&
             phone.length >= 10 &&
             phone.length <= 11
-          ) {
-            return true;
-          }
-          return false;
-        })
-    )
-    .required("At least one phone number is required"),
+          );
+        });
+      }
+    ),
 });
 
 export const convertAirtimeSchema = yup.object().shape({

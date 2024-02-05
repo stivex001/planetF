@@ -84,7 +84,7 @@ const BuyAirtime = () => {
       payment: "",
       promo: "0",
       ref: "",
-      number: [""],
+      number: "",
       amount: "",
       discount: "",
     },
@@ -152,7 +152,7 @@ const BuyAirtime = () => {
 
   const handleBuyAirtime = useCallback(
     (values: BuyAirtimeFormValues) => {
-      const phoneNumbers = value.map((option) => option.value);
+      const phoneNumbers = value.map((option) => option.value).join(',');
 
       const payload = {
         ...values,

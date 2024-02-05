@@ -193,12 +193,6 @@ const BuyData = (props: Props) => {
     }
   };
 
-  const handleBuyDataWrapper = () => {
-  if (formData) {
-    handleBuyData();
-  }
-};
-
 
   return (
     <div className="  rounded-md  w-full ">
