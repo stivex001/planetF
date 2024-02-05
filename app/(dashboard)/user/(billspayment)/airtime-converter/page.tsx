@@ -24,6 +24,8 @@ import airtelImage from "@/images/airtel.png";
 import mobileImage from "@/images/9mobile.png";
 import { useModal } from "@/context/useModal";
 import Modal from "react-modal";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -83,7 +85,9 @@ const AirtimeConverter = (props: Props) => {
   const [data, setData] = useState<BuyDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [formData, setFormData] = useState<ConvertAirtimeFormValues | null>(null);
+  const [formData, setFormData] = useState<ConvertAirtimeFormValues | null>(
+    null
+  );
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const { mutate: convertAirtime, isPending } = useConvertAirtime();
 
@@ -118,11 +122,19 @@ const AirtimeConverter = (props: Props) => {
         },
         onSuccess: (response: any) => {
           console.log(response?.data);
-          toast.success(response?.data?.message);
+          // toast.success(response?.data?.message);
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: response?.data?.message,
+            confirmButtonText: "Okay",
+          }).then(() => {
+            closeModal();
+          });
         },
       });
     },
-    [convertAirtime]
+    [convertAirtime, closeModal]
   );
 
   const {
@@ -176,7 +188,7 @@ const AirtimeConverter = (props: Props) => {
                   <div key={category?.id} className="cursor-pointer">
                     <button
                       onClick={(e) => {
-                        e.preventDefault()
+                        e.preventDefault();
                         handleSelectedData(category?.network);
                         setActiveNetwork(category?.network);
                       }}
@@ -265,9 +277,7 @@ const AirtimeConverter = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Recipient Number: </p>
-              <span className="text-[#164e63]">
-                {formData?.number}
-              </span>
+              <span className="text-[#164e63]">{formData?.number}</span>
             </div>
 
             <div className="w-1/2 mx-auto">
