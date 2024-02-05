@@ -6,7 +6,12 @@ import { ReadOnlyTextInput, TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
 import { BuyDataFormValues, buyDataSchema } from "@/models/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  KeyboardEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import { toast } from "react-toastify";
@@ -21,6 +26,7 @@ import mobileImage from "@/images/9mobile.png";
 import Image from "next/image";
 import Modal from "react-modal";
 import { useModal } from "@/context/useModal";
+import CreatableSelect from "react-select/creatable";
 
 type Props = {};
 
@@ -73,6 +79,16 @@ const categories = [
   },
 ];
 
+interface Option {
+  readonly label: string;
+  readonly value: string;
+}
+
+const createOption = (label: string) => ({
+  label,
+  value: label,
+});
+
 const BuyData = (props: Props) => {
   const form = useForm<BuyDataFormValues>({
     defaultValues: {
@@ -80,7 +96,7 @@ const BuyData = (props: Props) => {
       payment: "",
       promo: "0",
       ref: "",
-      number: "",
+      number: [""],
       name: "",
     },
     mode: "all",
@@ -95,10 +111,37 @@ const BuyData = (props: Props) => {
 
   const [formData, setFormData] = useState<BuyDataFormValues | null>(null);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
+  const [inputValue, setInputValue] = React.useState("");
+  const [value, setValues] = React.useState<readonly Option[]>([]);
+
+  const components = {
+    DropdownIndicator: null,
+  };
+
+  const handleKeyDown: KeyboardEventHandler = (event) => {
+    if (!inputValue) return;
+    switch (event.key) {
+      case "Enter":
+      case "Tab":
+        setValues((prev) => [...prev, createOption(inputValue)]);
+        setInputValue("");
+        event.preventDefault();
+    }
+  };
 
   const { openModal, closeModal, isOpen } = useModal();
 
   const { mutate: buyData, isPending } = useBuyData();
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    getValues,
+    clearErrors,
+    setError,
+    register,
+  } = form;
 
   const handleImageClick = async (categoryName: string) => {
     try {
@@ -113,33 +156,29 @@ const BuyData = (props: Props) => {
     }
   };
 
-  const handleBuyData = useCallback(
-    (values: BuyDataFormValues) => {
-      buyData(values, {
-        onError: (error: unknown) => {
-          if (error instanceof Error) {
-            console.log(error?.message);
-            toast.error(error?.message);
-          }
-        },
-        onSuccess: (response: any) => {
-          console.log(response?.data);
-          toast.success(response?.data?.message);
-        },
-      });
-    },
-    [buyData]
-  );
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    getValues,
-    clearErrors,
-    setError,
-    register,
-  } = form;
+  const handleBuyData = useCallback(() => {
+    const phoneNumbers = value.map((option) => option.value);
+  
+    const payload = {
+      ...getValues(),
+      number: phoneNumbers,
+    };
+  
+    buyData(payload, {
+      onError: (error: unknown) => {
+        if (error instanceof Error) {
+          console.log(error?.message);
+          toast.error(error?.message);
+        }
+      },
+      onSuccess: (response: any) => {
+        console.log(response?.data);
+        toast.success(response?.data?.message);
+        closeModal();
+      },
+    });
+  }, [buyData, closeModal, getValues, toast, value]);
+  
 
   const handleSelectedData = (selectedValue: string) => {
     const selectedCategory = data?.find(
@@ -153,6 +192,13 @@ const BuyData = (props: Props) => {
       setSelectedCategoryData(selectedCategory);
     }
   };
+
+  const handleBuyDataWrapper = () => {
+  if (formData) {
+    handleBuyData();
+  }
+};
+
 
   return (
     <div className="  rounded-md  w-full ">
@@ -190,30 +236,8 @@ const BuyData = (props: Props) => {
                     />
                   </button>
                 </div>
-                // <Image
-                //   key={category.id}
-                //   src={category.img}
-                //   alt={`${selectedCategory} Logo`}
-                //   className="cursor-pointer"
-                //   width={42}
-                //   height={42}
-                //   onClick={() => handleImageClick(category.name)}
-                // />
               ))}
             </div>
-
-            {/* <DropDown
-              options={
-                categories?.map((category) => ({
-                  key: category.name,
-                  label: category.name,
-                  value: category.name,
-                })) || []
-              }
-              placeholder={"Select network Provider"}
-              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
-              buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-            /> */}
           </div>
 
           {isLoading ? (
@@ -247,16 +271,24 @@ const BuyData = (props: Props) => {
             />
           </div>
 
-          <div className="w-full">
-            <TextInput
-              label="Phone Number"
-              placeholder="Enter your phone number"
-              register={register}
-              fieldName={"number"}
-              error={errors.number}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
+          <div className="w-full relative mb-8">
+            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+              Phone Numbers
+            </label>
+            <CreatableSelect
+              components={components}
+              inputValue={inputValue}
+              isClearable
+              isMulti
+              menuIsOpen={false}
+              onChange={(newValue) => setValues(newValue)}
+              onInputChange={(newValue) => setInputValue(newValue)}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter phone number"
+              value={value}
+              className="relative w-full rounded-sm border-zinc-600 h-14  placeholder:text-gray-400 outline-none text-sm sm:leading-6"
             />
-            <p className="text-red-500 text-base font-medium">
+            <p className="text-red-500 text-base font-medium mt-5">
               Dear Customer always be certain that you have entered the correct
               number as PLANETF will not be responsible for any number entered
               incorrectly. Thank You.{" "}
@@ -310,15 +342,17 @@ const BuyData = (props: Props) => {
               <span className="text-[#164e63]">₦{formData?.amount}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Phone Number: </p>
-              <span className="text-[#164e63]">{formData?.number}</span>
+              <p>Recipient Numbers: </p>
+              <span className="text-[#164e63]">
+                {value?.map((option) => option.value).join(", ")}
+              </span>
             </div>
 
             <div className="w-1/2 mx-auto">
               <CustomButton
                 onClick={() => {
                   if (formData) {
-                    handleBuyData(formData);
+                    handleBuyData();
                   }
                 }}
                 className={clsx({

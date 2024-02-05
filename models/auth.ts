@@ -128,10 +128,38 @@ export const buyDataSchema = yup.object().shape({
   promo: yup.string(),
   ref: yup.string(),
   number: yup
+    .array()
+    .of(
+      yup
+        .string()
+        .required("Phone number is required")
+        .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
+          if (
+            !isNaN(Number(phone)) &&
+            phone.length >= 10 &&
+            phone.length <= 11
+          ) {
+            return true;
+          }
+          return false;
+        })
+    )
+    .required("At least one phone number is required"),
+});
+
+export const buyBettingSchema = yup.object().shape({
+  coded: yup.string(),
+  name: yup.string(),
+  amount: yup.string(),
+  network: yup.string(),
+  payment: yup.string(),
+  promo: yup.string(),
+  ref: yup.string(),
+  number: yup
     .string()
     .required("Phone number is required")
-    .test("is-valid-phone", "Not a valid phone number", (phone) => {
-      if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
+    .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
+      if (!isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11) {
         return true;
       }
       return false;
@@ -243,6 +271,7 @@ export type ConvertAirtimeFormValues = yup.InferType<
 >;
 
 export type BuyDataFormValues = yup.InferType<typeof buyDataSchema>;
+export type BuyBettingFormValues = yup.InferType<typeof buyBettingSchema>;
 
 export type BuyCheckerFormValues = yup.InferType<typeof buyCheckerSchema>;
 
@@ -262,6 +291,7 @@ export type AuthFormTypes =
   | ForgotPasswordFormOneValues
   | BuyAirtimeFormValues
   | BuyDataFormValues
+  | BuyBettingFormValues
   | BuyTvFormValues
   | BuyElectricityFormValues
   | BuyCheckerFormValues
@@ -277,6 +307,7 @@ export type AuthFormFields =
   | keyof ForgotPasswordFormOneValues
   | keyof BuyAirtimeFormValues
   | keyof BuyDataFormValues
+  | keyof BuyBettingFormValues
   | keyof BuyTvFormValues
   | keyof BuyElectricityFormValues
   | keyof BuyCheckerFormValues
