@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 const Dashboard = () => {
   const { data: user, isLoading } = useUser();
 
-  console.log(user?.user?.referral_plan,"user");
+  console.log(user,"user");
   
 
   const formatCurrency = (value: any) => {
@@ -38,7 +38,7 @@ const Dashboard = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           
-          window.open("https://google.com", "_blank");
+          window.open("https://planet-f-kyc.vercel.app/", "_blank");
         }
       });
     }
