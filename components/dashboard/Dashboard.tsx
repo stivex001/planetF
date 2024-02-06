@@ -26,7 +26,7 @@ const Dashboard = () => {
   const general_market = formatCurrency(user?.balances?.general_market);
 
   useEffect(() => {
-    if (!isLoading && user?.user.referral_plan == "free") {
+    if (!isLoading && !user?.user?.bvn) {
       Swal.fire({
         title: "Account Restricted",
         html:

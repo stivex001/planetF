@@ -5,6 +5,7 @@ export type UserProfile = {
     user_name: string;
     status: string;
     referral_plan: string;
+    bvn: boolean
   };
   balances: {
     wallet: string;
