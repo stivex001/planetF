@@ -1,14 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CustomCard from "../CustomCard";
 import { IoWalletOutline } from "react-icons/io5";
 import { ScreenLoader } from "../ScreenLoader";
 import Link from "next/link";
 import { useUser } from "@/hooks/auth/useUser";
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
   const { data: user, isLoading } = useUser();
+
+  console.log(user?.user?.referral_plan,"user");
+  
 
   const formatCurrency = (value: any) => {
     const parsedValue = Number(value);
@@ -20,6 +24,25 @@ const Dashboard = () => {
   const agent_commision = formatCurrency(user?.balances?.agent_commision);
   const points = formatCurrency(user?.balances?.points);
   const general_market = formatCurrency(user?.balances?.general_market);
+
+  useEffect(() => {
+    if (!isLoading && user?.user.referral_plan == "free") {
+      Swal.fire({
+        title: "Account Restricted",
+        html:
+          "Your account was restricted based on CBN requirement. Kindly update your info to continue enjoying PlanetF services.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Update Info",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          
+          window.open("https://google.com", "_blank");
+        }
+      });
+    }
+  }, [isLoading, user]);
 
   if (isLoading) {
     return <ScreenLoader />;

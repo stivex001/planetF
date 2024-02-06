@@ -4,6 +4,7 @@ export type UserProfile = {
     photo: string;
     user_name: string;
     status: string;
+    referral_plan: string;
   };
   balances: {
     wallet: string;
