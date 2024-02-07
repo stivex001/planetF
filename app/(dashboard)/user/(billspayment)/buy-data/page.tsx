@@ -113,6 +113,7 @@ const BuyData = (props: Props) => {
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [inputValue, setInputValue] = React.useState("");
   const [value, setValues] = React.useState<readonly Option[]>([]);
+  const [numberErr, setNumberErr] = useState(false);
 
   const components = {
     DropdownIndicator: null,
@@ -157,13 +158,13 @@ const BuyData = (props: Props) => {
   };
 
   const handleBuyData = useCallback(() => {
-    const phoneNumbers = value.map((option) => option.value).join(',');
-  
+    const phoneNumbers = value.map((option) => option.value).join(",");
+
     const payload = {
       ...getValues(),
       number: phoneNumbers,
     };
-  
+
     buyData(payload, {
       onError: (error: unknown) => {
         if (error instanceof Error) {
@@ -178,7 +179,6 @@ const BuyData = (props: Props) => {
       },
     });
   }, [buyData, closeModal, getValues, toast, value]);
-  
 
   const handleSelectedData = (selectedValue: string) => {
     const selectedCategory = data?.find(
@@ -192,7 +192,6 @@ const BuyData = (props: Props) => {
       setSelectedCategoryData(selectedCategory);
     }
   };
-
 
   return (
     <div className="  rounded-md  w-full ">
@@ -282,6 +281,11 @@ const BuyData = (props: Props) => {
               value={value}
               className="relative w-full rounded-sm border-zinc-600 h-14  placeholder:text-gray-400 outline-none text-sm sm:leading-6"
             />
+            {numberErr && (
+              <p className="text-red-500 text-base font-medium mt-5">
+                Kindly Enter your phone number and press Enter
+              </p>
+            )}
             <p className="text-red-500 text-base font-medium mt-5">
               Dear Customer always be certain that you have entered the correct
               number as PLANETF will not be responsible for any number entered
@@ -293,7 +297,14 @@ const BuyData = (props: Props) => {
             onClick={(e) => {
               e.preventDefault();
               setFormData(getValues());
+              const phoneNumbers = value.map((option) => option.value);
+              console.log("Phone numbers:", phoneNumbers);
+              if (!phoneNumbers || phoneNumbers.length === 0) {
+                setNumberErr(true);
+                return;
+              }
               openModal();
+              setNumberErr(false);
             }}
             className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
           >

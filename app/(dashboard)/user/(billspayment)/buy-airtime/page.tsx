@@ -308,12 +308,14 @@ const BuyAirtime = () => {
               onClick={(e) => {
                 e.preventDefault();
                 setFormData(getValues());
-                const phoneNo = getValues("number");
-                if (phoneNo || phoneNo.split(",").length === 0) {
+                const phoneNumbers = value.map((option) => option.value);
+                console.log("Phone numbers:", phoneNumbers);
+                if (!phoneNumbers || phoneNumbers.length === 0) {
                   setNumberErr(true);
                   return;
                 }
                 openModal();
+                setNumberErr(false);
               }}
               className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
             >
