@@ -2,7 +2,7 @@
 
 import CustomButton from "@/components/Form/CustomButton";
 import { DropDown } from "@/components/Form/Dropdown";
-import { TextInput } from "@/components/Form/TextInput";
+import { ReadOnlyTextInput, TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
 import {
   BuyAirtimeFormValues,
@@ -26,6 +26,11 @@ import { useModal } from "@/context/useModal";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import { useBankList } from "@/hooks/queries/useBankList";
+import { BankListData } from "@/types/transaction";
+import { useToken } from "@/hooks/auth/useToken";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { BASE_URL } from "@/utils/baseUrl";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -80,6 +85,13 @@ interface BuyDataProps {
   network: string;
 }
 
+interface ApiResponseType {
+  token: string;
+  message: string | undefined;
+  success: number | undefined;
+  data: any;
+}
+
 const AirtimeConverter = (props: Props) => {
   const form = useForm<ConvertAirtimeFormValues>({
     defaultValues: {
@@ -88,6 +100,7 @@ const AirtimeConverter = (props: Props) => {
       ref: "",
       number: "",
       amount: "",
+      accountNumber: "",
     },
     mode: "all",
     resolver: yupResolver(convertAirtimeSchema),
@@ -100,9 +113,20 @@ const AirtimeConverter = (props: Props) => {
     null
   );
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
+  const [selectedMode, setSelectedMode] = useState<string | null>(null);
+  const [accountNumber, setAccountNumber] = useState("");
+  const [selectedBankCode, setSelectedBankCode] = useState("");
+  const [verifyBank, setVerifyBank] = useState();
+  const [loadingBankVerify, setLoadingBankVerify] = useState(false);
+
+  console.log(selectedBankCode, accountNumber, "test");
+
   const { mutate: convertAirtime, isPending } = useConvertAirtime();
 
   const { openModal, closeModal, isOpen } = useModal();
+
+  const { data: banklist, isPending: banklistPending } = useBankList();
+  console.log(banklist, "list");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -171,6 +195,77 @@ const AirtimeConverter = (props: Props) => {
     }
   };
 
+  const handleCreditModeSelect = (selectedValue: string) => {
+    setSelectedMode(selectedValue);
+  };
+
+  const handleAccountNumberChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value } = e.target;
+    setAccountNumber(value);
+
+    if (selectedBankCode && value.length === 10) {
+      makeBankValidationAPICall(selectedBankCode, value);
+    }
+  };
+
+  const makeBankValidationAPICall = async (
+    bankCode: string,
+    accountNumber: string
+  ) => {
+    const { token } = useToken();
+    setLoadingBankVerify(true);
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/verifyBank`,
+        {
+          accountnumber: accountNumber,
+          code: bankCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            version: "1.0",
+          },
+        }
+      );
+      console.log(response, "ressssss");
+
+      if (response?.data?.success === 1) {
+        setVerifyBank(response?.data);
+        setLoadingBankVerify(false);
+      } else {
+        toast.error(response?.data?.message);
+        setLoadingBankVerify(false);
+        throw new Error(response?.data?.message);
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data?.error?.message);
+        setLoadingBankVerify(false);
+        throw new Error(error?.response?.data?.error?.message);
+      } else if (error instanceof Error) {
+        setLoadingBankVerify(false);
+        throw error;
+      } else throw new Error("Error occurred while creating account");
+    }
+  };
+
+  const handleBankSelect = (selectedValue: string) => {
+    const selectedBank = banklist?.find((bank) => bank.name === selectedValue);
+
+    if (selectedBank) {
+      setSelectedBankCode(selectedBank.code);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedBankCode && accountNumber.length === 10) {
+      makeBankValidationAPICall(selectedBankCode, accountNumber);
+    }
+  }, [selectedBankCode, accountNumber]);
+
   return (
     <div className="  rounded-md  w-full ">
       <div className="w-full lg:w-11/12 mx-auto">
@@ -234,7 +329,10 @@ const AirtimeConverter = (props: Props) => {
                 })) || []
               }
               placeholder={"Select Credit Mode "}
-              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
+              onSelect={(selectedValue) => {
+                selectDataCategory(selectedValue);
+                handleCreditModeSelect(selectedValue);
+              }}
               buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
             />
           </div>
@@ -249,35 +347,58 @@ const AirtimeConverter = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
+          {selectedMode == "My Bank Account" && (
+            <>
+              <div className="w-full">
+                <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                  Bank Name
+                </label>
 
-          <div className="w-full">
-            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-              Bank Name
-            </label>
-            <DropDown
-              options={
-                mode?.map((category) => ({
-                  key: category.name,
-                  label: category.name,
-                  value: category.name,
-                })) || []
-              }
-              placeholder={"Select Bank "}
-              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
-              buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
-            />
-          </div>
-
-          <div className="w-full">
-            <TextInput
-              label="Account Number"
-              placeholder="Enter your Account number"
-              register={register}
-              fieldName={"number"}
-              error={errors.number}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
-            />
-          </div>
+                {banklistPending ? (
+                  <div>
+                    <Spinner />
+                  </div>
+                ) : (
+                  <DropDown
+                    options={
+                      banklist?.map((category: BankListData) => ({
+                        key: category.name,
+                        label: category.name,
+                        value: category.name,
+                      })) || []
+                    }
+                    placeholder={"Select Bank "}
+                    onSelect={(selectedValue) =>
+                      handleBankSelect(selectedValue)
+                    }
+                    buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
+                  />
+                )}
+              </div>
+              <div className="w-full">
+                <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                  Account Number
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter your Account number"
+                  onChange={handleAccountNumberChange}
+                  value={accountNumber}
+                  className={`relative w-full h-14 rounded-lg py-2 pl-6 pr-16 placeholder:text-gray-400 outline-none text-sm sm:leading-6 border `}
+                />
+              </div>
+            </>
+          )}
+          {verifyBank && (
+            <div className="w-full">
+              <ReadOnlyTextInput
+                label="Account Name"
+                placeholder=""
+                value={""}
+                className="bg-gray-100 rounded-sm border border-zinc-600"
+              />
+            </div>
+          )}
 
           <div className="w-full">
             <TextInput

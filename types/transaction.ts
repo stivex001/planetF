@@ -35,3 +35,9 @@ export interface ReportData {
   electricity_amount: number;
   date: string;
 }
+
+export interface BankListData {
+  id: number
+  name: string
+  code: string
+}

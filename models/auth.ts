@@ -104,6 +104,7 @@ export const convertAirtimeSchema = yup.object().shape({
         return false;
       }
     ),
+    
 
   payment: yup.string(),
   promo: yup.string(),
@@ -111,6 +112,15 @@ export const convertAirtimeSchema = yup.object().shape({
   number: yup
     .string()
     .required("Phone number is required")
+    .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
+      if (!isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11) {
+        return true;
+      }
+      return false;
+    }),
+    accountNumber: yup
+    .string()
+    .required("account number is required")
     .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
       if (!isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11) {
         return true;

@@ -54,7 +54,7 @@ export const DropDown = ({
       <div
         className={clsx({
           "flex items-center justify-between px-4": true,
-          "w-full h-12 rounded-lg border border-gray-300 text-gray-500 text-sm bg-white":
+          "w-full h-12 overflow-y-auto rounded-lg border border-gray-300 text-gray-500 text-sm bg-white":
             !buttonstyle,
           [buttonstyle || ""]: buttonstyle,
         })}
@@ -74,7 +74,7 @@ export const DropDown = ({
       )}
 
       {isOpen && (
-        <div className="absolute  w-full border border-gray-300 rounded-lg z-10 bg-white top-full mt-1">
+        <div className="absolute max-h-60 overflow-y-auto  w-full border border-gray-300 rounded-lg z-10 bg-white top-full mt-1">
           {options.map((option, index) => {
             return (
               <div key={index}>
