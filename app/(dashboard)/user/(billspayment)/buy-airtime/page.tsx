@@ -308,10 +308,8 @@ const BuyAirtime = () => {
               onClick={(e) => {
                 e.preventDefault();
                 setFormData(getValues());
-                const phoneNo = getValues('number');
-                console.log(inputValue, "hsfsdyuf");
-                
-                if (inputValue.split(",").length == 0) {
+                const phoneNo = getValues("number");
+                if (phoneNo || phoneNo.split(",").length === 0) {
                   setNumberErr(true);
                   return;
                 }

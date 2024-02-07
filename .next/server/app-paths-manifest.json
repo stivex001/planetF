@@ -1,8 +1,5 @@
 {
-  "/(dashboard)/user/(billspayment)/buy-tv/page": "app/(dashboard)/user/(billspayment)/buy-tv/page.js",
-  "/(dashboard)/user/(billspayment)/buy-electricity/page": "app/(dashboard)/user/(billspayment)/buy-electricity/page.js",
-  "/(dashboard)/user/(billspayment)/result-checker/page": "app/(dashboard)/user/(billspayment)/result-checker/page.js",
-  "/(dashboard)/user/(billspayment)/airtime-converter/page": "app/(dashboard)/user/(billspayment)/airtime-converter/page.js",
-  "/(dashboard)/user/salesreport/page": "app/(dashboard)/user/salesreport/page.js",
-  "/(dashboard)/user/commission/page": "app/(dashboard)/user/commission/page.js"
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js",
+  "/(dashboard)/user/page": "app/(dashboard)/user/page.js"
 }
