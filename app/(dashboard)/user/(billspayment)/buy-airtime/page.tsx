@@ -101,6 +101,7 @@ const BuyAirtime = () => {
   );
   const [inputValue, setInputValue] = React.useState("");
   const [value, setValues] = React.useState<readonly Option[]>([]);
+  const [numberErr, setNumberErr] = useState(false);
 
   const components = {
     DropdownIndicator: null,
@@ -152,11 +153,11 @@ const BuyAirtime = () => {
 
   const handleBuyAirtime = useCallback(
     (values: BuyAirtimeFormValues) => {
-      const phoneNumbers = value.map((option) => option.value).join(',');
+      const phoneNumbers = value.map((option) => option.value).join(",");
 
       const payload = {
         ...values,
-        amount: getValues("discount") || amount,
+        amount: amount,
         number: phoneNumbers,
       };
 
@@ -199,8 +200,7 @@ const BuyAirtime = () => {
       const amountValue = parseFloat(amount);
 
       if (!isNaN(amountValue) && isFinite(amountValue)) {
-        const cashback =
-          amountValue - (selectedCategory.discount / 100) * amountValue;
+        const cashback = (selectedCategory.discount / 100) * amountValue;
         setValue("discount", cashback.toFixed(2));
       } else {
         setValue("discount", "");
@@ -276,7 +276,7 @@ const BuyAirtime = () => {
           </div>
           <div className="w-full relative mb-8">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-              Phone Numbers
+              Phone Numbers (kindly press enter after inputing numbers)
             </label>
             <CreatableSelect
               components={components}
@@ -291,6 +291,11 @@ const BuyAirtime = () => {
               value={value}
               className="relative w-full rounded-sm border-zinc-600 h-14  placeholder:text-gray-400 outline-none text-sm sm:leading-6"
             />
+            {numberErr && (
+              <p className="text-red-500 text-base font-medium mt-5">
+                Kindly Enter your phone number and press Enter
+              </p>
+            )}
             <p className="text-red-500 text-base font-medium mt-5">
               Dear Customer always be certain that you have entered the correct
               number as PLANETF will not be responsible for any number entered
@@ -303,6 +308,13 @@ const BuyAirtime = () => {
               onClick={(e) => {
                 e.preventDefault();
                 setFormData(getValues());
+                const phoneNo = getValues('number');
+                console.log(inputValue, "hsfsdyuf");
+                
+                if (inputValue.split(",").length == 0) {
+                  setNumberErr(true);
+                  return;
+                }
                 openModal();
               }}
               className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
