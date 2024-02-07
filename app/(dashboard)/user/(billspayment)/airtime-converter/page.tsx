@@ -63,6 +63,17 @@ const providerImages: ProviderImages = {
   "9mobile": mobileImage,
 };
 
+const mode = [
+  {
+    id: "1",
+    name: "My Bank Account",
+  },
+  {
+    id: "2",
+    name: "My Wallet",
+  },
+];
+
 interface BuyDataProps {
   id: string;
   name: string;
@@ -209,14 +220,22 @@ const AirtimeConverter = (props: Props) => {
               </div>
             )}
           </div>
+
           <div className="w-full">
-            <TextInput
-              label="Amount"
-              placeholder="Enter your Amount"
-              register={register}
-              fieldName={"amount"}
-              error={errors.amount}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
+            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+              Credit Mode
+            </label>
+            <DropDown
+              options={
+                mode?.map((category) => ({
+                  key: category.name,
+                  label: category.name,
+                  value: category.name,
+                })) || []
+              }
+              placeholder={"Select Credit Mode "}
+              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
+              buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
             />
           </div>
 
@@ -227,6 +246,46 @@ const AirtimeConverter = (props: Props) => {
               register={register}
               fieldName={"number"}
               error={errors.number}
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
+
+          <div className="w-full">
+            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+              Bank Name
+            </label>
+            <DropDown
+              options={
+                mode?.map((category) => ({
+                  key: category.name,
+                  label: category.name,
+                  value: category.name,
+                })) || []
+              }
+              placeholder={"Select Bank "}
+              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
+              buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
+            />
+          </div>
+
+          <div className="w-full">
+            <TextInput
+              label="Account Number"
+              placeholder="Enter your Account number"
+              register={register}
+              fieldName={"number"}
+              error={errors.number}
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
+
+          <div className="w-full">
+            <TextInput
+              label="Amount"
+              placeholder="Enter your Amount"
+              register={register}
+              fieldName={"amount"}
+              error={errors.amount}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
