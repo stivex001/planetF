@@ -237,6 +237,12 @@ const AirtimeConverter = (props: Props) => {
         setLoadingBankVerify(false);
       } else {
         toast.error(response?.data?.message);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: response?.data?.message,
+        });
+
         setLoadingBankVerify(false);
         throw new Error(response?.data?.message);
       }
@@ -389,7 +395,9 @@ const AirtimeConverter = (props: Props) => {
               </div>
             </>
           )}
-          {verifyBank && (
+          {(verifyBank && loadingBankVerify) ? (
+            <Spinner />
+          ) : (
             <div className="w-full">
               <ReadOnlyTextInput
                 label="Account Name"
