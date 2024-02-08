@@ -79,6 +79,14 @@ const categories = [
   },
 ];
 
+const types = [
+  {
+    id: "1",
+    name: "Wallet",
+  },
+
+];
+
 interface Option {
   readonly label: string;
   readonly value: string;
@@ -193,6 +201,13 @@ const BuyData = (props: Props) => {
     }
   };
 
+  const selectDataCategory = (selectedValue: string) => {
+    setSelectedCategory(selectedValue);
+  };
+
+  console.log(data,'dat');
+  
+
   return (
     <div className="  rounded-md  w-full ">
       <div className="w-full lg:w-11/12 mx-auto">
@@ -264,7 +279,7 @@ const BuyData = (props: Props) => {
             />
           </div>
 
-          <div className="w-full relative mb-8">
+          <div className="w-full relative">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
               Phone Numbers
             </label>
@@ -286,12 +301,31 @@ const BuyData = (props: Props) => {
                 Kindly Enter your phone number and press Enter
               </p>
             )}
-            <p className="text-red-500 text-base font-medium mt-5">
+            <p className="text-red-500 text-base font-medium mt-2">
               Dear Customer always be certain that you have entered the correct
               number as PLANETF will not be responsible for any number entered
               incorrectly. Thank You.{" "}
             </p>
           </div>
+
+          <div className="w-full mb-8">
+            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+              Select Payment Method
+            </label>
+            <DropDown
+              options={
+                types?.map((category) => ({
+                  key: category.name,
+                  label: category.name,
+                  value: category.name,
+                })) || []
+              }
+              placeholder={"Select bill platform "}
+              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
+              buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
+            />
+          </div>
+          
 
           <CustomButton
             onClick={(e) => {
