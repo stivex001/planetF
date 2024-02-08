@@ -84,6 +84,18 @@ const types = [
     id: "1",
     name: "Wallet",
   },
+  {
+    id: "2",
+    name: "MTN-SME",
+  },
+  {
+    id: "3",
+    name: "MTN-CG",
+  },
+  {
+    id: "4",
+    name: "MTN-DG",
+  },
 
 ];
 
