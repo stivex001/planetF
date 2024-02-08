@@ -101,6 +101,7 @@ const AirtimeConverter = (props: Props) => {
       number: "",
       amount: "",
       accountNumber: "",
+      code: "",
     },
     mode: "all",
     resolver: yupResolver(convertAirtimeSchema),
@@ -233,7 +234,7 @@ const AirtimeConverter = (props: Props) => {
       console.log(response, "ressssss");
 
       if (response?.data?.success === 1) {
-        setVerifyBank(response?.data);
+        setVerifyBank(response?.data?.data);
         setLoadingBankVerify(false);
       } else {
         toast.error(response?.data?.message);
@@ -263,6 +264,7 @@ const AirtimeConverter = (props: Props) => {
 
     if (selectedBank) {
       setSelectedBankCode(selectedBank.code);
+      setValue("code", selectedBank?.name);
     }
   };
 
@@ -271,6 +273,7 @@ const AirtimeConverter = (props: Props) => {
       makeBankValidationAPICall(selectedBankCode, accountNumber);
     }
   }, [selectedBankCode, accountNumber]);
+
 
   return (
     <div className="  rounded-md  w-full ">
@@ -395,17 +398,25 @@ const AirtimeConverter = (props: Props) => {
               </div>
             </>
           )}
-          {(verifyBank && loadingBankVerify) ? (
+          {loadingBankVerify ? (
             <Spinner />
           ) : (
-            <div className="w-full">
-              <ReadOnlyTextInput
-                label="Account Name"
-                placeholder=""
-                value={""}
-                className="bg-gray-100 rounded-sm border border-zinc-600"
-              />
-            </div>
+            <>
+              {verifyBank && (
+                <div className="w-full">
+                  <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                    Account Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder=""
+                    value={verifyBank}
+                    disabled
+                    className="relative w-full h-14 rounded-lg py-2 pl-6 pr-16 placeholder:text-gray-400 outline-none text-sm sm:leading-6 border"
+                  />
+                </div>
+              )}
+            </>
           )}
 
           <div className="w-full">
@@ -456,6 +467,29 @@ const AirtimeConverter = (props: Props) => {
               </button>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Credit Mode: </p>
+              <span className="text-[#164e63]">{`${selectedMode} `}</span>
+            </div>
+            {selectedMode == "My Bank Account" && (
+              <div className="flex items-center justify-between pb-2 border-b-2">
+                <p>Bank Name: </p>
+                <span className="text-[#164e63]">{`${formData?.code} `}</span>
+              </div>
+            )}
+            {selectedMode == "My Bank Account" && (
+              <div className="flex items-center justify-between pb-2 border-b-2">
+                <p>Account Name: </p>
+                <span className="text-[#164e63]">{`${verifyBank} `}</span>
+              </div>
+            )}
+            {selectedMode == "My Bank Account" && (
+              <div className="flex items-center justify-between pb-2 border-b-2">
+                <p>Account Number: </p>
+                <span className="text-[#164e63]">{`${accountNumber} `}</span>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Network Provider: </p>
               <span className="text-[#164e63]">{`${formData?.network} `}</span>
             </div>
@@ -464,7 +498,7 @@ const AirtimeConverter = (props: Props) => {
               <span className="text-[#164e63]">₦{formData?.amount}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Recipient Number: </p>
+              <p>Sender Number: </p>
               <span className="text-[#164e63]">{formData?.number}</span>
             </div>
 

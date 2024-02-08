@@ -90,6 +90,7 @@ export const buyAirtimeSchema = yup.object().shape({
 
 export const convertAirtimeSchema = yup.object().shape({
   network: yup.string(),
+  code: yup.string(),
   receiver: yup.string(),
   amount: yup
     .string()
