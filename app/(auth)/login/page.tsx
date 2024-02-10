@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import logo from "@/images/planetf-.png"
+
 
 type Props = {};
 
@@ -62,16 +64,16 @@ const Login = (props: Props) => {
         <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center ">
           <div className="flex items-center gap-2">
             <Image
-              src="https://softconnet.com.ng/img/PlanetfLogo.png"
+              src={logo}
               alt=""
-              width={20}
-              height={20}
+              width={50}
+              height={50}
             />
             <span className="text-white text-lg">PlanetF</span>
           </div>
           <div className="max-w-[296px] h-[205px]  ml-20">
             <Image
-              src="https://softconnet.com.ng/img/PlanetfLogo.png"
+              src={logo}
               alt=""
               width={300}
               height={290}

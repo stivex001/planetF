@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import clsx from "clsx";
 import { OpenEyeIcon } from "@/icons/CloseEye";
+import logo from "@/images/planetf-.png"
 
 const Register = () => {
   const router = useRouter();
@@ -72,16 +73,16 @@ const Register = () => {
         <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center">
           <div className="flex items-center gap-2">
             <Image
-              src="https://enigma-laravel.left4code.com/build/assets/logo-9a88cec5.svg"
+              src={logo}
               alt=""
-              width={20}
-              height={20}
+              width={50}
+              height={50}
             />
-            <span className="text-white text-lg">Enigma</span>
+            <span className="text-white text-lg">PlanetF</span>
           </div>
           <div className="max-w-[296px] h-[205px]  ml-20">
             <Image
-              src="https://softconnet.com.ng/img/PlanetfLogo.png"
+              src={logo}
               alt=""
               width={300}
               height={290}

@@ -10,6 +10,7 @@ import UserModal from "./UserModal";
 import MobileNav from "./MobileNav";
 import { usePathname } from "next/navigation";
 import { useUser } from "@/hooks/auth/useUser";
+import logo from "@/images/planetf-.png"
 
 type Props = {};
 
@@ -40,7 +41,7 @@ const Navbar = (props: Props) => {
           <div className="flex items-center gap-[50px] lg:gap-[150px] ">
             <Link href="/user" className="flex items-center gap-2">
               <Image
-                src="https://softconnet.com.ng/img/PlanetfLogo.png"
+                src={logo}
                 alt=""
                 width={20}
                 height={20}
