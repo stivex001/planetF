@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import clsx from "clsx";
 import { OpenEyeIcon } from "@/icons/CloseEye";
 import logo from "@/images/planetf-.png"
+import authImg from "@/images/planet.jpeg"
 
 const Register = () => {
   const router = useRouter();
@@ -82,10 +83,11 @@ const Register = () => {
           </div>
           <div className="max-w-[296px] h-[205px]  ml-20">
             <Image
-              src={logo}
+              src={authImg}
               alt=""
-              width={300}
-              height={290}
+              width={400}
+              height={400}
+              objectFit="cover"
             />
             <h1 className="text-4xl mt-10 font-medium text-white leading-tight whitespace-nowrap">
               A few more clicks to
