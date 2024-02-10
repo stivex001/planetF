@@ -11,6 +11,8 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useUser } from "@/context/user-context";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { IoWalletOutline } from "react-icons/io5";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 type Props = {};
 
@@ -36,7 +38,12 @@ const page = (props: Props) => {
       setCopiedText([...newCopiedText]);
     }, 5000);
 
-    toast.success("Copied!");
+    Swal.fire({
+      icon: "success",
+      title: "Copied!",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   };
 
   useEffect(() => {
@@ -112,7 +119,6 @@ const page = (props: Props) => {
     <main>
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-medium text-[#1e293b]">Fund Wallet</h2>
-        
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {accounts?.map((account, index) => (
