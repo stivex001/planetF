@@ -259,7 +259,15 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
                     ₦{Number(row?.f_wallet).toFixed(2)}
                   </td>
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                    {row?.status}
+                    <span
+                      className={`bg-white shadow px-4 py-2 rounded-md ${
+                        row.status == "pending"
+                          ? "text-red-500"
+                          : "text-green-400"
+                      }`}
+                    >
+                      {row?.status}
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
                     {format(new Date(row?.created_at), "MMM dd, yyyy HH:mm:ss")}
@@ -267,8 +275,8 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
                     App
                   </td>
-                  <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                    <button onClick={() => handleViewClick(row)}>View</button>
+                  <td className="px-6 py-4 text-white text-xl font-semibold whitespace-nowrap ">
+                    <button onClick={() => handleViewClick(row)} className="bg-[#163e63]/80 hover:scale-105 duration-200 px-4 py-2 rounded-md">View</button>
                   </td>
                 </tr>
               ))
