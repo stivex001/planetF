@@ -22,6 +22,7 @@ import { useBuyBundles } from "@/mutation/useBuyBundles";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "@/context/user-context";
 import { useTransferBundles } from "@/mutation/useTransferBundles";
+import Image from "next/image";
 
 // Styles for modal
 const customStyles: Modal.Styles = {
@@ -58,7 +59,6 @@ const CGBundles = (props: Props) => {
   const [transferText, setTransferText] = useState<string>("");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-
   const [activeTab, setActiveTab] = useState<Tab>("wallet");
 
   const handleTabChange = (tab: Tab) => {
@@ -66,8 +66,9 @@ const CGBundles = (props: Props) => {
   };
 
   const { user, loading } = useUser();
+  // console.log(user.balances);
 
-  const walletBalance = user?.user?.account_details;
+  const walletBalance = user?.balances?.wallet;
 
   const user_name = user?.user?.user_name;
 
@@ -78,10 +79,9 @@ const CGBundles = (props: Props) => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-   
+
     setUploadedFile(file);
   };
-
 
   const form = useForm<CGFormTransferValues>({
     defaultValues: {
@@ -140,14 +140,12 @@ const CGBundles = (props: Props) => {
       reader.readAsDataURL(file);
     });
 
-
   const handleBuyBundle = useCallback(() => {
     if (selectedBundle) {
       const payload = {
         bundle_id: selectedBundle?.id?.toString(),
         paywith: "wallet",
         receipt: uploadedFile ? fileToBase64(uploadedFile) : "",
-
       };
 
       buyBundle(payload, {
@@ -167,13 +165,16 @@ const CGBundles = (props: Props) => {
     }
   }, [buyBundle, selectedBundle, walletBalance]);
 
-  console.log(uploadedFile, 'file');
-    
-
   const {
     formState: { errors },
     handleSubmit,
   } = form;
+
+  useEffect(() => {
+    if (!isOpen) {
+      setUploadedFile(null);
+    }
+  }, [isOpen]);
 
   if (isLoading) {
     return <ScreenLoader />;
@@ -201,7 +202,7 @@ const CGBundles = (props: Props) => {
             >
               <td className="py-2 px-4 border-b">{data?.id}</td>
               <td className="py-2 px-4 border-b">{data?.display_name}</td>
-              <td className="py-2 px-4 border-b">{data?.value}</td>
+              <td className="py-2 px-4 border-b">{data?.value}(GB)</td>
               <td className="py-2 px-4 border-b">{data?.network}</td>
               <td className="py-2 px-4 border-b">{data?.type}</td>
               <td className="py-2 px-4 border-b">₦{data?.price}</td>
@@ -240,7 +241,7 @@ const CGBundles = (props: Props) => {
             <div className="flex flex-col gap-8">
               <div className="flex mt-4">
                 <button
-                  className={`mr-4 px-4 py-2 border-b-2 ${
+                  className={`mr-4 px-4 py-2 border-b-2 text-xl font-bold ${
                     activeTab === "wallet"
                       ? "border-[#164e63] text-[#164e63]"
                       : ""
@@ -250,7 +251,7 @@ const CGBundles = (props: Props) => {
                   Buy with Wallet
                 </button>
                 <button
-                  className={`px-4 py-2 border-b-2 ${
+                  className={`px-4 py-2 border-b-2 text-xl font-bold ${
                     activeTab === "transfer"
                       ? "border-[#164e63] text-[#164e63]"
                       : ""
@@ -269,7 +270,7 @@ const CGBundles = (props: Props) => {
                     <ReadOnlyTextInput
                       label="Pay with Wallet"
                       placeholder="Wallet balance"
-                      value={` ${walletBalance}`}
+                      value={`₦${walletBalance}`}
                       className="bg-gray-100 rounded-sm border border-zinc-600"
                     />
                   </div>
@@ -294,7 +295,6 @@ const CGBundles = (props: Props) => {
                     {transferText}
                   </h1>
                   <div className="w-full mt-2">
-                    
                     <label
                       htmlFor="uploadFile"
                       className="cursor-pointer block bg-[#164e63] text-white px-4 py-2 rounded-md hover:bg-[#063855]"
@@ -308,6 +308,15 @@ const CGBundles = (props: Props) => {
                       className="hidden"
                       onChange={handleFileChange}
                     />
+                    {uploadedFile && (
+                      <Image
+                        src={URL.createObjectURL(uploadedFile)}
+                        alt="Uploaded Image"
+                        className="mt-4 object-cover rounded-md mx-auto"
+                        width={100}
+                        height={100}
+                      />
+                    )}
                   </div>
 
                   <div className="w-full mx-auto h-9 mt-10">
@@ -316,7 +325,7 @@ const CGBundles = (props: Props) => {
                       disabled={isPending}
                       className="transition duration-200 shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-opacity-50 bg-[#164e63] border border-[#164e63] hover:opacity-80  text-white w-full px-4 py-3"
                     >
-                      {isPending ? <Spinner /> : "Transfer"}
+                      {isPending ? <Spinner /> : "Submit"}
                     </button>
                   </div>
                 </form>

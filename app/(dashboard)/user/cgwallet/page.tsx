@@ -42,10 +42,7 @@ const CGWallet = (props: Props) => {
     <main>
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-medium text-[#1e293b]">CG Wallet</h2>
-        {/* <div className="flex items-center gap-3 text-[#164e63] cursor-pointer">
-          <FiRefreshCcw size={16} />
-          <span>Reload Data</span>
-        </div> */}
+        
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {cGData?.map((data) => (
@@ -68,7 +65,7 @@ const CGWallet = (props: Props) => {
                     {data?.name}
                   </h4>
                   <p className="text-2xl font-semibold capitalize text-right">
-                    ({data?.balance})
+                    ({data?.balance})GB
                   </p>
                 </div>
                 {/* <h1 className="text-2xl  font-medium"></h1> */}

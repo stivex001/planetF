@@ -32,15 +32,15 @@ const navbarLinks = [
         subIcon: <FaWallet size={24} className="-ml-3 xl:ml-0" />,
       },
       {
-        id: 2,
-        title: "CG Transfer",
-        url: "/user/cgtransfer",
-        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
-      },
-      {
         id: 3,
         title: "CG Wallet",
         url: "/user/cgwallet",
+        subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
+      },
+      {
+        id: 2,
+        title: "CG Transfer",
+        url: "/user/cgtransfer",
         subIcon: <FaArrowRightArrowLeft size={24} className="-ml-3 xl:ml-0" />,
       },
       {
