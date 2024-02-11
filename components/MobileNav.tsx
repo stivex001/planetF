@@ -12,7 +12,7 @@ import {
 } from "react-icons/fi";
 import Link from "next/link";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
-import { FaGraduationCap, FaPhoneAlt } from "react-icons/fa";
+import { FaGraduationCap, FaPhoneAlt, FaRegLightbulb } from "react-icons/fa";
 import { MdOutlineElectricalServices, MdReport } from "react-icons/md";
 import { IoPhonePortraitOutline, IoTvSharp } from "react-icons/io5";
 
@@ -61,34 +61,34 @@ const navbarLinks = [
         id: 1,
         title: "Buy Airtime",
         url: "/user/buy-airtime",
-        subIcon: <FaPhoneAlt size={24} />,
+        subIcon: <FaPhoneAlt size={24} className="text-[#c49829]"/>,
       },
       // { id: 2, title: "Buy Airtime Pin", url: "/user/buy-airtimepin" },
       {
         id: 3,
         title: "Buy Data",
         url: "/user/buy-data",
-        subIcon: <IoPhonePortraitOutline size={24} />,
+        subIcon: <IoPhonePortraitOutline size={24} className="text-[#2b2e32]"/>,
       },
       // { id: 4, title: "Buy Data Pin", url: "/user/buy-datapin" },
       {
         id: 5,
         title: "Buy TV",
         url: "/user/buy-tv",
-        subIcon: <IoTvSharp size={24} />,
+        subIcon: <IoTvSharp size={24} className="text-[#222c38]"/>,
       },
       {
         id: 6,
         title: "Buy Electricity",
         url: "/user/buy-electricity",
-        subIcon: <MdOutlineElectricalServices size={24} />,
+        subIcon: <FaRegLightbulb size={24} className="text-[-[#a75551]"/>,
       },
       // { id: 8, title: "Betting Topup", url: "/user/betting" },
       {
         id: 9,
         title: "Education",
         url: "/user/result-checker",
-        subIcon: <FaGraduationCap size={24} />,
+        subIcon: <FaGraduationCap size={24} className="text-[#223487]"/>,
       },
       {
         id: 10,

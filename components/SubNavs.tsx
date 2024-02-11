@@ -13,7 +13,7 @@ import {
   FiSidebar,
 } from "react-icons/fi";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
-import { FaGraduationCap, FaPhoneAlt, FaWallet } from "react-icons/fa";
+import { FaGraduationCap, FaPhoneAlt, FaRegLightbulb, FaWallet } from "react-icons/fa";
 import { IoPhonePortraitOutline, IoTvSharp } from "react-icons/io5";
 import { MdOutlineElectricalServices, MdReport } from "react-icons/md";
 
@@ -82,7 +82,7 @@ const navbarLinks = [
         id: 6,
         title: "Buy Electricity",
         url: "/user/buy-electricity",
-        subIcon: <MdOutlineElectricalServices size={24} className="-ml-3 xl:ml-0 text-[#a75551]" />,
+        subIcon: <FaRegLightbulb size={24} className="-ml-3 xl:ml-0 text-[#a75551]" />,
       },
       // { id: 8, title: "Betting Topup", url: "/user/betting" },
       {
