@@ -52,7 +52,7 @@ const Navbar = (props: Props) => {
             </Link>
             <div className="hidden md:flex items-center gap-2 ">
               <Link href="/user" className="text-sm text-white ">
-                Application
+                Dashboard
               </Link>
               <IoIosArrowForward className="text-white/70 cursor-pointer" />
               <Link
