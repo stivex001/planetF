@@ -232,14 +232,14 @@ const BuyAirtime = () => {
   const inputStyles: Partial<Styles> = {
     control: (provided: any, state: any) => ({
       ...provided,
-      backgroundColor: "transparent", // Set background color to transparent
+      backgroundColor: "transparent",
       border: "1px solid #D1D5DB",
       borderRadius: "0.5rem",
       minHeight: "3.5rem",
     }),
     input: (provided: any, state: any) => ({
       ...provided,
-      color: "#111827", // Set text color
+      color: "#111827",
     }),
   };
 
