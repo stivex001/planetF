@@ -105,6 +105,7 @@ const BuyAirtime = () => {
   const [numberErr, setNumberErr] = useState(false);
   const [numberValidation, setNumberValidation] = useState(false);
   const [isNumberValid, setIsNumberValid] = useState(false);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
 
   const components = {
     DropdownIndicator: null,
@@ -174,10 +175,11 @@ const BuyAirtime = () => {
     (values: BuyAirtimeFormValues) => {
       const phoneNumbers = value.map((option) => option.value).join(",");
       const provider = values?.provider ? values?.provider.toUpperCase() : "";
+      const totalAmount = parseFloat(values?.amount) * value?.length;
 
       const payload = {
         ...values,
-        amount: amount,
+        amount: totalAmount.toString(),
         number: phoneNumbers,
         provider,
       };
@@ -242,6 +244,15 @@ const BuyAirtime = () => {
       color: "#111827",
     }),
   };
+
+  useEffect(() => {
+    if (formData && formData.amount && value.length > 0) {
+      const total = parseFloat(formData.amount) * value.length;
+      setTotalAmount(total);
+    } else {
+      setTotalAmount(0);
+    }
+  }, [formData, value]);
 
   return (
     <div className="  rounded-md  w-full ">
@@ -431,7 +442,7 @@ const BuyAirtime = () => {
 
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
-              <span className="text-[#164e63]">₦{formData?.amount}</span>
+              <span className="text-[#164e63]">₦{totalAmount.toFixed(2)}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cashback: </p>

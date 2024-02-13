@@ -197,10 +197,13 @@ const BuyData = (props: Props) => {
 
   const handleBuyData = useCallback(() => {
     const phoneNumbers = value.map((option) => option.value).join(",");
+    const amountPerNumber = selectedCategoryData ? parseFloat(selectedCategoryData.price) : 0;
+    const totalAmount = amountPerNumber * phoneNumbers.length;
 
     const payload = {
       ...getValues(),
       number: phoneNumbers,
+      amount: totalAmount.toString()
     };
 
     buyData(payload, {
