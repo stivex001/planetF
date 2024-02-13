@@ -1,1 +1,5 @@
-{}
+{
+  "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(dashboard)/user/page": "app/(dashboard)/user/page.js"
+}

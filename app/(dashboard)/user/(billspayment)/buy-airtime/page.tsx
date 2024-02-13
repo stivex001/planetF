@@ -115,7 +115,7 @@ const BuyAirtime = () => {
     switch (event.key) {
       case "Enter":
       case "Tab":
-        if (!/^\d{11}$/.test(inputValue)) {
+        if (!/^\d+$/.test(inputValue)) {
           setNumberValidation(true);
           return;
         }
@@ -129,7 +129,7 @@ const BuyAirtime = () => {
 
   const onInputChange = (newValue: string) => {
     const newValueString = newValue.toString();
-    if (!isNaN(parseFloat(newValueString))) {
+    if (newValueString !== "" && !isNaN(parseFloat(newValueString))) {
       setInputValue(newValueString);
       setIsNumberValid(false);
     } else {
@@ -397,9 +397,38 @@ const BuyAirtime = () => {
 
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Network Provider: </p>
-              <span className="text-[#164e63] uppercase">{`${formData?.provider} `}</span>
+              {/* <span className="text-[#164e63] uppercase">{`${formData?.provider} `}</span> */}
+              {formData?.provider == "mtn" ? (
+                <Image
+                  src={mtnImage}
+                  alt={formData?.provider}
+                  width={42}
+                  height={42}
+                />
+              ) : formData?.provider == "glo" ? (
+                <Image
+                  src={gloImage}
+                  alt={formData?.provider}
+                  width={42}
+                  height={42}
+                />
+              ) : formData?.provider == "airtel" ? (
+                <Image
+                  src={airtelImage}
+                  alt={formData?.provider}
+                  width={42}
+                  height={42}
+                />
+              ) : (
+                <Image
+                  src={mobileImage}
+                  alt={`${formData?.provider}`}
+                  width={42}
+                  height={42}
+                />
+              )}
             </div>
-            
+
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
               <span className="text-[#164e63]">₦{formData?.amount}</span>
