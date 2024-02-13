@@ -25,6 +25,7 @@ import Modal from "react-modal";
 import { useModal } from "@/context/useModal";
 import Image, { StaticImageData } from "next/image";
 import CreatableSelect from "react-select/creatable";
+import Styles from "react-select/creatable";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -102,6 +103,8 @@ const BuyAirtime = () => {
   const [inputValue, setInputValue] = React.useState("");
   const [value, setValues] = React.useState<readonly Option[]>([]);
   const [numberErr, setNumberErr] = useState(false);
+  const [numberValidation, setNumberValidation] = useState(false);
+  const [isNumberValid, setIsNumberValid] = useState(false);
 
   const components = {
     DropdownIndicator: null,
@@ -112,9 +115,25 @@ const BuyAirtime = () => {
     switch (event.key) {
       case "Enter":
       case "Tab":
+        if (!/^\d{11}$/.test(inputValue)) {
+          setNumberValidation(true);
+          return;
+        }
         setValues((prev) => [...prev, createOption(inputValue)]);
         setInputValue("");
+        setNumberErr(false);
+        setNumberValidation(false);
         event.preventDefault();
+    }
+  };
+
+  const onInputChange = (newValue: string) => {
+    const newValueString = newValue.toString();
+    if (!isNaN(parseFloat(newValueString))) {
+      setInputValue(newValueString);
+      setIsNumberValid(false);
+    } else {
+      setIsNumberValid(true);
     }
   };
 
@@ -154,11 +173,13 @@ const BuyAirtime = () => {
   const handleBuyAirtime = useCallback(
     (values: BuyAirtimeFormValues) => {
       const phoneNumbers = value.map((option) => option.value).join(",");
+      const provider = values?.provider ? values?.provider.toUpperCase() : "";
 
       const payload = {
         ...values,
         amount: amount,
         number: phoneNumbers,
+        provider,
       };
 
       buyAirtime(payload, {
@@ -207,6 +228,20 @@ const BuyAirtime = () => {
       }
     }
   }, [amount, selectedCategory, setValue]);
+
+  const inputStyles: Partial<Styles> = {
+    control: (provided: any, state: any) => ({
+      ...provided,
+      backgroundColor: "transparent", // Set background color to transparent
+      border: "1px solid #D1D5DB",
+      borderRadius: "0.5rem",
+      minHeight: "3.5rem",
+    }),
+    input: (provided: any, state: any) => ({
+      ...provided,
+      color: "#111827", // Set text color
+    }),
+  };
 
   return (
     <div className="  rounded-md  w-full ">
@@ -285,25 +320,37 @@ const BuyAirtime = () => {
               isMulti
               menuIsOpen={false}
               onChange={(newValue) => setValues(newValue)}
-              onInputChange={(newValue) => setInputValue(newValue)}
+              onInputChange={(newValue) => onInputChange(newValue)}
               onKeyDown={handleKeyDown}
               placeholder="Enter phone number"
               value={value}
-              className="relative w-full rounded-sm border-zinc-600 h-14  placeholder:text-gray-400 outline-none text-sm sm:leading-6"
+              styles={inputStyles}
+              // className="bg-gray-100 w-full h-14 rounded-sm border border-zinc-600 flex items-center "
             />
             {numberErr && (
-              <p className="text-red-500 text-base font-medium mt-5">
+              <p className="text-red-500 text-base font-medium mt-3">
                 Kindly Enter your phone number and press Enter
               </p>
             )}
-            <p className="text-red-500 text-base font-medium mt-5">
+
+            {isNumberValid && (
+              <p className="text-red-500 text-base font-medium mt-3">
+                Phone number must contain only digits
+              </p>
+            )}
+            {numberValidation && (
+              <p className="text-red-500 text-base font-medium mt-3">
+                Phone number must not be less than 11 digits
+              </p>
+            )}
+            <p className="text-red-500/80 text-base font-medium mt-3">
               Dear Customer always be certain that you have entered the correct
               number as PLANETF will not be responsible for any number entered
               incorrectly. Thank You.{" "}
             </p>
           </div>
 
-          <div className="w-full mx-auto h-9 my-10">
+          <div className="w-full mx-auto h-9 mb-5">
             <CustomButton
               onClick={(e) => {
                 e.preventDefault();
@@ -337,7 +384,8 @@ const BuyAirtime = () => {
           className="w-full h-full flex items-center justify-center"
         >
           <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold">Airtime Top-Up</h1>
               <button
                 type="button"
                 onClick={closeModal}
@@ -349,7 +397,7 @@ const BuyAirtime = () => {
 
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Network Provider: </p>
-              <span className="text-[#164e63]">{`${formData?.provider} `}</span>
+              <span className="text-[#164e63] uppercase">{`${formData?.provider} `}</span>
             </div>
             {/* <div className="flex items-center justify-between">
               <p>Details: </p>
