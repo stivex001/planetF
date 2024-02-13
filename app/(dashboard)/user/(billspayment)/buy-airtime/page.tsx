@@ -399,10 +399,7 @@ const BuyAirtime = () => {
               <p>Network Provider: </p>
               <span className="text-[#164e63] uppercase">{`${formData?.provider} `}</span>
             </div>
-            {/* <div className="flex items-center justify-between">
-              <p>Details: </p>
-              <span className="text-[#164e63]">{` ${formData?.name}`}</span>
-            </div> */}
+            
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
               <span className="text-[#164e63]">₦{formData?.amount}</span>
