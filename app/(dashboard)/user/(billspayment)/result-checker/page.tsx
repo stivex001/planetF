@@ -116,7 +116,6 @@ const ResultChecker = (props: Props) => {
     setValue("quantity", "");
     clearErrors("coded");
   };
-
   return (
     <div className="  rounded-md  w-full ">
       <div className="w-full lg:w-11/12 mx-auto">

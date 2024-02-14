@@ -178,7 +178,7 @@ const BuyTV = (props: Props) => {
               console.log(error?.message);
               toast.error(error?.message);
               setIsValidating(false);
-              closeModal()
+              closeModal();
             }
           },
           onSuccess: (response: any) => {
@@ -292,7 +292,7 @@ const BuyTV = (props: Props) => {
               error={errors.number}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
-            <p className="text-red-500 text-base font-medium">
+            <p className="text-red-500/80 text-base font-medium">
               Dear Customer always be certain that you have entered the correct
               number as PLANETF will not be responsible for any number entered
               incorrectly. Thank You.{" "}
@@ -309,7 +309,7 @@ const BuyTV = (props: Props) => {
             </div>
           )}
 
-          <div className="w-full mx-auto h-9 my-10">
+          <div className="w-full mx-auto h-9 my-8">
             {buttonType === "validate" && (
               <CustomButton
                 type="submit"
@@ -353,7 +353,8 @@ const BuyTV = (props: Props) => {
           className="w-full h-full flex items-center justify-center"
         >
           <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold">Tv-Subscriptions</h1>
               <button
                 type="button"
                 onClick={closeModal}
@@ -362,9 +363,32 @@ const BuyTV = (props: Props) => {
                 X
               </button>
             </div>
+
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Type: </p>
-              <span className="text-[#164e63] uppercase">{`${formData?.type} `}</span>
+              {/* <span className="text-[#164e63] uppercase">{`${formData?.provider} `}</span> */}
+              {formData?.type == "gotv" ? (
+                <Image
+                  src={gotvImage}
+                  alt={formData?.type}
+                  width={42}
+                  height={42}
+                />
+              ) : formData?.type == "dstv" ? (
+                <Image
+                  src={dstvImage}
+                  alt={formData?.type}
+                  width={42}
+                  height={42}
+                />
+              ) : (
+                <Image
+                  src={starImage}
+                  alt={`${formData?.type}`}
+                  width={42}
+                  height={42}
+                />
+              )}
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Package: </p>
