@@ -31,6 +31,7 @@ import { BankListData } from "@/types/transaction";
 import { useToken } from "@/hooks/auth/useToken";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { BASE_URL } from "@/utils/baseUrl";
+import { useAirtimeConverter } from "@/hooks/queries/useAirtimeConverter";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -127,7 +128,9 @@ const AirtimeConverter = (props: Props) => {
   const { openModal, closeModal, isOpen } = useModal();
 
   const { data: banklist, isPending: banklistPending } = useBankList();
-  console.log(banklist, "list");
+  const { data: airtimeData, isPending: airtimePending } =
+    useAirtimeConverter();
+  console.log(airtimeData, "airt");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -194,6 +197,18 @@ const AirtimeConverter = (props: Props) => {
     if (selectedCategory) {
       setValue("network", selectedCategory?.network);
     }
+  };
+
+  const calculateAmountToReturn = (network: string, amount: number) => {
+    const selectedNetwork = airtimeData?.find(
+      (item) => item?.network === network
+    );
+    if (selectedNetwork) {
+      const discount = selectedNetwork?.discount;
+      // const discountedAmount = (discount / 100) * amount;
+      // return amount - discountedAmount;
+    }
+    return amount; // Return original amount if network not found
   };
 
   const handleCreditModeSelect = (selectedValue: string) => {
@@ -274,7 +289,6 @@ const AirtimeConverter = (props: Props) => {
     }
   }, [selectedBankCode, accountNumber]);
 
-
   return (
     <div className="  rounded-md  w-full ">
       <div className="w-full lg:w-11/12 mx-auto">
@@ -286,10 +300,7 @@ const AirtimeConverter = (props: Props) => {
           requires verification and is not an instant payment. We kindly request
           your patience as we work to complete the verification process.
         </p>
-        <form
-          className="mt-8 flex flex-col gap-4 md:w-1/2 "
-          
-        >
+        <form className="mt-8 flex flex-col gap-4 md:w-1/2 ">
           <div className="w-full ">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
               Network Provider
@@ -426,6 +437,15 @@ const AirtimeConverter = (props: Props) => {
               register={register}
               fieldName={"amount"}
               error={errors.amount}
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
+
+          <div className="w-full">
+            <ReadOnlyTextInput
+              label="Return Amount"
+              placeholder=""
+              value={getValues("amount") && `₦${getValues("amount")}`}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>

@@ -41,3 +41,10 @@ export interface BankListData {
   name: string
   code: string
 }
+
+export interface AirtimeListData {
+  id: number
+  network: string
+  discount: string
+  number: string
+}
