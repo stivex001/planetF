@@ -28,6 +28,7 @@ import Modal from "react-modal";
 import { useModal } from "@/context/useModal";
 import CreatableSelect from "react-select/creatable";
 import Styles from "react-select/creatable";
+import { Switch } from "@/components/ui/switch";
 
 type Props = {};
 
@@ -136,6 +137,7 @@ const BuyData = (props: Props) => {
   const [numberErr, setNumberErr] = useState(false);
   const [numberValidation, setNumberValidation] = useState(false);
   const [isNumberValid, setIsNumberValid] = useState(false);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
 
   const components = {
     DropdownIndicator: null,
@@ -197,13 +199,15 @@ const BuyData = (props: Props) => {
 
   const handleBuyData = useCallback(() => {
     const phoneNumbers = value.map((option) => option.value).join(",");
-    const amountPerNumber = selectedCategoryData ? parseFloat(selectedCategoryData.price) : 0;
+    const amountPerNumber = selectedCategoryData
+      ? parseFloat(selectedCategoryData.price)
+      : 0;
     const totalAmount = amountPerNumber * phoneNumbers.length;
 
     const payload = {
       ...getValues(),
       number: phoneNumbers,
-      amount: totalAmount.toString()
+      amount: totalAmount.toString(),
     };
 
     buyData(payload, {
@@ -226,7 +230,7 @@ const BuyData = (props: Props) => {
       (category) => category?.coded === selectedValue
     );
     console.log(selectedCategory, "sel");
-    
+
     if (selectedCategory) {
       setValue("coded", selectedCategory?.coded);
       setValue("name", selectedCategory?.name);
@@ -243,18 +247,22 @@ const BuyData = (props: Props) => {
   const inputStyles: Partial<Styles> = {
     control: (provided: any, state: any) => ({
       ...provided,
-      backgroundColor: "transparent", // Set background color to transparent
+      backgroundColor: "#f5f5f5",
       border: "1px solid #D1D5DB",
       borderRadius: "0.5rem",
       minHeight: "3.5rem",
     }),
     input: (provided: any, state: any) => ({
       ...provided,
-      color: "#111827", 
+      color: "#111827",
     }),
   };
 
   console.log(data, "dat");
+
+  const toggleSwitch = () => {
+    setIsSwitchOn((prev) => !prev);
+  };
 
   return (
     <div className="  rounded-md  w-full min-h-screen ">
@@ -326,45 +334,62 @@ const BuyData = (props: Props) => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-
-          <div className="w-full relative">
-            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-              Phone Numbers
-            </label>
-            <CreatableSelect
-              components={components}
-              inputValue={inputValue}
-              isClearable
-              isMulti
-              menuIsOpen={false}
-              onChange={(newValue) => setValues(newValue)}
-              onInputChange={(newValue) => onInputChange(newValue)}
-              onKeyDown={handleKeyDown}
-              placeholder="Enter phone number"
-              value={value}
-              styles={inputStyles}
-            />
-            {numberErr && (
-              <p className="text-red-500 text-base font-medium mt-5">
-                Kindly Enter your phone number and press Enter
-              </p>
-            )}
-            {isNumberValid && (
-              <p className="text-red-500 text-base font-medium mt-3">
-                Phone number must contain only digits
-              </p>
-            )}
-            {numberValidation && (
-              <p className="text-red-500 text-base font-medium mt-3">
-                Phone number must not be less than 11 digits
-              </p>
-            )}
-            <p className="text-red-500/80 text-sm font-medium mt-2">
-              Dear Customer always be certain that you have entered the correct
-              number as PLANETF will not be responsible for any number entered
-              incorrectly. Thank You.{" "}
-            </p>
+          {isSwitchOn ? (
+            <div className="w-full relative">
+              <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                Phone Numbers
+              </label>
+              <CreatableSelect
+                components={components}
+                inputValue={inputValue}
+                isClearable
+                isMulti
+                menuIsOpen={false}
+                onChange={(newValue) => setValues(newValue)}
+                onInputChange={(newValue) => onInputChange(newValue)}
+                onKeyDown={handleKeyDown}
+                placeholder="Enter phone number"
+                value={value}
+                styles={inputStyles}
+              />
+              {numberErr && (
+                <p className="text-red-500 text-base font-medium mt-5">
+                  Kindly Enter your phone number and press Enter
+                </p>
+              )}
+              {isNumberValid && (
+                <p className="text-red-500 text-base font-medium mt-3">
+                  Phone number must contain only digits
+                </p>
+              )}
+              {numberValidation && (
+                <p className="text-red-500 text-base font-medium mt-3">
+                  Phone number must not be less than 11 digits
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="w-full">
+              <TextInput
+                label="Phone Number"
+                placeholder="Enter phone number"
+                register={register}
+                fieldName={"number"}
+                error={errors.number}
+                className="bg-gray-100 rounded-sm border border-zinc-600"
+              />
+            </div>
+          )}
+          <div className="flex items-center gap-3">
+            <p className="text-base font-medium">Add multiple numbers</p>
+            <Switch onClick={toggleSwitch} checked={isSwitchOn} />
           </div>
+
+          <p className="text-red-500/80 text-sm font-medium mt-2">
+            Dear Customer always be certain that you have entered the correct
+            number as PLANETF will not be responsible for any number entered
+            incorrectly. Thank You.{" "}
+          </p>
 
           <div className="w-full mb-3">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">

@@ -373,7 +373,7 @@ const BuyAirtime = () => {
             <div className="w-full">
               <TextInput
                 label="Phone Number"
-                placeholder=""
+                placeholder="Enter phone number"
                 register={register}
                 fieldName={"number"}
                 error={errors.number}
