@@ -26,6 +26,7 @@ import { useModal } from "@/context/useModal";
 import Image, { StaticImageData } from "next/image";
 import CreatableSelect from "react-select/creatable";
 import Styles from "react-select/creatable";
+import { Switch } from "@/components/ui/switch";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -106,6 +107,7 @@ const BuyAirtime = () => {
   const [numberValidation, setNumberValidation] = useState(false);
   const [isNumberValid, setIsNumberValid] = useState(false);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
 
   const components = {
     DropdownIndicator: null,
@@ -254,6 +256,10 @@ const BuyAirtime = () => {
     }
   }, [formData, value]);
 
+  const toggleSwitch = () => {
+    setIsSwitchOn((prev) => !prev);
+  };
+
   return (
     <div className="  rounded-md  w-full ">
       <div className="w-full lg:w-11/12 mx-auto">
@@ -320,46 +326,66 @@ const BuyAirtime = () => {
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
-          <div className="w-full relative mb-8">
-            <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-              Phone Numbers (kindly press enter after inputing numbers)
-            </label>
-            <CreatableSelect
-              components={components}
-              inputValue={inputValue}
-              isClearable
-              isMulti
-              menuIsOpen={false}
-              onChange={(newValue) => setValues(newValue)}
-              onInputChange={(newValue) => onInputChange(newValue)}
-              onKeyDown={handleKeyDown}
-              placeholder="Enter phone number"
-              value={value}
-              styles={inputStyles}
-              // className="bg-gray-100 w-full h-14 rounded-sm border border-zinc-600 flex items-center "
-            />
-            {numberErr && (
-              <p className="text-red-500 text-base font-medium mt-3">
-                Kindly Enter your phone number and press Enter
-              </p>
-            )}
 
-            {isNumberValid && (
-              <p className="text-red-500 text-base font-medium mt-3">
-                Phone number must contain only digits
-              </p>
-            )}
-            {numberValidation && (
-              <p className="text-red-500 text-base font-medium mt-3">
-                Phone number must not be less than 11 digits
-              </p>
-            )}
-            <p className="text-red-500/80 text-base font-medium mt-3">
-              Dear Customer always be certain that you have entered the correct
-              number as PLANETF will not be responsible for any number entered
-              incorrectly. Thank You.{" "}
-            </p>
+          <div className="flex items-center gap-3">
+            <p className="text-base font-medium">Add multiple numbers</p>
+            <Switch onClick={toggleSwitch} checked={isSwitchOn} />
           </div>
+
+          {isSwitchOn ? (
+            <div className="w-full relative ">
+              <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                Phone Numbers (kindly press enter after inputing numbers)
+              </label>
+              <CreatableSelect
+                components={components}
+                inputValue={inputValue}
+                isClearable
+                isMulti
+                menuIsOpen={false}
+                onChange={(newValue) => setValues(newValue)}
+                onInputChange={(newValue) => onInputChange(newValue)}
+                onKeyDown={handleKeyDown}
+                placeholder="Enter phone number"
+                value={value}
+                styles={inputStyles}
+                // className="bg-gray-100 w-full h-14 rounded-sm border border-zinc-600 flex items-center "
+              />
+              {numberErr && (
+                <p className="text-red-500 text-base font-medium mt-3">
+                  Kindly Enter your phone number and press Enter
+                </p>
+              )}
+
+              {isNumberValid && (
+                <p className="text-red-500 text-base font-medium mt-3">
+                  Phone number must contain only digits
+                </p>
+              )}
+              {numberValidation && (
+                <p className="text-red-500 text-base font-medium mt-3">
+                  Phone number must not be less than 11 digits
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="w-full">
+              <TextInput
+                label="Phone Number"
+                placeholder=""
+                register={register}
+                fieldName={"number"}
+                error={errors.number}
+                className="bg-gray-100 rounded-sm border border-zinc-600"
+              />
+            </div>
+          )}
+
+          <p className="text-red-500/80 text-base font-medium ">
+            Dear Customer always be certain that you have entered the correct
+            number as PLANETF will not be responsible for any number entered
+            incorrectly. Thank You.{" "}
+          </p>
 
           <div className="w-full mx-auto h-9 mb-5">
             <CustomButton
