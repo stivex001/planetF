@@ -175,7 +175,13 @@ const BuyAirtime = () => {
 
   const handleBuyAirtime = useCallback(
     (values: BuyAirtimeFormValues) => {
-      const phoneNumbers = value.map((option) => option.value).join(",");
+      let phoneNumbers;
+      if (isSwitchOn) {
+        phoneNumbers = value.map((option) => option.value).join(",");
+      } else {
+        phoneNumbers = values.number;
+      }
+
       const provider = values?.provider ? values?.provider.toUpperCase() : "";
       const totalAmount = parseFloat(values?.amount) * value?.length;
 
@@ -236,7 +242,7 @@ const BuyAirtime = () => {
   const inputStyles: Partial<Styles> = {
     control: (provided: any, state: any) => ({
       ...provided,
-      backgroundColor: "transparent",
+      backgroundColor: "#f5f5f5",
       border: "1px solid #D1D5DB",
       borderRadius: "0.5rem",
       minHeight: "3.5rem",
@@ -327,11 +333,6 @@ const BuyAirtime = () => {
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <p className="text-base font-medium">Add multiple numbers</p>
-            <Switch onClick={toggleSwitch} checked={isSwitchOn} />
-          </div>
-
           {isSwitchOn ? (
             <div className="w-full relative ">
               <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
@@ -380,6 +381,11 @@ const BuyAirtime = () => {
               />
             </div>
           )}
+
+          <div className="flex items-center gap-3">
+            <p className="text-base font-medium">Add multiple numbers</p>
+            <Switch onClick={toggleSwitch} checked={isSwitchOn} />
+          </div>
 
           <p className="text-red-500/80 text-base font-medium ">
             Dear Customer always be certain that you have entered the correct
