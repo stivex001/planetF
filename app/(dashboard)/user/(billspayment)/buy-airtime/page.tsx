@@ -27,6 +27,7 @@ import Image, { StaticImageData } from "next/image";
 import CreatableSelect from "react-select/creatable";
 import Styles from "react-select/creatable";
 import { Switch } from "@/components/ui/switch";
+import Swal from "sweetalert2";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -176,18 +177,22 @@ const BuyAirtime = () => {
   const handleBuyAirtime = useCallback(
     (values: BuyAirtimeFormValues) => {
       let phoneNumbers;
+      let amountToSend;
+      const totalAmount = parseFloat(values?.amount) * value?.length;
+
       if (isSwitchOn) {
         phoneNumbers = value.map((option) => option.value).join(",");
+        amountToSend = totalAmount.toString();
       } else {
         phoneNumbers = values.number;
+        amountToSend = values.amount;
       }
 
       const provider = values?.provider ? values?.provider.toUpperCase() : "";
-      const totalAmount = parseFloat(values?.amount) * value?.length;
 
       const payload = {
         ...values,
-        amount: totalAmount.toString(),
+        amount: amountToSend,
         number: phoneNumbers,
         provider,
       };
@@ -197,11 +202,21 @@ const BuyAirtime = () => {
           if (error instanceof Error) {
             console.log(error?.message);
             toast.error(error?.message);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error.message,
+            });
           }
         },
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data?.message);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: response?.data?.message,
+          });
           closeModal();
         },
       });
@@ -393,25 +408,32 @@ const BuyAirtime = () => {
             incorrectly. Thank You.{" "}
           </p>
 
-          <div className="w-full mx-auto h-9 mb-5">
-            <CustomButton
-              onClick={(e) => {
-                e.preventDefault();
-                setFormData(getValues());
-                const phoneNumbers = value.map((option) => option.value);
-                console.log("Phone numbers:", phoneNumbers);
+          <CustomButton
+            onClick={(e) => {
+              e.preventDefault();
+              setFormData(getValues());
+              const phoneNumbers = value.map((option) => option.value);
+              console.log("Phone numbers:", phoneNumbers);
+
+              if (isSwitchOn) {
                 if (!phoneNumbers || phoneNumbers.length === 0) {
                   setNumberErr(true);
                   return;
                 }
-                openModal();
-                setNumberErr(false);
-              }}
-              className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
-            >
-              Proceed
-            </CustomButton>
-          </div>
+              } else {
+                if (!formData?.number) {
+                  setNumberErr(true);
+                  return;
+                }
+              }
+
+              openModal();
+              setNumberErr(false);
+            }}
+            className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
+          >
+            Proceed
+          </CustomButton>
         </form>
       </div>
       {isOpen && (
@@ -482,9 +504,13 @@ const BuyAirtime = () => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Recipient Numbers: </p>
-              <span className="text-[#164e63]">
-                {value?.map((option) => option.value).join(", ")}
-              </span>
+              {isSwitchOn ? (
+                <span className="text-[#164e63]">
+                  {value?.map((option) => option.value).join(", ")}
+                </span>
+              ) : (
+                <span className="text-[#164e63]">{formData?.number}</span>
+              )}
             </div>
 
             <div className="w-1/2 mx-auto">

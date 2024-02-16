@@ -29,6 +29,7 @@ import { useModal } from "@/context/useModal";
 import CreatableSelect from "react-select/creatable";
 import Styles from "react-select/creatable";
 import { Switch } from "@/components/ui/switch";
+import Swal from "sweetalert2";
 
 type Props = {};
 
@@ -197,33 +198,52 @@ const BuyData = (props: Props) => {
     }
   };
 
-  const handleBuyData = useCallback(() => {
-    const phoneNumbers = value.map((option) => option.value).join(",");
-    const amountPerNumber = selectedCategoryData
-      ? parseFloat(selectedCategoryData.price)
-      : 0;
-    const totalAmount = amountPerNumber * phoneNumbers.length;
+  const handleBuyData = useCallback(
+    (values: BuyDataFormValues) => {
+      let phoneNumbers;
+      if (isSwitchOn) {
+        phoneNumbers = value.map((option) => option.value).join(",");
+      } else {
+        phoneNumbers = values.number;
+      }
 
-    const payload = {
-      ...getValues(),
-      number: phoneNumbers,
-      amount: totalAmount.toString(),
-    };
+      const amountPerNumber = selectedCategoryData
+        ? parseFloat(selectedCategoryData.price)
+        : 0;
+      const totalAmount = amountPerNumber * phoneNumbers.length;
 
-    buyData(payload, {
-      onError: (error: unknown) => {
-        if (error instanceof Error) {
-          console.log(error?.message);
-          toast.error(error?.message);
-        }
-      },
-      onSuccess: (response: any) => {
-        console.log(response?.data);
-        toast.success(response?.data?.message);
-        closeModal();
-      },
-    });
-  }, [buyData, closeModal, getValues, toast, value]);
+      const payload = {
+        ...values,
+        number: phoneNumbers,
+        amount: totalAmount.toString(),
+      };
+
+      buyData(payload, {
+        onError: (error: unknown) => {
+          if (error instanceof Error) {
+            console.log(error?.message);
+            toast.error(error?.message);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error.message,
+            });
+          }
+        },
+        onSuccess: (response: any) => {
+          console.log(response?.data);
+          toast.success(response?.data?.message);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: response?.data?.message,
+          });
+          closeModal();
+        },
+      });
+    },
+    [buyData, closeModal, getValues, toast, value]
+  );
 
   const handleSelectedData = (selectedValue: string) => {
     const selectedCategory = data?.find(
@@ -372,7 +392,7 @@ const BuyData = (props: Props) => {
             <div className="w-full">
               <TextInput
                 label="Phone Number"
-                placeholder="Enter phone number"
+                placeholder=""
                 register={register}
                 fieldName={"number"}
                 error={errors.number}
@@ -415,10 +435,19 @@ const BuyData = (props: Props) => {
               setFormData(getValues());
               const phoneNumbers = value.map((option) => option.value);
               console.log("Phone numbers:", phoneNumbers);
-              if (!phoneNumbers || phoneNumbers.length === 0) {
-                setNumberErr(true);
-                return;
+
+              if (isSwitchOn) {
+                if (!phoneNumbers || phoneNumbers.length === 0) {
+                  setNumberErr(true);
+                  return;
+                }
+              } else {
+                if (!formData?.number) {
+                  setNumberErr(true);
+                  return;
+                }
               }
+
               openModal();
               setNumberErr(false);
             }}
@@ -499,16 +528,20 @@ const BuyData = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Recipient Numbers: </p>
-              <span className="text-[#164e63]">
-                {value?.map((option) => option.value).join(", ")}
-              </span>
+              {isSwitchOn ? (
+                <span className="text-[#164e63]">
+                  {value?.map((option) => option.value).join(", ")}
+                </span>
+              ) : (
+                <span className="text-[#164e63]">{formData?.number}</span>
+              )}
             </div>
 
             <div className="w-1/2 mx-auto">
               <CustomButton
                 onClick={() => {
                   if (formData) {
-                    handleBuyData();
+                    handleBuyData(formData);
                   }
                 }}
                 className={clsx({
