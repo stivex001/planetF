@@ -48,3 +48,10 @@ export interface AirtimeListData {
   discount: string
   number: string
 }
+
+export interface AirtimeConverterData {
+  id: number
+  network: string
+  discount: number
+  number: string
+}

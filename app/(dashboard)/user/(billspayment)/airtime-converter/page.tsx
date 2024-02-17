@@ -27,7 +27,7 @@ import Modal from "react-modal";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import { useBankList } from "@/hooks/queries/useBankList";
-import { BankListData } from "@/types/transaction";
+import { AirtimeConverterData, BankListData } from "@/types/transaction";
 import { useToken } from "@/hooks/auth/useToken";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { BASE_URL } from "@/utils/baseUrl";
@@ -55,17 +55,17 @@ const customStyles: Modal.Styles = {
 type Props = {};
 
 interface ProviderImages {
-  mtn: StaticImageData;
-  glo: StaticImageData;
-  airtel: StaticImageData;
+  Mtn: StaticImageData;
+  Glo: StaticImageData;
+  Airtel: StaticImageData;
   "9mobile": StaticImageData;
   [key: string]: StaticImageData;
 }
 
 const providerImages: ProviderImages = {
-  mtn: mtnImage,
-  glo: gloImage,
-  airtel: airtelImage,
+  Mtn: mtnImage,
+  Glo: gloImage,
+  Airtel: airtelImage,
   "9mobile": mobileImage,
 };
 
@@ -80,10 +80,11 @@ const mode = [
   },
 ];
 
-interface BuyDataProps {
+interface ConvertAirtimeProps {
   id: string;
   name: string;
   network: string;
+  discount: number;
 }
 
 interface ApiResponseType {
@@ -103,14 +104,15 @@ const AirtimeConverter = (props: Props) => {
       amount: "",
       accountNumber: "",
       code: "",
+      discount: 0,
+      revNumber: "",
     },
     mode: "all",
     resolver: yupResolver(convertAirtimeSchema),
   });
 
-  const [data, setData] = useState<BuyDataProps[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<AirtimeConverterData | null>(null);
   const [formData, setFormData] = useState<ConvertAirtimeFormValues | null>(
     null
   );
@@ -119,8 +121,8 @@ const AirtimeConverter = (props: Props) => {
   const [accountNumber, setAccountNumber] = useState("");
   const [selectedBankCode, setSelectedBankCode] = useState("");
   const [verifyBank, setVerifyBank] = useState();
+  const [returnAmount, setReturnAmount] = useState(0);
   const [loadingBankVerify, setLoadingBankVerify] = useState(false);
-
 
   const { mutate: convertAirtime, isPending } = useConvertAirtime();
 
@@ -130,24 +132,6 @@ const AirtimeConverter = (props: Props) => {
   const { data: airtimeData, isPending: airtimePending } =
     useAirtimeConverter();
   console.log(airtimeData, "airt");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getAirtime();
-        console.log(data);
-
-        setData(data);
-
-        setIsLoading(false);
-      } catch (error: any) {
-        toast.error(error);
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleConvertAirtime = useCallback(
     (values: ConvertAirtimeFormValues) => {
@@ -183,32 +167,41 @@ const AirtimeConverter = (props: Props) => {
     clearErrors,
     setError,
     register,
+    watch,
   } = form;
 
-  const selectDataCategory = (selectedValue: string) => {
+  const selectDataCategory = (selectedValue: AirtimeConverterData | null) => {
     setSelectedCategory(selectedValue);
   };
 
   const handleSelectedData = (selectedValue: string) => {
-    const selectedCategory = data?.find(
+    const category = airtimeData?.find(
       (category) => category?.network == selectedValue
     );
-    if (selectedCategory) {
-      setValue("network", selectedCategory?.network);
+    if (category) {
+      setSelectedCategory(category);
+      setValue("network", category?.network);
+      setValue("revNumber", category?.number);
+      setValue("amount", "");
     }
   };
 
-  const calculateAmountToReturn = (network: string, amount: number) => {
-    const selectedNetwork = airtimeData?.find(
-      (item) => item?.network === network
-    );
-    if (selectedNetwork) {
-      const discount = selectedNetwork?.discount;
-      // const discountedAmount = (discount / 100) * amount;
-      // return amount - discountedAmount;
+  const amount = watch("amount");
+
+  useEffect(() => {
+    if (amount !== undefined && selectedCategory) {
+      const amountValue = parseFloat(amount);
+
+      if (!isNaN(amountValue) && isFinite(amountValue)) {
+        const cashback =
+          amountValue - (selectedCategory?.discount / 100) * amountValue;
+
+        setReturnAmount(parseFloat(cashback.toFixed(2)));
+      } else {
+        setReturnAmount(0);
+      }
     }
-    return amount; // Return original amount if network not found
-  };
+  }, [amount, selectedCategory, setReturnAmount]);
 
   const handleCreditModeSelect = (selectedValue: string) => {
     setSelectedMode(selectedValue);
@@ -305,11 +298,11 @@ const AirtimeConverter = (props: Props) => {
               Network Provider
             </label>
 
-            {isLoading ? (
+            {airtimePending ? (
               <Spinner />
             ) : (
               <div className="flex items-center justify-between my-5">
-                {data?.map((category) => (
+                {airtimeData?.map((category) => (
                   <div key={category?.id} className="cursor-pointer">
                     <button
                       onClick={(e) => {
@@ -349,7 +342,7 @@ const AirtimeConverter = (props: Props) => {
               }
               placeholder={"Select Credit Mode "}
               onSelect={(selectedValue) => {
-                selectDataCategory(selectedValue);
+                // selectDataCategory(selectedValue);
                 handleCreditModeSelect(selectedValue);
               }}
               buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
@@ -436,6 +429,8 @@ const AirtimeConverter = (props: Props) => {
               register={register}
               fieldName={"amount"}
               error={errors.amount}
+              // onChange={handleAmountChange}
+              value={amount && `₦${amount}`}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -444,7 +439,7 @@ const AirtimeConverter = (props: Props) => {
             <ReadOnlyTextInput
               label="Return Amount"
               placeholder=""
-              value={getValues("amount") && `₦${getValues("amount")}`}
+              value={returnAmount !== undefined ? `₦${returnAmount}` : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -476,7 +471,8 @@ const AirtimeConverter = (props: Props) => {
           className="w-full h-full flex items-center justify-center"
         >
           <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold">Airtime-Converter</h1>
               <button
                 type="button"
                 onClick={closeModal}
@@ -509,20 +505,55 @@ const AirtimeConverter = (props: Props) => {
             )}
 
             <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Sender Number: </p>
+              <span className="text-[#164e63]">{formData?.number}</span>
+            </div>
+
+            <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Network Provider: </p>
-              <span className="text-[#164e63]">{`${formData?.network} `}</span>
+              {/* <span className="text-[#164e63] uppercase">{`${formData?.network} `}</span> */}
+              {formData?.network == "Mtn" ? (
+                <Image
+                  src={mtnImage}
+                  alt={formData?.network}
+                  width={42}
+                  height={42}
+                />
+              ) : formData?.network == "Glo" ? (
+                <Image
+                  src={gloImage}
+                  alt={formData?.network}
+                  width={42}
+                  height={42}
+                />
+              ) : formData?.network == "Airtel" ? (
+                <Image
+                  src={airtelImage}
+                  alt={formData?.network}
+                  width={42}
+                  height={42}
+                />
+              ) : (
+                <Image
+                  src={mobileImage}
+                  alt={`${formData?.network}`}
+                  width={42}
+                  height={42}
+                />
+              )}
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
               <span className="text-[#164e63]">₦{formData?.amount}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Sender Number: </p>
-              <span className="text-[#164e63]">{formData?.number}</span>
+              <p>Amount to Receive: </p>
+              <span className="text-[#164e63]">₦{returnAmount}</span>
             </div>
+
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Receiver's Number: </p>
-              <span className="text-[#164e63]">{formData?.number}</span>
+              <span className="text-[#164e63]">{formData?.revNumber}</span>
             </div>
 
             <div className="w-1/2 mx-auto">
@@ -537,7 +568,7 @@ const AirtimeConverter = (props: Props) => {
                     true,
                   "opacity-70 cursor-not-allowed": isPending,
                 })}
-                disabled={isPending || isLoading}
+                disabled={isPending || airtimePending}
               >
                 {isPending ? <Spinner /> : "Convert"}
               </CustomButton>

@@ -1,14 +1,14 @@
 
 import { useToken } from "../auth/useToken";
 import { useQuery } from "@tanstack/react-query";
-import { AirtimeListData } from "@/types/transaction";
+import { AirtimeConverterData } from "@/types/transaction";
 import { getAirtimeConverter } from "@/query/getAirtimeConerter";
 
 
 export const useAirtimeConverter = () => {
   const { token } = useToken();
 
-  return useQuery<unknown, Error, AirtimeListData[]>({
+  return useQuery<unknown, Error, AirtimeConverterData[]>({
     enabled: !!token,
     queryFn: () => getAirtimeConverter(),
     queryKey: ["airtime"],
