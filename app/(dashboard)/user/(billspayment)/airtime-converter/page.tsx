@@ -123,6 +123,7 @@ const AirtimeConverter = (props: Props) => {
   const [verifyBank, setVerifyBank] = useState();
   const [returnAmount, setReturnAmount] = useState(0);
   const [loadingBankVerify, setLoadingBankVerify] = useState(false);
+  const [isAmountTyped, setIsAmountTyped] = useState(false);
 
   const { mutate: convertAirtime, isPending } = useConvertAirtime();
 
@@ -202,6 +203,10 @@ const AirtimeConverter = (props: Props) => {
       }
     }
   }, [amount, selectedCategory, setReturnAmount]);
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsAmountTyped(true);
+  };
 
   const handleCreditModeSelect = (selectedValue: string) => {
     setSelectedMode(selectedValue);
@@ -429,7 +434,7 @@ const AirtimeConverter = (props: Props) => {
               register={register}
               fieldName={"amount"}
               error={errors.amount}
-              // onChange={handleAmountChange}
+              onChange={handleAmountChange}
               value={amount && `₦${amount}`}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
@@ -548,7 +553,7 @@ const AirtimeConverter = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount to Receive: </p>
-              <span className="text-[#164e63]">₦{returnAmount}</span>
+              <span className="text-[#164e63]">₦{formData?.discount}</span>
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b-2">

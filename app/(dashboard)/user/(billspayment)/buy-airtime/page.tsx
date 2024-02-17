@@ -109,6 +109,8 @@ const BuyAirtime = () => {
   const [isNumberValid, setIsNumberValid] = useState(false);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [cashbackAmount, setCashbackAmount] = useState(0);
+
 
   const components = {
     DropdownIndicator: null,
@@ -247,9 +249,10 @@ const BuyAirtime = () => {
 
       if (!isNaN(amountValue) && isFinite(amountValue)) {
         const cashback = (selectedCategory.discount / 100) * amountValue;
-        setValue("discount", cashback.toFixed(2));
+        
+        setCashbackAmount(parseFloat(cashback.toFixed(2)));
       } else {
-        setValue("discount", "");
+        setCashbackAmount(0)
       }
     }
   }, [amount, selectedCategory, setValue]);
@@ -343,7 +346,7 @@ const BuyAirtime = () => {
             <ReadOnlyTextInput
               label="Cashback"
               placeholder=""
-              value={getValues("discount") && `₦${getValues("discount")}`}
+              value={cashbackAmount !== undefined ? `₦${cashbackAmount}` : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -496,11 +499,11 @@ const BuyAirtime = () => {
 
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
-              <span className="text-[#164e63]">₦{totalAmount.toFixed(2)}</span>
+              <span className="text-[#164e63]">₦{formData?.amount}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cashback: </p>
-              <span className="text-[#164e63]">₦{formData?.discount}</span>
+              <span className="text-[#164e63]">₦{cashbackAmount.toFixed(2)}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Recipient Numbers: </p>
