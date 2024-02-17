@@ -371,7 +371,8 @@ const BuyElectricity = (props: Props) => {
           className="w-full h-full flex items-center justify-center"
         >
           <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold">Buy-Electricity</h1>
               <button
                 type="button"
                 onClick={closeModal}

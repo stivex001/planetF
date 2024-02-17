@@ -194,7 +194,8 @@ const ResultChecker = (props: Props) => {
           className="w-full h-full flex items-center justify-center"
         >
           <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold">Buy-Education</h1>
               <button
                 type="button"
                 onClick={closeModal}
@@ -205,20 +206,26 @@ const ResultChecker = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Type: </p>
-              <span className="text-[#164e63] uppercase">{formData?.coded}</span>
+              <span className="text-[#164e63] uppercase">
+                {formData?.coded}
+              </span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Number Of Pin: </p>
               <span className="text-[#164e63]">{` ${formData?.quantity}`}</span>
             </div>
-            
+
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
-              <span className="text-[#164e63]">₦{formData?.amount || "1000"}</span>
+              <span className="text-[#164e63]">
+                ₦{formData?.amount || "1000"}
+              </span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cummulative Amount: </p>
-              <span className="text-[#164e63]">₦{formData?.amount || "2000"}</span>
+              <span className="text-[#164e63]">
+                ₦{formData?.amount || "2000"}
+              </span>
             </div>
 
             <div className="w-1/2 mx-auto">
