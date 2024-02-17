@@ -121,7 +121,6 @@ const AirtimeConverter = (props: Props) => {
   const [verifyBank, setVerifyBank] = useState();
   const [loadingBankVerify, setLoadingBankVerify] = useState(false);
 
-  console.log(selectedBankCode, accountNumber, "test");
 
   const { mutate: convertAirtime, isPending } = useConvertAirtime();
 
@@ -519,6 +518,10 @@ const AirtimeConverter = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Sender Number: </p>
+              <span className="text-[#164e63]">{formData?.number}</span>
+            </div>
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Receiver's Number: </p>
               <span className="text-[#164e63]">{formData?.number}</span>
             </div>
 

@@ -1,7 +1,4 @@
 {
-  "/not-found": "app/not-found.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/(dashboard)/user/page": "app/(dashboard)/user/page.js",
-  "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js",
-  "/(dashboard)/user/(billspayment)/buy-data/page": "app/(dashboard)/user/(billspayment)/buy-data/page.js"
+  "/(dashboard)/user/(billspayment)/airtime-converter/page": "app/(dashboard)/user/(billspayment)/airtime-converter/page.js",
+  "/(dashboard)/user/page": "app/(dashboard)/user/page.js"
 }
