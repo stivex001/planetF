@@ -65,7 +65,7 @@ const CGWallet = (props: Props) => {
                     {data?.name}
                   </h4>
                   <p className="text-2xl font-semibold capitalize text-right">
-                    ({data?.balance})GB
+                    {data?.balance}GB
                   </p>
                 </div>
                 {/* <h1 className="text-2xl  font-medium"></h1> */}

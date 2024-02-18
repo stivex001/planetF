@@ -12,8 +12,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import clsx from "clsx";
 import { OpenEyeIcon } from "@/icons/CloseEye";
-import logo from "@/images/planetf-.png"
-import authImg from "@/images/planet.jpeg"
+import logo from "@/images/planetf-.png";
+import authImg from "@/images/planet.jpeg";
 
 const Register = () => {
   const router = useRouter();
@@ -73,12 +73,7 @@ const Register = () => {
       <div className="bg-[url(/eeee.svg)] bg-no-repeat bg-contain overflow-x-hidden hidden lg:block h-screen flex-1 ">
         <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center">
           <div className="flex items-center gap-2">
-            <Image
-              src={logo}
-              alt=""
-              width={50}
-              height={50}
-            />
+            <Image src={logo} alt="" width={50} height={50} />
             <span className="text-white text-lg">PlanetF</span>
           </div>
           <div className="max-w-[296px] h-[205px]  ml-20">
@@ -95,7 +90,7 @@ const Register = () => {
               sign Up to your account.
             </h1>
             <p className="mt-5 text-white text-lg text-opacity-70 whitespace-nowrap">
-              Manage all your e-commerce accounts in one place
+              Conveniently settle your bills, from anywhere you are
             </p>
           </div>
         </div>

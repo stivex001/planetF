@@ -80,7 +80,7 @@ const ForgotPassword = (props: Props) => {
               sign in to your account.
             </h1>
             <p className="mt-5 text-white text-lg text-opacity-70 whitespace-nowrap">
-              Manage all your e-commerce accounts in one place
+            Conveniently settle your bills, from anywhere you are
             </p>
           </div>
         </div>

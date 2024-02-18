@@ -141,6 +141,7 @@ const CGBundles = (props: Props) => {
     });
 
   const handleBuyBundle = useCallback(() => {
+    alert("buy bundle")
     if (selectedBundle) {
       const payload = {
         bundle_id: selectedBundle?.id?.toString(),
@@ -202,7 +203,7 @@ const CGBundles = (props: Props) => {
             >
               <td className="py-2 px-4 border-b">{data?.id}</td>
               <td className="py-2 px-4 border-b">{data?.display_name}</td>
-              <td className="py-2 px-4 border-b">{data?.value}(GB)</td>
+              <td className="py-2 px-4 border-b">{data?.value}GB</td>
               <td className="py-2 px-4 border-b">{data?.network}</td>
               <td className="py-2 px-4 border-b">{data?.type}</td>
               <td className="py-2 px-4 border-b">₦{data?.price}</td>
@@ -233,7 +234,7 @@ const CGBundles = (props: Props) => {
           <button
             type="button"
             onClick={closeModal}
-            className="absolute top-[270px] right-[360px] text-sm text-white px-4 h-12 bg-[#164e63] rounded-lg"
+            className="absolute top-[200px] right-[400px] text-sm text-white px-4 h-12 bg-[#164e63] rounded-lg"
           >
             Close
           </button>
@@ -268,9 +269,9 @@ const CGBundles = (props: Props) => {
                 >
                   <div className="w-full mt-2">
                     <ReadOnlyTextInput
-                      label="Pay with Wallet"
+                      label={`Pay with Wallet (₦${walletBalance})`}
                       placeholder="Wallet balance"
-                      value={`₦${walletBalance}`}
+                      value={`₦${selectedBundle?.price}`}
                       className="bg-gray-100 rounded-sm border border-zinc-600"
                     />
                   </div>
@@ -319,7 +320,7 @@ const CGBundles = (props: Props) => {
                     )}
                   </div>
 
-                  <div className="w-full mx-auto h-9 mt-10">
+                  <div className="w-full mx-auto h-9 my-10">
                     <button
                       type="submit"
                       disabled={isPending}
