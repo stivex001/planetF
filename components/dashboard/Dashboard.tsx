@@ -83,22 +83,39 @@ const Dashboard = () => {
   const points = formatCurrency(user?.balances?.points);
   const general_market = formatCurrency(user?.balances?.general_market);
 
-  useEffect(() => {
-    if (!isLoading && !user?.user?.bvn) {
-      Swal.fire({
-        title: "Account Restricted",
-        html: "Your account was restricted based on CBN requirement. Kindly update your info to continue enjoying PlanetF services.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Update Info",
-        allowOutsideClick: false,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.open("https://planet-f-kyc.vercel.app/", "_blank");
-        }
-      });
-    }
-  }, [isLoading, user]);
+  // useEffect(() => {
+  //   if (!isLoading ) {
+  //     Swal.fire({
+  //       title: "News",
+  //       html: {user?.news},
+  //       icon: "warning",
+  //       showCancelButton: true,
+  //       confirmButtonText: "Ok",
+  //       allowOutsideClick: false,
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         window.open("https://planet-f-kyc.vercel.app/", "_blank");
+  //       }
+  //     });
+  //   }
+  // }, [isLoading, user]);
+
+  // useEffect(() => {
+  //   if (!isLoading && !user?.user?.bvn) {
+  //     Swal.fire({
+  //       title: "Account Restricted",
+  //       html: "Your account was restricted based on CBN requirement. Kindly update your info to continue enjoying PlanetF services.",
+  //       icon: "warning",
+  //       showCancelButton: true,
+  //       confirmButtonText: "Update Info",
+  //       allowOutsideClick: false,
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         window.open("https://planet-f-kyc.vercel.app/", "_blank");
+  //       }
+  //     });
+  //   }
+  // }, [isLoading, user]);
 
   if (isLoading) {
     return <ScreenLoader />;
