@@ -22,6 +22,8 @@ import { getData } from "@/query/getdata";
 import { useCheckResult } from "@/hooks/billsPayments/useCheckResult";
 import Modal from "react-modal";
 import { useModal } from "@/context/useModal";
+import Swal from "sweetalert2";
+import { useUser } from "@/hooks/auth/useUser";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -82,6 +84,8 @@ const ResultChecker = (props: Props) => {
 
   const { mutate: buyChecker, isPending } = useCheckResult();
   const { openModal, closeModal, isOpen } = useModal();
+  const { data: user } = useUser();
+
 
   const handleBuyData = useCallback(
     (values: BuyCheckerFormValues) => {
@@ -116,6 +120,31 @@ const ResultChecker = (props: Props) => {
     setValue("quantity", "");
     clearErrors("coded");
   };
+
+  const proceedWithPurchase = () => {
+    setFormData(getValues());
+    openModal();
+  };
+
+  const handleClick = () => {
+    if (user?.user?.bvn === true) {
+      proceedWithPurchase();
+    } else {
+      Swal.fire({
+        title: "Account Restricted",
+        html: "Your account was restricted based on CBN requirement. Kindly update your info to continue enjoying PlanetF services.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Update Info",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open("https://planet-f-kyc.vercel.app/", "_blank");
+        }
+      });
+    }
+  };
+
   return (
     <div className="  rounded-md  w-full ">
       <div className="w-full lg:w-11/12 mx-auto">
@@ -169,10 +198,9 @@ const ResultChecker = (props: Props) => {
 
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
-              onClick={(e) => {
+               onClick={(e) => {
                 e.preventDefault();
-                setFormData(getValues());
-                openModal();
+                handleClick();
               }}
               className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
             >
