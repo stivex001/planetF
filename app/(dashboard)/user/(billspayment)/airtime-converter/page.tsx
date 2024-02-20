@@ -32,6 +32,7 @@ import { useToken } from "@/hooks/auth/useToken";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { BASE_URL } from "@/utils/baseUrl";
 import { useAirtimeConverter } from "@/hooks/queries/useAirtimeConverter";
+import { useUser } from "@/hooks/auth/useUser";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -128,6 +129,8 @@ const AirtimeConverter = (props: Props) => {
   const { mutate: convertAirtime, isPending } = useConvertAirtime();
 
   const { openModal, closeModal, isOpen } = useModal();
+
+  const { data: user } = useUser();
 
   const { data: banklist, isPending: banklistPending } = useBankList();
   const { data: airtimeData, isPending: airtimePending } =
@@ -285,6 +288,30 @@ const AirtimeConverter = (props: Props) => {
       makeBankValidationAPICall(selectedBankCode, accountNumber);
     }
   }, [selectedBankCode, accountNumber]);
+
+  const proceedWithPurchase = () => {
+    setFormData(getValues());
+    openModal();
+  };
+
+  const handleClick = () => {
+    if (user?.user?.bvn === true) {
+      proceedWithPurchase();
+    } else {
+      Swal.fire({
+        title: "Account Restricted",
+        html: "Your account was restricted based on CBN requirement. Kindly update your info to continue enjoying PlanetF services.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Update Info",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open("https://planet-f-kyc.vercel.app/", "_blank");
+        }
+      });
+    }
+  };
 
   return (
     <div className="  rounded-md  w-full ">
@@ -452,8 +479,7 @@ const AirtimeConverter = (props: Props) => {
             <CustomButton
               onClick={(e) => {
                 e.preventDefault();
-                setFormData(getValues());
-                openModal();
+                handleClick();
               }}
               className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
             >
