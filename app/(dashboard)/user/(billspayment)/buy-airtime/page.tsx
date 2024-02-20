@@ -183,7 +183,7 @@ const BuyAirtime = () => {
       let phoneNumbers;
       let amountToSend;
       const totalAmount = parseFloat(values?.amount) * value?.length;
-
+      
       if (isSwitchOn) {
         phoneNumbers = value.map((option) => option.value).join(",");
         amountToSend = totalAmount.toString();

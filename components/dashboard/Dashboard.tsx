@@ -88,7 +88,7 @@ const Dashboard = () => {
     if (user?.news && user.news.trim() !== "") {
       
       Swal.fire({
-        title: "Welcome!",
+        title: "General News!",
         text: user.news,
         icon: "info",
         confirmButtonText: "OK",
