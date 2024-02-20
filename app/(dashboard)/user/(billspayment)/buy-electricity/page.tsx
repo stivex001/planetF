@@ -27,6 +27,8 @@ import { BASE_URL } from "@/utils/baseUrl";
 import { useToken } from "@/hooks/auth/useToken";
 import { useModal } from "@/context/useModal";
 import Modal from "react-modal";
+import Swal from "sweetalert2";
+import { useUser } from "@/hooks/auth/useUser";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -103,6 +105,8 @@ const BuyElectricity = (props: Props) => {
   const { mutate: buyElectricity, isPending } = useBuyElectricity();
 
   const { openModal, closeModal, isOpen } = useModal();
+
+  const { data: user } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -211,6 +215,30 @@ const BuyElectricity = (props: Props) => {
     if (selectedCategory) {
       setValue("provider", selectedCategory?.code);
       setValue("amount", "");
+    }
+  };
+
+  const proceedWithPurchase = () => {
+    setFormData(getValues());
+    openModal();
+  };
+
+  const handleClick = () => {
+    if (user?.user?.bvn === true) {
+      proceedWithPurchase();
+    } else {
+      Swal.fire({
+        title: "Account Restricted",
+        html: "Your account was restricted based on CBN requirement. Kindly update your info to continue enjoying PlanetF services.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Update Info",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open("https://planet-f-kyc.vercel.app/", "_blank");
+        }
+      });
     }
   };
 
@@ -347,8 +375,7 @@ const BuyElectricity = (props: Props) => {
               <CustomButton
                 onClick={(e) => {
                   e.preventDefault();
-                  setFormData(getValues());
-                  openModal();
+                  handleClick();
                 }}
                 className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
               >
