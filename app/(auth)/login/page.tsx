@@ -168,10 +168,10 @@ const Login = (props: Props) => {
             </div>
           </form>
           <p className="mt-10 text-center lg:text-left lg:whitespace-nowrap text-slate-600 text-base">
-            By signin up, you agree to our{" "}
-            <span className="text-[#164e63]">
+            By signin in, you agree to our{" "}
+            <Link href="/terms" className="text-[#164e63]">
               Terms and Conditions & Privacy Policy
-            </span>
+            </Link>
           </p>
         </div>
       </div>

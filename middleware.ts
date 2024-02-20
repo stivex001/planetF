@@ -10,7 +10,8 @@ export const middleware = async (request: NextRequest) => {
       !loggedin &&
       pathname !== "/login" &&
       pathname !== "/register" &&
-      pathname !== "/forgotpassword"
+      pathname !== "/forgotpassword" &&
+      pathname !== "/terms"
     ) {
       // If not logged in and not on the allowed pages, redirect to the login page
       return NextResponse.redirect(new URL("/login", request.url));

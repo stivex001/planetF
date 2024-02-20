@@ -238,9 +238,9 @@ const Register = () => {
           </form>
           <p className="mt-10 text-center lg:text-left lg:whitespace-nowrap text-slate-600 text-base">
             By signin up, you agree to our{" "}
-            <span className="text-[#164e63]">
+            <Link href="/terms" className="text-[#164e63]">
               Terms and Conditions & Privacy Policy
-            </span>
+            </Link>
           </p>
         </div>
       </div>
