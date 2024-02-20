@@ -1,11 +1,12 @@
 export type UserProfile = {
   _id: string;
+  news: string;
   user: {
     photo: string;
     user_name: string;
     status: string;
     referral_plan: string;
-    bvn: boolean
+    bvn: boolean;
   };
   balances: {
     wallet: string;
@@ -15,6 +16,6 @@ export type UserProfile = {
     general_market: string;
   };
   others: {
-    banner: string
-  }
+    banner: string;
+  };
 };
