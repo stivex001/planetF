@@ -30,6 +30,7 @@ import CreatableSelect from "react-select/creatable";
 import Styles from "react-select/creatable";
 import { Switch } from "@/components/ui/switch";
 import Swal from "sweetalert2";
+import { useUser } from "@/hooks/auth/useUser";
 
 type Props = {};
 
@@ -175,6 +176,9 @@ const BuyData = (props: Props) => {
 
   const { mutate: buyData, isPending } = useBuyData();
 
+  const { data: user } = useUser();
+
+
   const {
     formState: { errors },
     handleSubmit,
@@ -282,6 +286,46 @@ const BuyData = (props: Props) => {
 
   const toggleSwitch = () => {
     setIsSwitchOn((prev) => !prev);
+  };
+
+  const handleClick = () => {
+    if (user?.user?.bvn === true) {
+      proceedWithPurchase();
+    } else {
+      Swal.fire({
+        title: "Account Restricted",
+        html: "Your account was restricted based on CBN requirement. Kindly update your info to continue enjoying PlanetF services.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Update Info",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open("https://planet-f-kyc.vercel.app/", "_blank");
+        }
+      });
+    }
+  };
+
+  const proceedWithPurchase = () => {
+    setFormData(getValues());
+    const phoneNumbers = value.map((option) => option.value);
+    console.log("Phone numbers:", phoneNumbers);
+
+    if (isSwitchOn) {
+      if (!phoneNumbers || phoneNumbers.length === 0) {
+        setNumberErr(true);
+        return;
+      }
+    } else {
+      if (!formData?.number) {
+        setNumberErr(true);
+        return;
+      }
+    }
+
+    openModal();
+    setNumberErr(false);
   };
 
   return (
@@ -432,24 +476,7 @@ const BuyData = (props: Props) => {
           <CustomButton
             onClick={(e) => {
               e.preventDefault();
-              setFormData(getValues());
-              const phoneNumbers = value.map((option) => option.value);
-              console.log("Phone numbers:", phoneNumbers);
-
-              if (isSwitchOn) {
-                if (!phoneNumbers || phoneNumbers.length === 0) {
-                  setNumberErr(true);
-                  return;
-                }
-              } else {
-                if (!formData?.number) {
-                  setNumberErr(true);
-                  return;
-                }
-              }
-
-              openModal();
-              setNumberErr(false);
+              handleClick()
             }}
             className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
           >

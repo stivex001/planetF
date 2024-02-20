@@ -28,6 +28,7 @@ import CreatableSelect from "react-select/creatable";
 import Styles from "react-select/creatable";
 import { Switch } from "@/components/ui/switch";
 import Swal from "sweetalert2";
+import { useUser } from "@/hooks/auth/useUser";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -111,7 +112,6 @@ const BuyAirtime = () => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [cashbackAmount, setCashbackAmount] = useState(0);
 
-
   const components = {
     DropdownIndicator: null,
   };
@@ -146,6 +146,8 @@ const BuyAirtime = () => {
   const { openModal, closeModal, isOpen } = useModal();
 
   const { mutate: buyAirtime, isPending } = useBuyAirtime();
+
+  const { data: user } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -249,10 +251,10 @@ const BuyAirtime = () => {
 
       if (!isNaN(amountValue) && isFinite(amountValue)) {
         const cashback = (selectedCategory.discount / 100) * amountValue;
-        
+
         setCashbackAmount(parseFloat(cashback.toFixed(2)));
       } else {
-        setCashbackAmount(0)
+        setCashbackAmount(0);
       }
     }
   }, [amount, selectedCategory, setValue]);
@@ -282,6 +284,46 @@ const BuyAirtime = () => {
 
   const toggleSwitch = () => {
     setIsSwitchOn((prev) => !prev);
+  };
+
+  const proceedWithPurchase = () => {
+    setFormData(getValues());
+    const phoneNumbers = value.map((option) => option.value);
+    console.log("Phone numbers:", phoneNumbers);
+
+    if (isSwitchOn) {
+      if (!phoneNumbers || phoneNumbers.length === 0) {
+        setNumberErr(true);
+        return;
+      }
+    } else {
+      if (!formData?.number) {
+        setNumberErr(true);
+        return;
+      }
+    }
+
+    openModal();
+    setNumberErr(false);
+  };
+
+  const handleClick = () => {
+    if (user?.user?.bvn === true) {
+      proceedWithPurchase();
+    } else {
+      Swal.fire({
+        title: "Account Restricted",
+        html: "Your account was restricted based on CBN requirement. Kindly update your info to continue enjoying PlanetF services.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Update Info",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open("https://planet-f-kyc.vercel.app/", "_blank");
+        }
+      });
+    }
   };
 
   return (
@@ -414,24 +456,7 @@ const BuyAirtime = () => {
           <CustomButton
             onClick={(e) => {
               e.preventDefault();
-              setFormData(getValues());
-              const phoneNumbers = value.map((option) => option.value);
-              console.log("Phone numbers:", phoneNumbers);
-
-              if (isSwitchOn) {
-                if (!phoneNumbers || phoneNumbers.length === 0) {
-                  setNumberErr(true);
-                  return;
-                }
-              } else {
-                if (!formData?.number) {
-                  setNumberErr(true);
-                  return;
-                }
-              }
-
-              openModal();
-              setNumberErr(false);
+              handleClick();
             }}
             className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
           >
@@ -503,7 +528,9 @@ const BuyAirtime = () => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cashback: </p>
-              <span className="text-[#164e63]">₦{cashbackAmount.toFixed(2)}</span>
+              <span className="text-[#164e63]">
+                ₦{cashbackAmount.toFixed(2)}
+              </span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Recipient Numbers: </p>
