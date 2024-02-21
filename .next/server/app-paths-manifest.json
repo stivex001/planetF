@@ -1,5 +1,6 @@
 {
-  "/not-found": "app/not-found.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/(dashboard)/user/cgBundles/page": "app/(dashboard)/user/cgBundles/page.js"
+  "/(dashboard)/user/cgBundles/page": "app/(dashboard)/user/cgBundles/page.js",
+  "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js",
+  "/(dashboard)/user/(billspayment)/buy-data/page": "app/(dashboard)/user/(billspayment)/buy-data/page.js"
 }

@@ -182,10 +182,15 @@ const BuyAirtime = () => {
     (values: BuyAirtimeFormValues) => {
       let phoneNumbers;
       let amountToSend;
-      const totalAmount = parseFloat(values?.amount) * value?.length;
-      
+
+      const selectedPhoneNumbers = value.map((option) => option.value);
+
+      const totalAmount = isSwitchOn
+        ? parseFloat(values.amount) * selectedPhoneNumbers?.length
+        : parseFloat(values?.amount);
+
       if (isSwitchOn) {
-        phoneNumbers = value.map((option) => option.value).join(",");
+        phoneNumbers = selectedPhoneNumbers.join(",");
         amountToSend = totalAmount.toString();
       } else {
         phoneNumbers = values.number;
@@ -327,7 +332,7 @@ const BuyAirtime = () => {
   };
 
   return (
-    <div className="  rounded-md  w-full ">
+    <div className=" min-h-screen rounded-md  w-full ">
       <div className="w-full lg:w-11/12 mx-auto">
         <h2 className="lg:text-center text-2xl font-bold xl:text-left xl:text-3xl">
           Airtime TopUp
@@ -524,8 +529,13 @@ const BuyAirtime = () => {
 
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
-              <span className="text-[#164e63]">₦{formData?.amount}</span>
+              {isSwitchOn ? (
+                <span className="text-[#164e63]">₦{totalAmount}</span>
+              ) : (
+                <span className="text-[#164e63]">₦{formData?.amount}</span>
+              )}
             </div>
+
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cashback: </p>
               <span className="text-[#164e63]">

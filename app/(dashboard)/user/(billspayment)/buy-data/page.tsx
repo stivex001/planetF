@@ -178,7 +178,6 @@ const BuyData = (props: Props) => {
 
   const { data: user } = useUser();
 
-
   const {
     formState: { errors },
     handleSubmit,
@@ -476,7 +475,7 @@ const BuyData = (props: Props) => {
           <CustomButton
             onClick={(e) => {
               e.preventDefault();
-              handleClick()
+              handleClick();
             }}
             className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
           >
@@ -550,9 +549,26 @@ const BuyData = (props: Props) => {
               <span className="text-[#164e63]">{` ${formData?.name}`}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Amount: </p>
-              <span className="text-[#164e63]">₦{formData?.amount}</span>
+              <p>Total Amount: </p>
+              {isSwitchOn ? (
+                <span className="text-[#164e63]">
+                  ₦
+                  {(
+                    (selectedCategoryData
+                      ? parseFloat(selectedCategoryData.price)
+                      : 0) * value.length
+                  ).toFixed(2)}
+                </span>
+              ) : (
+                <span className="text-[#164e63]">
+                  ₦
+                  {selectedCategoryData
+                    ? parseFloat(selectedCategoryData.price).toFixed(2)
+                    : 0}
+                </span>
+              )}
             </div>
+
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Recipient Numbers: </p>
               {isSwitchOn ? (
