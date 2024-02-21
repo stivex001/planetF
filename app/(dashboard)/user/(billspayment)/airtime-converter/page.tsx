@@ -475,6 +475,15 @@ const AirtimeConverter = (props: Props) => {
             />
           </div>
 
+          <div className="w-full">
+            <ReadOnlyTextInput
+              label="Receiver's Number:"
+              placeholder=""
+              value={getValues("revNumber")}
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
+
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
               onClick={(e) => {
@@ -578,7 +587,7 @@ const AirtimeConverter = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount to Receive: </p>
-              <span className="text-[#164e63]">₦{formData?.discount}</span>
+              <span className="text-[#164e63]">₦{returnAmount}</span>
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b-2">
