@@ -23,6 +23,8 @@ import { useSearchParams } from "next/navigation";
 import { useUser } from "@/context/user-context";
 import { useTransferBundles } from "@/mutation/useTransferBundles";
 import Image from "next/image";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Swal from "sweetalert2";
 
 // Styles for modal
 const customStyles: Modal.Styles = {
@@ -58,6 +60,8 @@ const CGBundles = (props: Props) => {
   const [selectedBundle, setSelectedBundle] = useState<CGWallet | null>(null);
   const [transferText, setTransferText] = useState<string>("");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [copiedText, setCopiedText] = useState<Array<string>>([]);
+  const [accountNumber, setAccountNumber] = useState<string>("");
 
   const [activeTab, setActiveTab] = useState<Tab>("wallet");
 
@@ -141,7 +145,7 @@ const CGBundles = (props: Props) => {
     });
 
   const handleBuyBundle = useCallback(() => {
-    alert("buy bundle")
+    alert("buy bundle");
     if (selectedBundle) {
       const payload = {
         bundle_id: selectedBundle?.id?.toString(),
@@ -180,6 +184,8 @@ const CGBundles = (props: Props) => {
   if (isLoading) {
     return <ScreenLoader />;
   }
+
+  console.log(transferText, "trs");
 
   return (
     <div className="overflow-x-auto">
@@ -292,9 +298,22 @@ const CGBundles = (props: Props) => {
                   className="flex flex-col"
                   onSubmit={handleSubmit(() => handleBuyBundle())}
                 >
-                  <h1 className="max-w-xs text-[#164e63] mb-6">
-                    {transferText}
-                  </h1>
+                  <CopyToClipboard text={transferText}>
+                    <h1
+                      className="max-w-xs text-[#164e63] mb-6 cursor-pointer"
+                      onClick={() =>
+                        Swal.fire({
+                          icon: "success",
+                          title: "Copied!",
+                          showConfirmButton: false,
+                          timer: 1500,
+                        })
+                      }
+                    >
+                      {transferText}
+                    </h1>
+                  </CopyToClipboard>
+
                   <div className="w-full mt-2">
                     <label
                       htmlFor="uploadFile"
