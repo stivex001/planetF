@@ -102,6 +102,60 @@ const types = [
   },
 ];
 
+const mtnTypes = [
+  {
+    id: "1",
+    name: "MTN-SME",
+    img: mtnImage,
+  },
+  {
+    id: "2",
+    name: "MTN-CG",
+    img: mtnImage,
+  },
+  {
+    id: "3",
+    name: "MTN-DG",
+    img: mtnImage,
+  },
+];
+
+// const gloTypes = [
+//   {
+//     id: "1",
+//     name: "GLO-SME",
+//     img: gloImage,
+//   },
+//   {
+//     id: "2",
+//     name: "GLO-CG",
+//     img: gloImage,
+//   },
+//   {
+//     id: "3",
+//     name: "GLO-DG",
+//     img: gloImage,
+//   },
+// ];
+
+const airtelTypes = [
+  // {
+  //   id: "1",
+  //   name: "AIRTEL-SME",
+  //   img: airtelImage,
+  // },
+  {
+    id: "2",
+    name: "AIRTEL-CG",
+    img: airtelImage,
+  },
+  {
+    id: "3",
+    name: "AIRTEL-DG",
+    img: airtelImage,
+  },
+];
+
 interface Option {
   readonly label: string;
   readonly value: string;
@@ -140,6 +194,7 @@ const BuyData = (props: Props) => {
   const [numberValidation, setNumberValidation] = useState(false);
   const [isNumberValid, setIsNumberValid] = useState(false);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [dataCategory, setDataCategeory] = useState("");
 
   const components = {
     DropdownIndicator: null,
@@ -192,6 +247,7 @@ const BuyData = (props: Props) => {
     try {
       setIsLoading(true);
       const categoryData = await getData(categoryName);
+
       setData(categoryData);
       setSelectedCategory(categoryName);
       setIsLoading(false);
@@ -342,7 +398,7 @@ const BuyData = (props: Props) => {
 
             <div className="flex items-center justify-between my-3 ">
               {categories.map((category) => (
-                <div key={category.id}>
+                <div key={category.id} className="flex flex-col gap-2">
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -362,6 +418,88 @@ const BuyData = (props: Props) => {
                       height={42}
                     />
                   </button>
+                  <span className="text-sm font-medium">{category?.name}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-between my-3 ">
+              {mtnTypes.map((category) => (
+                <div key={category.id} className="flex flex-col gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleImageClick(category.name.split("-")[0]);
+                      setActiveNetwork(category?.id);
+                      setDataCategeory(category?.name);
+                    }}
+                    className={clsx("focus:outline-none", {
+                      "bg-[#164e63]/20 p-2 rounded-full":
+                        activeNetwork === category?.id,
+                    })}
+                  >
+                    <Image
+                      src={category.img}
+                      alt={`${selectedCategory} Logo`}
+                      className="cursor-pointer"
+                      width={42}
+                      height={42}
+                    />
+                  </button>
+                  <span className="text-sm font-medium">{category?.name}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* <div className="flex items-center justify-between my-3 ">
+              {gloTypes.map((category) => (
+                <div key={category.id} className="flex flex-col gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleImageClick(category.name);
+                      setActiveNetwork(category?.id);
+                    }}
+                    className={clsx("focus:outline-none", {
+                      "bg-[#164e63]/20 p-2 rounded-full":
+                        activeNetwork === category?.id,
+                    })}
+                  >
+                    <Image
+                      src={category.img}
+                      alt={`${selectedCategory} Logo`}
+                      className="cursor-pointer"
+                      width={42}
+                      height={42}
+                    />
+                  </button>
+                  <span className="text-sm font-medium">{category?.name}</span>
+                </div>
+              ))}
+            </div> */}
+            <div className="flex items-center justify-between my-3 ">
+              {airtelTypes.map((category) => (
+                <div key={category.id} className="flex flex-col gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleImageClick(category.name.split("-")[0]);
+                      setActiveNetwork(category?.id);
+                      setDataCategeory(category?.name);
+                    }}
+                    className={clsx("focus:outline-none", {
+                      "bg-[#164e63]/20 p-2 rounded-full":
+                        activeNetwork === category?.id,
+                    })}
+                  >
+                    <Image
+                      src={category.img}
+                      alt={`${selectedCategory} Logo`}
+                      className="cursor-pointer"
+                      width={42}
+                      height={42}
+                    />
+                  </button>
+                  <span className="text-sm font-medium">{category?.name}</span>
                 </div>
               ))}
             </div>
@@ -375,10 +513,19 @@ const BuyData = (props: Props) => {
             data?.length > 0 && (
               <DropDown
                 options={
-                  data?.map((category) => ({
-                    key: category?.coded,
-                    label: `${category?.network} - ${category?.name} `,
-                  })) || []
+                  data
+                    ?.filter((category) => {
+                      if(category.network === "MTN" || category.network === "AIRTEL") {
+                        return category.name.includes(dataCategory.split("-")[1]);
+                      }
+                      else{
+                        return true
+                      }
+                    })
+                    .map((category) => ({
+                      key: category?.coded,
+                      label: `${category?.network} - ${category?.name} `,
+                    })) || []
                 }
                 placeholder={"----Choose---"}
                 onSelect={handleSelectedData}
