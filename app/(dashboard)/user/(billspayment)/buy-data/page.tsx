@@ -64,43 +64,15 @@ interface BuyDataProps {
 
 const categories = [
   {
-    id: "1",
-    name: "MTN",
-    img: mtnImage,
-  },
-  {
     id: "2",
     name: "GLO",
     img: gloImage,
   },
-  {
-    id: "3",
-    name: "airtel",
-    img: airtelImage,
-  },
+
   {
     id: "4",
     name: "9mobile",
     img: mobileImage,
-  },
-];
-
-const types = [
-  {
-    id: "1",
-    name: "Wallet",
-  },
-  {
-    id: "2",
-    name: "MTN-SME",
-  },
-  {
-    id: "3",
-    name: "MTN-CG",
-  },
-  {
-    id: "4",
-    name: "MTN-DG",
   },
 ];
 
@@ -267,7 +239,6 @@ const BuyData = (props: Props) => {
       setIsLoading(false);
     }
   };
-
   const handleBuyData = useCallback(
     (values: BuyDataFormValues) => {
       let phoneNumbers;
@@ -442,7 +413,7 @@ const BuyData = (props: Props) => {
               Network Provider
             </label>
 
-            <div className="flex items-center justify-between my-3 ">
+            <div className="flex items-center gap-10 my-3 ">
               {categories.map((category) => (
                 <div key={category.id} className="flex flex-col gap-2">
                   <button
