@@ -1,1 +1,3 @@
-{}
+{
+  "/(dashboard)/user/(billspayment)/buy-data/page": "app/(dashboard)/user/(billspayment)/buy-data/page.js"
+}

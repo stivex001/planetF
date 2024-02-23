@@ -166,6 +166,8 @@ const BuyData = (props: Props) => {
 
   const [formData, setFormData] = useState<BuyDataFormValues | null>(null);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
+  const [activeMtnNetwork, setActiveMtnNetwork] = useState<string | null>(null);
+  const [activeAirtelNetwork, setActiveAirtelNetwork] = useState<string | null>(null);
   const [inputValue, setInputValue] = React.useState("");
   const [value, setValues] = React.useState<readonly Option[]>([]);
   const [numberErr, setNumberErr] = useState(false);
@@ -413,58 +415,95 @@ const BuyData = (props: Props) => {
               Network Provider
             </label>
 
-            <div className="flex items-center gap-10 my-3 ">
-              {categories.map((category) => (
-                <div key={category.id} className="flex flex-col gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleImageClick(category.name);
-                      setActiveNetwork(category?.id);
-                    }}
-                    className={clsx("focus:outline-none", {
-                      "bg-[#164e63]/20 p-2 rounded-full":
-                        activeNetwork === category?.id,
-                    })}
-                  >
-                    <Image
-                      src={category.img}
-                      alt={`${selectedCategory} Logo`}
-                      className="cursor-pointer"
-                      width={42}
-                      height={42}
-                    />
-                  </button>
-                  <span className="text-sm font-medium">{category?.name}</span>
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center justify-between my-3 ">
-              {mtnTypes.map((category) => (
-                <div key={category.id} className="flex flex-col gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleImageClick(category.name.split("-")[0]);
-                      setActiveNetwork(category?.id);
-                      setDataCategeory(category?.name);
-                    }}
-                    className={clsx("focus:outline-none", {
-                      "bg-[#164e63]/20 p-2 rounded-full":
-                        activeNetwork === category?.id,
-                    })}
-                  >
-                    <Image
-                      src={category.img}
-                      alt={`${selectedCategory} Logo`}
-                      className="cursor-pointer"
-                      width={42}
-                      height={42}
-                    />
-                  </button>
-                  <span className="text-sm font-medium">{category?.name}</span>
-                </div>
-              ))}
+            <div className="flex items-center gap-10 flex-wrap">
+              <div className="flex items-center gap-10 my-3 ">
+                {mtnTypes.map((category) => (
+                  <div key={category.id} className="flex flex-col gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleImageClick(category.name.split("-")[0]);
+                        setActiveMtnNetwork(category?.id);
+                        setDataCategeory(category?.name);
+                      }}
+                      className={clsx("focus:outline-none", {
+                        "bg-[#164e63]/20 p-2 rounded-full":
+                          activeMtnNetwork === category?.id,
+                      })}
+                    >
+                      <Image
+                        src={category.img}
+                        alt={`${selectedCategory} Logo`}
+                        className="cursor-pointer"
+                        width={42}
+                        height={42}
+                      />
+                    </button>
+                    <span className="text-sm font-medium">
+                      {category?.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-x-10 my-3 ">
+                {airtelTypes.map((category) => (
+                  <div key={category.id} className="flex flex-col gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleImageClick(category.name.split("-")[0]);
+                        setActiveAirtelNetwork(category?.id);
+                        setDataCategeory(category?.name);
+                      }}
+                      className={clsx("focus:outline-none", {
+                        "bg-[#164e63]/20 p-2 rounded-full":
+                          activeAirtelNetwork === category?.id,
+                      })}
+                    >
+                      <Image
+                        src={category.img}
+                        alt={`${selectedCategory} Logo`}
+                        className="cursor-pointer"
+                        width={42}
+                        height={42}
+                      />
+                    </button>
+                    <span className="text-sm font-medium">
+                      {category?.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-10 -mt-5 ">
+                {categories.map((category) => (
+                  <div key={category.id} className="flex flex-col gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleImageClick(category.name);
+                        setActiveNetwork(category?.id);
+                      }}
+                      className={clsx("focus:outline-none", {
+                        "bg-[#164e63]/20 p-2 rounded-full":
+                          activeNetwork === category?.id,
+                      })}
+                    >
+                      <Image
+                        src={category.img}
+                        alt={`${selectedCategory} Logo`}
+                        className="cursor-pointer"
+                        width={42}
+                        height={42}
+                      />
+                    </button>
+                    <span className="text-sm font-medium">
+                      {category?.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* <div className="flex items-center justify-between my-3 ">
@@ -493,33 +532,6 @@ const BuyData = (props: Props) => {
                 </div>
               ))}
             </div> */}
-            <div className="flex items-center justify-between my-3 ">
-              {airtelTypes.map((category) => (
-                <div key={category.id} className="flex flex-col gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleImageClick(category.name.split("-")[0]);
-                      setActiveNetwork(category?.id);
-                      setDataCategeory(category?.name);
-                    }}
-                    className={clsx("focus:outline-none", {
-                      "bg-[#164e63]/20 p-2 rounded-full":
-                        activeNetwork === category?.id,
-                    })}
-                  >
-                    <Image
-                      src={category.img}
-                      alt={`${selectedCategory} Logo`}
-                      className="cursor-pointer"
-                      width={42}
-                      height={42}
-                    />
-                  </button>
-                  <span className="text-sm font-medium">{category?.name}</span>
-                </div>
-              ))}
-            </div>
           </div>
 
           {isLoading ? (
