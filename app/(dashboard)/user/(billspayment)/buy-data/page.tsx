@@ -31,6 +31,8 @@ import Styles from "react-select/creatable";
 import { Switch } from "@/components/ui/switch";
 import Swal from "sweetalert2";
 import { useUser } from "@/hooks/auth/useUser";
+import { getCGs } from "@/query/getCGs";
+import { CGwallets } from "@/types/cg";
 
 type Props = {};
 
@@ -186,6 +188,10 @@ const BuyData = (props: Props) => {
   const [selectedCategoryData, setSelectedCategoryData] =
     useState<BuyDataProps | null>(null);
 
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    string | null
+  >(null);
+
   const [formData, setFormData] = useState<BuyDataFormValues | null>(null);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [inputValue, setInputValue] = React.useState("");
@@ -195,6 +201,7 @@ const BuyData = (props: Props) => {
   const [isNumberValid, setIsNumberValid] = useState(false);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [dataCategory, setDataCategeory] = useState("");
+  const [dataWallet, setDataWallet] = useState<CGwallets[]>([]);
 
   const components = {
     DropdownIndicator: null,
@@ -231,7 +238,11 @@ const BuyData = (props: Props) => {
 
   const { mutate: buyData, isPending } = useBuyData();
 
-  const { data: user } = useUser();
+  const { data: user, isLoading: userLoading } = useUser();
+
+  // const walletBalance = user?.balances?.wallet;
+
+  // console.log(walletBalance, "wal");
 
   const {
     formState: { errors },
@@ -275,6 +286,7 @@ const BuyData = (props: Props) => {
         ...values,
         number: phoneNumbers,
         amount: totalAmount.toString(),
+        payment: selectedPaymentMethod || undefined,
       };
 
       buyData(payload, {
@@ -323,6 +335,12 @@ const BuyData = (props: Props) => {
     setSelectedCategory(selectedValue);
   };
 
+  const selectPaymentMethod = (selectedValue: string) => {
+    setSelectedPaymentMethod(selectedValue);
+  };
+
+  console.log(selectedPaymentMethod, "selet");
+
   const inputStyles: Partial<Styles> = {
     control: (provided: any, state: any) => ({
       ...provided,
@@ -336,8 +354,6 @@ const BuyData = (props: Props) => {
       color: "#111827",
     }),
   };
-
-  console.log(data, "dat");
 
   const toggleSwitch = () => {
     setIsSwitchOn((prev) => !prev);
@@ -382,6 +398,36 @@ const BuyData = (props: Props) => {
     openModal();
     setNumberErr(false);
   };
+
+  useEffect(() => {
+    const fetchCGData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getCGs();
+        // console.log(user.balances, "bal");
+
+        const wallet = {
+          id: 0,
+          user_id: 16204,
+          name: "Wallet",
+          balance: `₦${user?.balances?.wallet}`,
+          status: 1,
+          created_at: "2022-07-22T21:59:05.000000Z",
+          updated_at: "2024-01-07T16:58:17.000000Z",
+        };
+        setDataWallet(data?.data.concat(wallet));
+        setIsLoading(false);
+      } catch (error: any) {
+        toast.error(error);
+        setIsLoading(false);
+      }
+    };
+    fetchCGData();
+  }, [user]);
+
+  if (userLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="  rounded-md  w-full min-h-screen ">
@@ -515,11 +561,15 @@ const BuyData = (props: Props) => {
                 options={
                   data
                     ?.filter((category) => {
-                      if(category.network === "MTN" || category.network === "AIRTEL") {
-                        return category.name.includes(dataCategory.split("-")[1]);
-                      }
-                      else{
-                        return true
+                      if (
+                        category.network === "MTN" ||
+                        category.network === "AIRTEL"
+                      ) {
+                        return category.name.includes(
+                          dataCategory.split("-")[1]
+                        );
+                      } else {
+                        return true;
                       }
                     })
                     .map((category) => ({
@@ -603,18 +653,69 @@ const BuyData = (props: Props) => {
 
           <div className="w-full mb-3">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-              Select Payment Method
+              Payment Method
             </label>
             <DropDown
               options={
-                types?.map((category) => ({
-                  key: category.name,
-                  label: category.name,
-                  value: category.name,
-                })) || []
+                dataWallet
+                  ?.filter((category) => {
+                    if (selectedCategoryData?.network === "MTN") {
+                      if (selectedCategoryData?.name?.includes("SME")) {
+                        return (
+                          category.name.includes("MTN SME") ||
+                          category.name.includes("Wallet")
+                        );
+                      }
+                      if (selectedCategoryData?.name?.includes("CG")) {
+                        return (
+                          category.name.includes("MTN CG") ||
+                          category.name.includes("Wallet")
+                        );
+                      }
+                      if (selectedCategoryData?.name?.includes("DG")) {
+                        return (
+                          category.name.includes("MTN DG") ||
+                          category.name.includes("Wallet")
+                        );
+                      }
+                    }
+                    if (selectedCategoryData?.network === "AIRTEL") {
+                      if (selectedCategoryData?.name?.includes("CG")) {
+                        return (
+                          category.name.includes("AIRTEL CG") ||
+                          category.name.includes("Wallet")
+                        );
+                      }
+                      if (selectedCategoryData?.name?.includes("DG")) {
+                        return (
+                          category.name.includes("AIRTEL DG") ||
+                          category.name.includes("Wallet")
+                        );
+                      }
+                    }
+
+                    if (selectedCategoryData?.network === "GLO") {
+                      return (
+                        category.name.includes("GLO") ||
+                        category.name.includes("Wallet")
+                      );
+                    }
+
+                    if (selectedCategoryData?.network === "9MOBILE") {
+                      return (
+                        category.name.includes("9MOBILE") ||
+                        category.name.includes("Wallet")
+                      );
+                    }
+                  })
+                  ?.map((category: { name: string; balance: string }) => ({
+                    key: category.name,
+                    label: `${category.name} - ${category?.balance}`,
+                    value: category.name,
+                  })) || []
               }
-              placeholder={"Select bill platform "}
-              onSelect={(selectedValue) => selectDataCategory(selectedValue)}
+              placeholder={"Select Payment Method "}
+              onSelect={(selectedValue) => selectPaymentMethod(selectedValue)}
               buttonstyle="w-full border border-gray-700 rounded bg-gray-100 h-12 text-sm"
             />
           </div>
