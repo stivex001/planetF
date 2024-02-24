@@ -60,6 +60,7 @@ interface BuyDataProps {
   network: string;
   price: string;
   type: string;
+  discount: string;
 }
 
 interface ValidatedData {
@@ -106,10 +107,13 @@ const BuyTV = (props: Props) => {
   const [validatedData, setValidatedData] = useState<ValidatedData | null>(
     null
   );
+  const [selectedCategoryData, setSelectedCategoryData] =
+    useState<BuyDataProps | null>(null);
   const [isValidated, setIsValidated] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [buttonType, setButtonType] = useState<"validate" | "buy">("validate");
+  const [cashbackAmount, setCashbackAmount] = useState(0);
 
   const [formData, setFormData] = useState<BuyTvFormValues | null>(null);
 
@@ -206,6 +210,7 @@ const BuyTV = (props: Props) => {
     clearErrors,
     setError,
     register,
+    watch,
   } = form;
 
   const selectDataCategory = (selectedValue: string) => {
@@ -222,8 +227,20 @@ const BuyTV = (props: Props) => {
       setValue("name", selectedCategory?.name);
       setValue("type", selectedCategory?.type);
       setValue("price", selectedCategory?.price);
+      setSelectedCategoryData(selectedCategory);
     }
   };
+
+  useEffect(() => {
+    if (selectedCategoryData) {
+      const discount = parseFloat(selectedCategoryData.discount);
+      const price = parseFloat(selectedCategoryData.price);
+
+      const cashback = (discount / 100) * price;
+
+      setCashbackAmount(parseFloat(cashback.toFixed(2)));
+    }
+  }, [selectedCategoryData]);
 
   const proceedWithPurchase = () => {
     setFormData(getValues());
@@ -301,7 +318,7 @@ const BuyTV = (props: Props) => {
                 options={
                   data?.map((category) => ({
                     key: category?.coded,
-                    label: `${category?.name} -₦${category?.price}`,
+                    label: `${category?.name}`,
                   })) || []
                 }
                 placeholder={"Select package"}
@@ -310,6 +327,26 @@ const BuyTV = (props: Props) => {
               />
             )
           )}
+
+          <div className="w-full">
+            <ReadOnlyTextInput
+              label="Amount"
+              placeholder=""
+              value={
+                selectedCategoryData ? `₦ ${selectedCategoryData.price}` : ""
+              }
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
+
+          <div className="w-full">
+            <ReadOnlyTextInput
+              label="Cashback"
+              placeholder=""
+              value={cashbackAmount !== undefined ? `₦${cashbackAmount}` : ""}
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
 
           <div className="w-full">
             <TextInput
@@ -427,7 +464,14 @@ const BuyTV = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
-              <span className="text-[#164e63]">₦{formData?.price}</span>
+              <span className="text-[#164e63]">₦{(formData?.price)}</span>
+            </div>
+
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Cashback: </p>
+              <span className="text-[#164e63]">
+                ₦{cashbackAmount.toFixed(2)}
+              </span>
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b-2">
