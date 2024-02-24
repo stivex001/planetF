@@ -66,6 +66,7 @@ interface BuyDataProps {
   code: string;
   name: string;
   network: string;
+  discount: string;
 }
 
 interface ValidatedData {
@@ -95,12 +96,15 @@ const BuyElectricity = (props: Props) => {
   const [validatedData, setValidatedData] = useState<ValidatedData | null>(
     null
   );
+  const [selectedCategoryData, setSelectedCategoryData] =
+    useState<BuyDataProps | null>(null);
   const [isValidated, setIsValidated] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [buttonType, setButtonType] = useState<"validate" | "buy">("validate");
   const [formData, setFormData] = useState<BuyElectricityFormValues | null>(
     null
   );
+  const [cashbackAmount, setCashbackAmount] = useState(0);
 
   const { mutate: buyElectricity, isPending } = useBuyElectricity();
 
@@ -201,6 +205,7 @@ const BuyElectricity = (props: Props) => {
     clearErrors,
     setError,
     register,
+    watch,
   } = form;
 
   const selectDataCategory = (selectedValue: string) => {
@@ -208,15 +213,31 @@ const BuyElectricity = (props: Props) => {
   };
 
   const handleSelectedData = (selectedValue: string) => {
-    const selectedCategory = data?.find(
-      (category) => category?.code === selectedValue
-    );
-    console.log(selectedCategory, "net");
-    if (selectedCategory) {
-      setValue("provider", selectedCategory?.code);
+    const category = data?.find((category) => category?.code === selectedValue);
+    console.log(category, "net");
+    if (category) {
+      setValue("provider", category?.code);
       setValue("amount", "");
+      setSelectedCategoryData(category);
     }
   };
+
+  const amount = watch("amount");
+
+  useEffect(() => {
+    if (amount !== undefined && selectedCategoryData) {
+      const amountValue = parseFloat(amount);
+      const discount = parseFloat(selectedCategoryData.discount);
+
+      if (!isNaN(amountValue) && isFinite(amountValue)) {
+        const cashback = (discount / 100) * amountValue;
+
+        setCashbackAmount(parseFloat(cashback.toFixed(2)));
+      } else {
+        setCashbackAmount(0);
+      }
+    }
+  }, [amount, selectedCategoryData, setValue]);
 
   const proceedWithPurchase = () => {
     setFormData(getValues());
@@ -313,7 +334,17 @@ const BuyElectricity = (props: Props) => {
               placeholder="Enter Amount"
               register={register}
               fieldName={"amount"}
+              value={amount && `₦${amount}`}
               error={errors.amount}
+              className="bg-gray-100 rounded-sm border border-zinc-600"
+            />
+          </div>
+
+          <div className="w-full">
+            <ReadOnlyTextInput
+              label="Cashback"
+              placeholder=""
+              value={cashbackAmount !== undefined ? `₦${cashbackAmount}` : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -327,7 +358,7 @@ const BuyElectricity = (props: Props) => {
               error={errors.phone}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
-            
+
             <p className="text-red-500 text-base font-medium">
               Dear Customer always be certain that you have entered the correct
               number as PLANETF will not be responsible for any number entered
@@ -424,6 +455,13 @@ const BuyElectricity = (props: Props) => {
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
               <span className="text-[#164e63]">₦{formData?.amount}</span>
+            </div>
+
+            <div className="flex items-center justify-between pb-2 border-b-2">
+              <p>Cashback: </p>
+              <span className="text-[#164e63]">
+                ₦{cashbackAmount.toFixed(2)}
+              </span>
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b-2">
