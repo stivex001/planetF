@@ -18,16 +18,18 @@ import { BASE_URL } from "@/utils/baseUrl";
 
 type Props = {};
 
+interface Support {
+  email: string;
+}
+
 const Login = (props: Props) => {
   const router = useRouter();
   const [showText, setShowText] = useState(false);
-  const [support, setSupport] = useState("");
+  const [support, setSupport] = useState<Support>({ email: "" });
 
   useEffect(() => {
     const fetchSuport = async () => {
       const response = await axios.get(`${BASE_URL}/support`);
-
-      console.log(response);
 
       if (response?.data?.success === 1) {
         setSupport(response?.data?.data);
@@ -37,9 +39,6 @@ const Login = (props: Props) => {
     };
     fetchSuport();
   }, []);
-
-  console.log(support);
-  
 
   const togglePassword = () => {
     setShowText((showText) => !showText);
@@ -177,7 +176,7 @@ const Login = (props: Props) => {
                 Register
               </Link>
               <div className=" whitespace-nowrap text-[#164e63]">
-                <a href="mailto:support@example.com">Need Support?</a>
+                <a href={`mailto:${support?.email}`}>Need Support?</a>
               </div>
             </div>
           </form>
