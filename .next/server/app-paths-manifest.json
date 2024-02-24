@@ -1,3 +1,4 @@
 {
-  "/(dashboard)/user/(billspayment)/buy-data/page": "app/(dashboard)/user/(billspayment)/buy-data/page.js"
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js"
 }

@@ -8,19 +8,38 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import logo from "@/images/planetf-.png"
-import authImg from "@/images/planet.jpeg"
-
-
+import logo from "@/images/planetf-.png";
+import authImg from "@/images/planet.jpeg";
+import axios from "axios";
+import { BASE_URL } from "@/utils/baseUrl";
 
 type Props = {};
 
 const Login = (props: Props) => {
   const router = useRouter();
   const [showText, setShowText] = useState(false);
+  const [support, setSupport] = useState("");
+
+  useEffect(() => {
+    const fetchSuport = async () => {
+      const response = await axios.get(`${BASE_URL}/support`);
+
+      console.log(response);
+
+      if (response?.data?.success === 1) {
+        setSupport(response?.data?.data);
+      } else {
+        throw new Error(response?.data?.message);
+      }
+    };
+    fetchSuport();
+  }, []);
+
+  console.log(support);
+  
 
   const togglePassword = () => {
     setShowText((showText) => !showText);
@@ -65,12 +84,7 @@ const Login = (props: Props) => {
       <div className="bg-[url(/eeee.svg)] bg-no-repeat bg-contain overflow-x-hidden hidden lg:block h-screen flex-1 relative ">
         <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center ">
           <div className="flex items-center gap-2">
-            <Image
-              src={logo}
-              alt=""
-              width={50}
-              height={50}
-            />
+            <Image src={logo} alt="" width={50} height={50} />
             <span className="text-white text-lg">PlanetF</span>
           </div>
           <div className="max-w-[296px] h-[205px]  ml-20">
@@ -87,7 +101,7 @@ const Login = (props: Props) => {
               sign in to your account.
             </h1>
             <p className="mt-5 text-white text-lg text-opacity-70 whitespace-nowrap">
-            Conveniently settle your bills, from anywhere you are
+              Conveniently settle your bills, from anywhere you are
             </p>
           </div>
         </div>
@@ -162,9 +176,9 @@ const Login = (props: Props) => {
               >
                 Register
               </Link>
-              <Link href="#" className=" whitespace-nowrap text-[#164e63]">
-                Need Support?
-              </Link>
+              <div className=" whitespace-nowrap text-[#164e63]">
+                <a href="mailto:support@example.com">Need Support?</a>
+              </div>
             </div>
           </form>
           <p className="mt-10 text-center lg:text-left lg:whitespace-nowrap text-slate-600 text-base">
