@@ -30,7 +30,7 @@ import { Switch } from "@/components/ui/switch";
 import Swal from "sweetalert2";
 import { useUser } from "@/hooks/auth/useUser";
 
-export const customStyles: Modal.Styles = {
+const customStyles: Modal.Styles = {
   overlay: {
     position: "fixed",
     top: 0,

@@ -167,7 +167,9 @@ const BuyData = (props: Props) => {
   const [formData, setFormData] = useState<BuyDataFormValues | null>(null);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [activeMtnNetwork, setActiveMtnNetwork] = useState<string | null>(null);
-  const [activeAirtelNetwork, setActiveAirtelNetwork] = useState<string | null>(null);
+  const [activeAirtelNetwork, setActiveAirtelNetwork] = useState<string | null>(
+    null
+  );
   const [inputValue, setInputValue] = React.useState("");
   const [value, setValues] = React.useState<readonly Option[]>([]);
   const [numberErr, setNumberErr] = useState(false);
@@ -382,7 +384,7 @@ const BuyData = (props: Props) => {
         const wallet = {
           id: 0,
           user_id: 16204,
-          name: "Wallet",
+          name: "wallet",
           balance: `₦${user?.balances?.wallet}`,
           status: 1,
           created_at: "2022-07-22T21:59:05.000000Z",
@@ -646,19 +648,19 @@ const BuyData = (props: Props) => {
                       if (selectedCategoryData?.name?.includes("SME")) {
                         return (
                           category.name.includes("MTN SME") ||
-                          category.name.includes("Wallet")
+                          category.name.includes("wallet")
                         );
                       }
                       if (selectedCategoryData?.name?.includes("CG")) {
                         return (
                           category.name.includes("MTN CG") ||
-                          category.name.includes("Wallet")
+                          category.name.includes("wallet")
                         );
                       }
                       if (selectedCategoryData?.name?.includes("DG")) {
                         return (
                           category.name.includes("MTN DG") ||
-                          category.name.includes("Wallet")
+                          category.name.includes("wallet")
                         );
                       }
                     }
@@ -666,13 +668,13 @@ const BuyData = (props: Props) => {
                       if (selectedCategoryData?.name?.includes("CG")) {
                         return (
                           category.name.includes("AIRTEL CG") ||
-                          category.name.includes("Wallet")
+                          category.name.includes("wallet")
                         );
                       }
                       if (selectedCategoryData?.name?.includes("DG")) {
                         return (
                           category.name.includes("AIRTEL DG") ||
-                          category.name.includes("Wallet")
+                          category.name.includes("wallet")
                         );
                       }
                     }
@@ -680,14 +682,14 @@ const BuyData = (props: Props) => {
                     if (selectedCategoryData?.network === "GLO") {
                       return (
                         category.name.includes("GLO") ||
-                        category.name.includes("Wallet")
+                        category.name.includes("wallet")
                       );
                     }
 
                     if (selectedCategoryData?.network === "9MOBILE") {
                       return (
                         category.name.includes("9MOBILE") ||
-                        category.name.includes("Wallet")
+                        category.name.includes("wallet")
                       );
                     }
                   })

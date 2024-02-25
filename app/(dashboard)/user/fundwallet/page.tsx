@@ -15,10 +15,29 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import Modal from "react-modal";
 import { useModal } from "@/context/useModal";
-import { customStyles } from "../(billspayment)/buy-airtime/page";
-
+import Paystack from "@/images/Paystack.png";
+import Image from "next/image";
 
 type Props = {};
+
+const customStyles: Modal.Styles = {
+  overlay: {
+    position: "fixed",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    opacity: "1",
+  },
+  content: {
+    borderRadius: "10px",
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "50%",
+    marginRight: "-50%",
+    opacity: "1",
+  },
+};
 
 type Account = {
   bank_name: string;
@@ -34,15 +53,13 @@ const page = (props: Props) => {
 
   const { user, loading } = useUser();
 
-
   const openModal = () => {
-    setIsOpen(true)
-  }
+    setIsOpen(true);
+  };
 
   const closeModal = () => {
-    setIsOpen(false)
-  }
-
+    setIsOpen(false);
+  };
 
   const onCopy = (index: number) => {
     const newCopiedText = [...copiedText];
@@ -169,7 +186,10 @@ const page = (props: Props) => {
             </CopyToClipboard>
           </CustomCard>
         ))}
-        <CustomCard onClick={openModal} className="flex justify-center items-center">
+        <CustomCard
+          onClick={openModal}
+          className="flex justify-center items-center"
+        >
           <span className="text-4xl font-medium whitespace-nowrap ">
             Fund with card
           </span>
@@ -196,15 +216,20 @@ const page = (props: Props) => {
           className="w-full h-full flex items-center justify-center"
         >
           <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
-            <h1 className="text-center text-2xl font-bold">Choose a Provider</h1>
+            <h1 className="text-center text-2xl font-bold">
+              Choose a Provider
+            </h1>
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-3">
+                <Image src={Paystack} alt="" className="w-[122px]" />
                 <span>Flutterwave</span>
               </div>
               <div className="flex flex-col gap-3">
+                <Image src={Paystack} alt="" className="w-[122px]" />
                 <span>Monify</span>
               </div>
               <div className="flex flex-col gap-3">
+                <Image src={Paystack} alt="" className="w-[122px]" />
                 <span>Paystack</span>
               </div>
             </div>
