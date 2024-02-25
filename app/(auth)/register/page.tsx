@@ -138,7 +138,23 @@ const Register = () => {
               placeholder="Phone Number"
               {...register("phoneno")}
               className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
+              onKeyPress={(event) => {
+                const isValidInput = /^\d+$/.test(event.key);
+                if (!isValidInput) {
+                  event.preventDefault();
+                }
+              }}
+              onKeyUp={(event) => {
+                const target = event.target as HTMLInputElement; // Cast event target to HTMLInputElement
+                const phoneNumber = target.value; // Access the value property
+                // Check if phone number has reached desired length (11 digits)
+                if (phoneNumber.length === 11) {
+                  // Blur the input field to make it lose focus
+                  target.blur();
+                }
+              }}
             />
+
             {errors?.phoneno && (
               <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
                 <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">

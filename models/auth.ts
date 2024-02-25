@@ -2,7 +2,14 @@ import * as yup from "yup";
 
 export const signUpSchema = yup.object().shape({
   user_name: yup.string().required("Username is required"),
-  phoneno: yup.string().required("Phone number is required"),
+  phoneno: yup
+    .string()
+    .matches(
+      /^0[0-9]{10}$/,
+      "Phone number must start with 0 and be 11 digits long"
+    )
+    .required("Phone number is required"),
+
   email: yup.string().email("Invalid email").required("Email is required"),
   password: yup
     .string()
@@ -71,21 +78,15 @@ export const buyAirtimeSchema = yup.object().shape({
   number: yup
     .string()
     .required("Phone numbers are required")
-    .test(
-      "is-valid-phone",
-      "Not a valid phone numbers",
-      (phones: string) => {
-        // Validate each phone number in the string
-        const phoneArray = phones.split(",");
-        return phoneArray.every((phone) => {
-          return (
-            !isNaN(Number(phone)) &&
-            phone.length >= 10 &&
-            phone.length <= 11
-          );
-        });
-      }
-    ),
+    .test("is-valid-phone", "Not a valid phone numbers", (phones: string) => {
+      // Validate each phone number in the string
+      const phoneArray = phones.split(",");
+      return phoneArray.every((phone) => {
+        return (
+          !isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11
+        );
+      });
+    }),
 });
 
 export const convertAirtimeSchema = yup.object().shape({
@@ -107,7 +108,6 @@ export const convertAirtimeSchema = yup.object().shape({
         return false;
       }
     ),
-    
 
   payment: yup.string(),
   promo: yup.string(),
@@ -121,7 +121,7 @@ export const convertAirtimeSchema = yup.object().shape({
       }
       return false;
     }),
-    accountNumber: yup
+  accountNumber: yup
     .string()
     .required("account number is required")
     .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
@@ -143,21 +143,15 @@ export const buyDataSchema = yup.object().shape({
   number: yup
     .string()
     .required("Phone numbers are required")
-    .test(
-      "is-valid-phone",
-      "Not a valid phone numbers",
-      (phones: string) => {
-        // Validate each phone number in the string
-        const phoneArray = phones.split(",");
-        return phoneArray.every((phone) => {
-          return (
-            !isNaN(Number(phone)) &&
-            phone.length >= 10 &&
-            phone.length <= 11
-          );
-        });
-      }
-    ),
+    .test("is-valid-phone", "Not a valid phone numbers", (phones: string) => {
+      // Validate each phone number in the string
+      const phoneArray = phones.split(",");
+      return phoneArray.every((phone) => {
+        return (
+          !isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11
+        );
+      });
+    }),
 });
 
 export const buyBettingSchema = yup.object().shape({
