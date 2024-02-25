@@ -16,6 +16,8 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import Modal from "react-modal";
 import { useModal } from "@/context/useModal";
 import Paystack from "@/images/Paystack.png";
+import Flutter from "@/images/flutter.svg";
+import Monify from "@/images/monify.svg";
 import Image from "next/image";
 
 type Props = {};
@@ -221,15 +223,15 @@ const page = (props: Props) => {
             </h1>
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-3">
-                <Image src={Paystack} alt="" className="w-[122px]" />
+                <Image src={Flutter} alt="" className="w-[122px]" />
                 <span>Flutterwave</span>
               </div>
               <div className="flex flex-col gap-3">
-                <Image src={Paystack} alt="" className="w-[122px]" />
+                <Image src={Monify} alt="" className="w-[122px]" />
                 <span>Monify</span>
               </div>
-              <div className="flex flex-col gap-3">
-                <Image src={Paystack} alt="" className="w-[122px]" />
+              <div className="flex flex-col gap-3 w-32">
+                <Image src={Paystack} alt="" className=" h-5 object-cover" />
                 <span>Paystack</span>
               </div>
             </div>
