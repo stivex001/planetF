@@ -13,6 +13,10 @@ import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { IoWalletOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import Modal from "react-modal";
+import { useModal } from "@/context/useModal";
+import { customStyles } from "../(billspayment)/buy-airtime/page";
+
 
 type Props = {};
 
@@ -26,8 +30,19 @@ const page = (props: Props) => {
   const [accounts, setAccounts] = useState<Account[] | null>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedText, setCopiedText] = useState<Array<string>>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const { user, loading } = useUser();
+
+
+  const openModal = () => {
+    setIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
+
 
   const onCopy = (index: number) => {
     const newCopiedText = [...copiedText];
@@ -154,11 +169,11 @@ const page = (props: Props) => {
             </CopyToClipboard>
           </CustomCard>
         ))}
-        {/* <CustomCard className="flex justify-center items-center">
+        <CustomCard onClick={openModal} className="flex justify-center items-center">
           <span className="text-4xl font-medium whitespace-nowrap ">
             Fund with card
           </span>
-        </CustomCard> */}
+        </CustomCard>
         {/* <CustomCard className="">
           <span className="text-xl font-medium  ">
             Transfer Wallet to Wallet move commission move referal bonus
@@ -167,6 +182,35 @@ const page = (props: Props) => {
       </div>
 
       <Transactions />
+
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          ariaHideApp={false}
+          shouldCloseOnOverlayClick={true}
+          shouldCloseOnEsc={true}
+          contentLabel="Start Project Modal"
+          overlayClassName={`left-0 bg-[#00000070] outline-none transition-all ease-in-out duration-500`}
+          className="w-full h-full flex items-center justify-center"
+        >
+          <div className="bg-white px-10 py-10 flex flex-col gap-10 w-[50%]">
+            <h1 className="text-center text-2xl font-bold">Choose a Provider</h1>
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-3">
+                <span>Flutterwave</span>
+              </div>
+              <div className="flex flex-col gap-3">
+                <span>Monify</span>
+              </div>
+              <div className="flex flex-col gap-3">
+                <span>Paystack</span>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
     </main>
   );
 };

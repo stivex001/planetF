@@ -1,7 +1,4 @@
 {
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/user/(billspayment)/buy-tv/page": "app/(dashboard)/user/(billspayment)/buy-tv/page.js",
-  "/(dashboard)/user/(billspayment)/buy-electricity/page": "app/(dashboard)/user/(billspayment)/buy-electricity/page.js",
-  "/(dashboard)/user/(billspayment)/buy-airtime/page": "app/(dashboard)/user/(billspayment)/buy-airtime/page.js",
-  "/(auth)/register/page": "app/(auth)/register/page.js"
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/(dashboard)/user/fundwallet/page": "app/(dashboard)/user/fundwallet/page.js"
 }
