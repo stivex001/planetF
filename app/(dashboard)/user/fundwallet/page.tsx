@@ -52,6 +52,7 @@ const page = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [copiedText, setCopiedText] = useState<Array<string>>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
 
   const { user, loading } = useUser();
 
@@ -97,6 +98,10 @@ const page = (props: Props) => {
     };
     fetchirtualData();
   }, []);
+
+  const handleSelectPayment = (payment: string) => {
+    setSelectedPayment(payment);
+  };
 
   const config = {
     public_key: "",
@@ -222,19 +227,53 @@ const page = (props: Props) => {
               Choose a Provider
             </h1>
             <div className="flex items-center justify-between">
-              <div className="flex flex-col gap-3">
-                <Image src={Flutter} alt="" className="w-[122px]" />
-                <span>Flutterwave</span>
+              <div className="flex flex-col gap-2">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="Flutterwave"
+                    checked={selectedPayment === "Flutterwave"}
+                    onChange={() => handleSelectPayment("Flutterwave")}
+                  />
+                  <Image src={Flutter} alt="" className="w-[122px]" />
+                </label>
+                <span className="text-center">Flutterwave</span>
               </div>
-              <div className="flex flex-col gap-3">
-                <Image src={Monify} alt="" className="w-[122px]" />
-                <span>Monify</span>
+
+              <div className="flex flex-col gap-2 cursor-pointer">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="Monify"
+                    checked={selectedPayment === "Monify"}
+                    onChange={() => handleSelectPayment("Monify")}
+                  />
+                  <Image src={Monify} alt="" className="w-[122px]" />
+                </label>
+                <span className="text-center">Monify</span>
               </div>
-              <div className="flex flex-col gap-3 w-32">
-                <Image src={Paystack} alt="" className=" h-5 object-cover" />
-                <span>Paystack</span>
+
+              <div className="flex flex-col gap-2 cursor-pointer">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="Paystack"
+                    checked={selectedPayment === "Paystack"}
+                    onChange={() => handleSelectPayment("Paystack")}
+                  />
+                  {/* <Image src={Paystack} alt="" className="h-5 object-cover" /> */}
+                </label>
+                <span className="text-center">Paystack</span>
               </div>
             </div>
+            {selectedPayment && (
+              <button onClick={closePaymentModal} className="bg-[#164e63] text-white py-2 px-4 rounded w-1/2 mx-auto">
+                Proceed
+              </button>
+            )}
           </div>
         </Modal>
       )}
