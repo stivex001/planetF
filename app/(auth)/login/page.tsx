@@ -15,6 +15,7 @@ import logo from "@/images/planetf-.png";
 import authImg from "@/images/planet.jpeg";
 import axios from "axios";
 import { BASE_URL } from "@/utils/baseUrl";
+import Swal from "sweetalert2";
 
 type Props = {};
 
@@ -61,6 +62,11 @@ const Login = (props: Props) => {
         onError: (error: any) => {
           console.log(error.message);
           toast.error(error?.message);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message,
+          });
         },
         onSuccess: (response: any) => {
           console.log(response?.data);

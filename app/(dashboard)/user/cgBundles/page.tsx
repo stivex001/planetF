@@ -212,7 +212,11 @@ const CGBundles = (props: Props) => {
               <td className="py-2 px-4 border-b">{data?.value}GB</td>
               <td className="py-2 px-4 border-b">{data?.network}</td>
               <td className="py-2 px-4 border-b">{data?.type}</td>
-              <td className="py-2 px-4 border-b">₦{data?.price}</td>
+              <td className="py-2 px-4 border-b">
+                ₦{Number(data?.price).toLocaleString()}.
+                {parseFloat(data?.price).toFixed(2).split(".")[1]}
+              </td>
+
               <td className="py-2 px-4 border-b">
                 <button
                   className="bg-[#164e63] text-white px-4 py-2 rounded-md"
@@ -298,21 +302,28 @@ const CGBundles = (props: Props) => {
                   className="flex flex-col"
                   onSubmit={handleSubmit(() => handleBuyBundle())}
                 >
-                  <CopyToClipboard text={transferText}>
-                    <h1
-                      className="max-w-xs text-[#164e63] mb-6 cursor-pointer"
-                      onClick={() =>
-                        Swal.fire({
-                          icon: "success",
-                          title: "Copied!",
-                          showConfirmButton: false,
-                          timer: 1500,
-                        })
-                      }
-                    >
-                      {transferText}
-                    </h1>
-                  </CopyToClipboard>
+                  <div>
+                    <CopyToClipboard text={transferText}>
+                      <div
+                        className="flex items-center mb-2 cursor-pointer"
+                        onClick={() =>
+                          Swal.fire({
+                            icon: "success",
+                            title: "Copied!",
+                            showConfirmButton: false,
+                            timer: 1500,
+                          })
+                        }
+                      >
+                        <h1 className="max-w-xs text-[#164e63]  mr-2">
+                          {transferText}
+                        </h1>
+                        <span className="text-[#164e63] text-base">
+                          (Click to copy)
+                        </span>
+                      </div>
+                    </CopyToClipboard>
+                  </div>
 
                   <div className="w-full mt-2">
                     <label
