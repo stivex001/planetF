@@ -16,6 +16,7 @@ import logo from "@/images/planetf-.png";
 import authImg from "@/images/planet.jpeg";
 import axios from "axios";
 import { BASE_URL } from "@/utils/baseUrl";
+import Swal from "sweetalert2";
 
 interface Support {
   email: string;
@@ -71,11 +72,21 @@ const Register = () => {
           if (error instanceof Error) {
             console.log(error?.message);
             toast.error(error?.message);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error.message,
+            });
           }
         },
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data?.message);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: response?.data?.message,
+          });
           router.push("/login");
         },
       });
@@ -247,7 +258,7 @@ const Register = () => {
             />
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <input type="checkbox" name="" id="" />{" "}
+                <input type="checkbox" {...register("agreeTerms")} />{" "}
                 <span className="text-sm text-[#164e63]">
                   I agree to PlanetF Privacy Policy.
                 </span>
@@ -256,6 +267,14 @@ const Register = () => {
                 <a href={`mailto:${support?.email}`}>Need Support?</a>
               </div>
             </div>
+            {errors?.agreeTerms && (
+              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                  !
+                </div>
+                <p>{errors?.agreeTerms?.message}</p>
+              </div>
+            )}
 
             <div className="flex items-center gap-3 mb-4 my-2">
               <button

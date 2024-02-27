@@ -19,6 +19,7 @@ export const signUpSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), undefined], "Passwords must match"),
   referral: yup.string(),
+  agreeTerms: yup.boolean().oneOf([true], "You must agree to terms and policy"),
 });
 
 export const signInSchema = yup.object().shape({
