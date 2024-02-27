@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import logo from "@/images/planetf-.png";
 import authImg from "@/images/planet.jpeg";
+import Swal from "sweetalert2";
 
 
 
@@ -42,10 +43,20 @@ const ForgotPassword = (props: Props) => {
         onError: (error: any) => {
           console.log(error.message);
           toast.error(error?.message);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message,
+          });
         },
         onSuccess: (response: any) => {
           console.log(response);
           toast.success(response?.message);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: response?.message,
+          });
           router.push("/login");
         },
       });
