@@ -7,18 +7,39 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import clsx from "clsx";
 import { OpenEyeIcon } from "@/icons/CloseEye";
 import logo from "@/images/planetf-.png";
 import authImg from "@/images/planet.jpeg";
+import axios from "axios";
+import { BASE_URL } from "@/utils/baseUrl";
+
+interface Support {
+  email: string;
+}
 
 const Register = () => {
   const router = useRouter();
   const [showText, setShowText] = useState(false);
   const [showConfirmText, setShowConfirmText] = useState(false);
+
+  const [support, setSupport] = useState<Support>({ email: "" });
+
+  useEffect(() => {
+    const fetchSuport = async () => {
+      const response = await axios.get(`${BASE_URL}/support`);
+
+      if (response?.data?.success === 1) {
+        setSupport(response?.data?.data);
+      } else {
+        throw new Error(response?.data?.message);
+      }
+    };
+    fetchSuport();
+  }, []);
 
   const togglePassword = () => {
     setShowText((showText) => !showText);
@@ -121,7 +142,7 @@ const Register = () => {
             )}
             <input
               type="email"
-              placeholder="email"
+              placeholder="Email"
               {...register("email")}
               className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
             />
@@ -189,9 +210,9 @@ const Register = () => {
                 <p>{errors?.password?.message}</p>
               </div>
             )}
-            <span className="text-[#164e63] text-sm">
+            {/* <span className="text-[#164e63] text-sm">
               What is a secure password?
-            </span>
+            </span> */}
             <div className="relative">
               <input
                 type={!showConfirmText ? "password" : "text"}
@@ -228,12 +249,12 @@ const Register = () => {
               <div className="flex items-center gap-2">
                 <input type="checkbox" name="" id="" />{" "}
                 <span className="text-sm text-[#164e63]">
-                  I agree to Enigma Privacy Policy.
+                  I agree to PlanetF Privacy Policy.
                 </span>
               </div>
-              <Link href="#" className=" whitespace-nowrap text-[#164e63]">
-                Need Support?
-              </Link>
+              <div className=" whitespace-nowrap text-[#164e63]">
+                <a href={`mailto:${support?.email}`}>Need Support?</a>
+              </div>
             </div>
 
             <div className="flex items-center gap-3 mb-4 my-2">
