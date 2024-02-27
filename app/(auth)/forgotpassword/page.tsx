@@ -16,6 +16,10 @@ import { useRouter } from "next/navigation";
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import logo from "@/images/planetf-.png";
+import authImg from "@/images/planet.jpeg";
+
+
 
 type Props = {};
 
@@ -58,29 +62,25 @@ const ForgotPassword = (props: Props) => {
     <div className="bg-[#164e63] lg:bg-transparent h-screen flex justify-center items-center ">
       <div className="bg-[url(/eeee.svg)] bg-no-repeat bg-contain overflow-x-hidden hidden lg:block h-screen flex-1 relative ">
         <div className="h-[50%] my-4 flex w-1/2 flex-col justify-between items-center ">
-          <div className="flex items-center gap-2">
-            <Image
-              src="https://enigma-laravel.left4code.com/build/assets/logo-9a88cec5.svg"
-              alt=""
-              width={20}
-              height={20}
-            />
-            <span className="text-white text-lg">Enigma</span>
+        <div className="flex items-center gap-2">
+            <Image src={logo} alt="" width={50} height={50} />
+            <span className="text-white text-lg">PlanetF</span>
           </div>
           <div className="max-w-[296px] h-[205px]  ml-20">
             <Image
-              src="https://softconnet.com.ng/img/PlanetfLogo.png"
+              src={authImg}
               alt=""
-              width={300}
-              height={290}
+              width={400}
+              height={400}
+              objectFit="cover"
             />
             <h1 className="text-4xl mt-10 font-medium text-white leading-tight whitespace-nowrap">
               A few more clicks to
               <br />
-              sign in to your account.
+              Reset Your Password
             </h1>
             <p className="mt-5 text-white text-lg text-opacity-70 whitespace-nowrap">
-            Conveniently settle your bills, from anywhere you are
+              Conveniently settle your bills, from anywhere you are
             </p>
           </div>
         </div>
