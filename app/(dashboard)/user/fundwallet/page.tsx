@@ -103,6 +103,43 @@ const page = (props: Props) => {
     setSelectedPayment(payment);
   };
 
+  const handleProceed = () => {
+    closeModal();
+    if (selectedPayment) {
+      Swal.fire({
+        title: `${selectedPayment} Checkout Process`,
+        html: `
+          <label>Amount</label>
+          <input id="amountInput" type="number" placeholder="Enter amount" class="swal2-input">
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Fund",
+        cancelButtonText: "Cancel",
+        preConfirm: () => {
+          const amountInput = document.getElementById(
+            "amountInput"
+          ) as HTMLInputElement;
+          const amount = amountInput.value.trim();
+          if (!amount) {
+            Swal.showValidationMessage("Amount is required");
+          }
+          return amount;
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const amount = parseFloat(result.value);
+          if (selectedPayment == "Flutterwave") {
+            alert(`flutter ${amount}`);
+          } else if (selectedPayment == "Paystack") {
+            alert("Paystack");
+          } else {
+            alert("monify");
+          }
+        }
+      });
+    }
+  };
+
   const config = {
     public_key: "",
     tx_ref: "1234",
@@ -270,7 +307,10 @@ const page = (props: Props) => {
               </div>
             </div>
             {selectedPayment && (
-              <button onClick={closePaymentModal} className="bg-[#164e63] text-white py-2 px-4 rounded w-1/2 mx-auto">
+              <button
+                onClick={handleProceed}
+                className="bg-[#164e63] text-white py-2 px-4 rounded w-1/2 mx-auto"
+              >
                 Proceed
               </button>
             )}
