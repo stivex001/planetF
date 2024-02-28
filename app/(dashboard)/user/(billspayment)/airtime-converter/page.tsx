@@ -393,14 +393,39 @@ const AirtimeConverter = (props: Props) => {
             />
           </div>
           <div className="w-full">
-            <TextInput
-              label="Phone Number"
-              placeholder="Enter your phone number"
-              register={register}
-              fieldName={"number"}
-              error={errors.number}
-              className="bg-gray-100 rounded-sm border border-zinc-600"
-            />
+            <div className="w-full">
+              <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                Phone Numbers
+              </label>
+              <input
+                type="text"
+                placeholder="Phone Number"
+                {...register("number")}
+                className="w-full bg-gray-100 h-14 rounded-lg py-2 pl-6 pr-16 placeholder:text-gray-400 outline-none text-sm sm:leading-6 border border-zinc-600"
+                onKeyPress={(event) => {
+                  const isValidInput = /^\d+$/.test(event.key);
+                  if (!isValidInput) {
+                    event.preventDefault();
+                  }
+                }}
+                onKeyUp={(event) => {
+                  const target = event.target as HTMLInputElement;
+                  const phoneNumber = target.value;
+
+                  if (phoneNumber.length === 11) {
+                    target.blur();
+                  }
+                }}
+              />
+              {errors?.number && (
+                <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                  <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                    !
+                  </div>
+                  <p>{errors?.number?.message}</p>
+                </div>
+              )}
+            </div>
           </div>
           {selectedMode == "My Bank Account" && (
             <>
