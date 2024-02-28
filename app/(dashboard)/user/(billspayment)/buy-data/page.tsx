@@ -180,13 +180,13 @@ const BuyData = (props: Props) => {
   const [dataWallet, setDataWallet] = useState<CGwallets[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-
   const components = {
     DropdownIndicator: null,
   };
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (!inputValue) return;
+    const target = event.target as HTMLInputElement;
     switch (event.key) {
       case "Enter":
       case "Tab":
@@ -194,10 +194,19 @@ const BuyData = (props: Props) => {
           setNumberValidation(true);
           return;
         }
-        setValues((prev) => [...prev, createOption(inputValue)]);
-        setInputValue("");
-        setNumberErr(false);
-        setNumberValidation(false);
+        // Check if phone number has reached desired length (11 digits)
+        if (inputValue.length === 11) {
+          // Blur the input field to make it lose focus
+          target.blur();
+          setNumberErr(false);
+          setNumberValidation(false);
+          setValues((prev) => [...prev, createOption(inputValue)]);
+          setInputValue("");
+        } else {
+          // Set error state if the number is less than 11 digits
+          setNumberErr(true);
+          setNumberValidation(true);
+        }
         event.preventDefault();
     }
   };
@@ -213,12 +222,12 @@ const BuyData = (props: Props) => {
   };
 
   const openModal = () => {
-    setIsOpen(true)
-  }
+    setIsOpen(true);
+  };
 
   const closeModal = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   const { mutate: buyData, isPending } = useBuyData();
 
@@ -413,8 +422,8 @@ const BuyData = (props: Props) => {
   }
 
   return (
-    <div className="  rounded-md  w-full min-h-screen ">
-      <div className="w-full lg:w-11/12 mx-auto">
+    <div className=" rounded-md w-full h-full ">
+      <div className="w-full lg:w-11/12 mx-auto h-screen ">
         <h2 className="lg:text-center text-2xl font-bold xl:text-left xl:text-3xl">
           Data TopUp
         </h2>
@@ -610,7 +619,7 @@ const BuyData = (props: Props) => {
                   Kindly Enter your phone number and press Enter
                 </p>
               )}
-              {isNumberValid && (
+              {!isNumberValid && (
                 <p className="text-red-500 text-base font-medium mt-3">
                   Phone number must contain only digits
                 </p>
@@ -623,14 +632,39 @@ const BuyData = (props: Props) => {
             </div>
           ) : (
             <div className="w-full">
-              <TextInput
-                label="Phone Number"
-                placeholder=""
-                register={register}
-                fieldName={"number"}
-                error={errors.number}
-                className="bg-gray-100 rounded-sm border border-zinc-600"
-              />
+              <div className="w-full">
+                <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                  Phone Numbers
+                </label>
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  {...register("number")}
+                  className="w-full bg-gray-100 h-14 rounded-lg py-2 pl-6 pr-16 placeholder:text-gray-400 outline-none text-sm sm:leading-6 border border-zinc-600"
+                  onKeyPress={(event) => {
+                    const isValidInput = /^\d+$/.test(event.key);
+                    if (!isValidInput) {
+                      event.preventDefault();
+                    }
+                  }}
+                  onKeyUp={(event) => {
+                    const target = event.target as HTMLInputElement;
+                    const phoneNumber = target.value;
+
+                    if (phoneNumber.length === 11) {
+                      target.blur();
+                    }
+                  }}
+                />
+                {errors?.number && (
+                  <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                    <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                      !
+                    </div>
+                    <p>{errors?.number?.message}</p>
+                  </div>
+                )}
+              </div>
             </div>
           )}
           <div className="flex items-center gap-3">
@@ -718,7 +752,7 @@ const BuyData = (props: Props) => {
               e.preventDefault();
               handleClick();
             }}
-            className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80"
+            className="bg-[#164e63] border border-[#164e63] w-full text-white hover:opacity-80 mb-5"
           >
             Proceed
           </CustomButton>
