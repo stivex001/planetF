@@ -172,14 +172,29 @@ const BuyTV = (props: Props) => {
         setIsValidating(false);
         setButtonType("buy");
         toast.success(validationResponse?.data?.message);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: validationResponse?.data?.message,
+        });
       } else {
         toast.error(validationResponse?.data?.message);
         setIsValidating(false);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: validationResponse?.data?.message,
+        });
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message);
         toast.error(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.message,
+        });
         setIsValidating(false);
       }
     }

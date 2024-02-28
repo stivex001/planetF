@@ -167,8 +167,19 @@ const BuyElectricity = (props: Props) => {
         setIsValidating(false);
         setButtonType("buy");
         toast.success(validationResponse?.data?.message);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: validationResponse?.data?.message,
+        });
       } else {
         toast.error(validationResponse?.data?.message);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: validationResponse?.data?.message,
+        });
+      
         setIsValidating(false);
       }
     } catch (error: unknown) {

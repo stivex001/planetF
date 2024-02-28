@@ -1,1 +1,4 @@
-{}
+{
+  "/(dashboard)/user/(billspayment)/result-checker/page": "app/(dashboard)/user/(billspayment)/result-checker/page.js",
+  "/(dashboard)/user/(billspayment)/buy-tv/page": "app/(dashboard)/user/(billspayment)/buy-tv/page.js"
+}
