@@ -178,6 +178,8 @@ const BuyData = (props: Props) => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [dataCategory, setDataCategeory] = useState("");
   const [dataWallet, setDataWallet] = useState<CGwallets[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+
 
   const components = {
     DropdownIndicator: null,
@@ -210,7 +212,13 @@ const BuyData = (props: Props) => {
     }
   };
 
-  const { openModal, closeModal, isOpen } = useModal();
+  const openModal = () => {
+    setIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
 
   const { mutate: buyData, isPending } = useBuyData();
 

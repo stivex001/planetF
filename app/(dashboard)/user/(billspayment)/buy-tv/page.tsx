@@ -114,12 +114,20 @@ const BuyTV = (props: Props) => {
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [buttonType, setButtonType] = useState<"validate" | "buy">("validate");
   const [cashbackAmount, setCashbackAmount] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+
 
   const [formData, setFormData] = useState<BuyTvFormValues | null>(null);
 
   const { mutate: buyTv, isPending } = useBuyTv();
 
-  const { openModal, closeModal, isOpen } = useModal();
+  const openModal = () => {
+    setIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
 
   const { data: user } = useUser();
 
@@ -185,14 +193,25 @@ const BuyTV = (props: Props) => {
             if (error instanceof Error) {
               console.log(error?.message);
               toast.error(error?.message);
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error.message,
+              });
               setIsValidating(false);
-              closeModal();
+              
             }
           },
           onSuccess: (response: any) => {
             console.log(response?.data);
             toast.success(response?.data?.message);
             setIsValidating(false);
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: response?.data?.message,
+            });
+            closeModal();
           },
         });
       } else {

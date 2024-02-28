@@ -104,11 +104,19 @@ const BuyElectricity = (props: Props) => {
   const [formData, setFormData] = useState<BuyElectricityFormValues | null>(
     null
   );
+  const [isOpen, setIsOpen] = useState(false);
+
   const [cashbackAmount, setCashbackAmount] = useState(0);
 
   const { mutate: buyElectricity, isPending } = useBuyElectricity();
 
-  const { openModal, closeModal, isOpen } = useModal();
+  const openModal = () => {
+    setIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
 
   const { data: user } = useUser();
 

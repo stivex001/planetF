@@ -64,8 +64,6 @@ const CGTransfer = (props: Props) => {
     openModal();
   };
 
-  console.log(selectedBundle?.id, "ygydgy");
-
   useEffect(() => {
     const fetchCGData = async () => {
       setIsLoading(true);
@@ -92,43 +90,44 @@ const CGTransfer = (props: Props) => {
     useTransferBundles();
 
   const handleBuyWithTransfer = useCallback(
-    async(values: CGFormTransferValues) => {
-      if (selectedBundle){
-        values.cgwallet_id = selectedBundle?.id.toString()
-      }
-      const payloads = {
-        ...values,
-        cgwallet_id: selectedBundle?.toString(),
-      };
+    async (values: CGFormTransferValues) => {
+      if (selectedBundle) {
+        const payloads = {
+          ...values,
+          cgwallet_id: selectedBundle?.id?.toString(),
+        };
 
-      buyBundleWithTransfer(payloads, {
-        onError: (error: unknown) => {
-          if (error instanceof Error) {
-            console.log(error?.message);
-            toast.error(error?.message);
+        buyBundleWithTransfer(payloads, {
+          onError: (error: unknown) => {
+            if (error instanceof Error) {
+              console.log(error?.message);
+              toast.error(error?.message);
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error?.message,
+              });
+            }
+          },
+          onSuccess: (response: any) => {
+            console.log(response?.data);
+            toast.success(response?.data);
             Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: error?.message,
+              icon: "success",
+              title: "Success",
+              text: response?.data,
             });
-          }
-        },
-        onSuccess: (response: any) => {
-          console.log(response?.data);
-          toast.success(response?.data);
-          Swal.fire({
-            icon: "success",
-            title: "Success",
-            text: response?.data
-          });
-          closeModal();
-          setTimeout(() => {
-            router.push("/user/cgwallet");
-          }, 5000);
-        },
-      });
+            closeModal();
+            setTimeout(() => {
+              router.push("/user/cgwallet");
+            }, 5000);
+          },
+        });
+      } else {
+        console.error("selectedBundle is null");
+      }
     },
-    [buyBundleWithTransfer]
+    [selectedBundle]
   );
 
   const {

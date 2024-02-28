@@ -125,10 +125,17 @@ const AirtimeConverter = (props: Props) => {
   const [returnAmount, setReturnAmount] = useState(0);
   const [loadingBankVerify, setLoadingBankVerify] = useState(false);
   const [isAmountTyped, setIsAmountTyped] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const { mutate: convertAirtime, isPending } = useConvertAirtime();
 
-  const { openModal, closeModal, isOpen } = useModal();
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   const { data: user } = useUser();
 
@@ -144,6 +151,11 @@ const AirtimeConverter = (props: Props) => {
           if (error instanceof Error) {
             console.log(error?.message);
             toast.error(error?.message);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error.message,
+            });
           }
         },
         onSuccess: (response: any) => {
