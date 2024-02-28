@@ -22,7 +22,6 @@ import gloImage from "@/images/glo.png";
 import airtelImage from "@/images/airtel.png";
 import mobileImage from "@/images/9mobile.png";
 import Modal from "react-modal";
-import { useModal } from "@/context/useModal";
 import Image, { StaticImageData } from "next/image";
 import CreatableSelect from "react-select/creatable";
 import Styles from "react-select/creatable";
@@ -111,6 +110,7 @@ const BuyAirtime = () => {
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [cashbackAmount, setCashbackAmount] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   const components = {
     DropdownIndicator: null,
@@ -143,7 +143,15 @@ const BuyAirtime = () => {
     }
   };
 
-  const { openModal, closeModal, isOpen } = useModal();
+
+  const openModal = () => {
+    setIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
+
 
   const { mutate: buyAirtime, isPending } = useBuyAirtime();
 
