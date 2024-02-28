@@ -106,6 +106,7 @@ const BuyAirtime = () => {
   const [value, setValues] = React.useState<readonly Option[]>([]);
   const [numberErr, setNumberErr] = useState(false);
   const [numberValidation, setNumberValidation] = useState(false);
+  const [numberIsComplete, setNumberIsComplete] = useState(false);
   const [isNumberValid, setIsNumberValid] = useState(false);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
@@ -118,6 +119,7 @@ const BuyAirtime = () => {
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (!inputValue) return;
+    const target = event.target as HTMLInputElement;
     switch (event.key) {
       case "Enter":
       case "Tab":
@@ -125,10 +127,21 @@ const BuyAirtime = () => {
           setNumberValidation(true);
           return;
         }
-        setValues((prev) => [...prev, createOption(inputValue)]);
-        setInputValue("");
-        setNumberErr(false);
-        setNumberValidation(false);
+        // Check if phone number has reached desired length (11 digits)
+        if (inputValue.length === 11) {
+          // Blur the input field to make it lose focus
+          target.blur();
+          setNumberErr(false);
+          setNumberValidation(false);
+          setNumberIsComplete(false);
+          setValues((prev) => [...prev, createOption(inputValue)]);
+          setInputValue("");
+        } else {
+          // Set error state if the number is less than 11 digits
+          setNumberErr(true);
+          setNumberValidation(true);
+          setNumberIsComplete(true);
+        }
         event.preventDefault();
     }
   };
@@ -143,15 +156,13 @@ const BuyAirtime = () => {
     }
   };
 
-
   const openModal = () => {
-    setIsOpen(true)
-  }
+    setIsOpen(true);
+  };
 
   const closeModal = () => {
-    setIsOpen(false)
-  }
-
+    setIsOpen(false);
+  };
 
   const { mutate: buyAirtime, isPending } = useBuyAirtime();
 
@@ -263,14 +274,24 @@ const BuyAirtime = () => {
       const amountValue = parseFloat(amount);
 
       if (!isNaN(amountValue) && isFinite(amountValue)) {
-        const cashback = (selectedCategory.discount / 100) * amountValue;
+        let cashback;
+
+        if (isSwitchOn && value.length > 0) {
+          // If multiple numbers are selected, multiply cashback by the number of selected phone numbers
+          cashback = (selectedCategory.discount / 100) * amountValue * value.length;
+        } else {
+          // Otherwise, calculate cashback as usual
+          cashback = (selectedCategory.discount / 100) * amountValue;
+        }
+  
+        // const cashback = (selectedCategory.discount / 100) * amountValue;
 
         setCashbackAmount(parseFloat(cashback.toFixed(2)));
       } else {
         setCashbackAmount(0);
       }
     }
-  }, [amount, selectedCategory, setValue]);
+  }, [amount, selectedCategory, setValue, value]);
 
   const inputStyles: Partial<Styles> = {
     control: (provided: any, state: any) => ({
@@ -423,6 +444,7 @@ const BuyAirtime = () => {
                 placeholder="Enter phone number"
                 value={value}
                 styles={inputStyles}
+
                 // className="bg-gray-100 w-full h-14 rounded-sm border border-zinc-600 flex items-center "
               />
               {numberErr && (
@@ -431,7 +453,7 @@ const BuyAirtime = () => {
                 </p>
               )}
 
-              {isNumberValid && (
+              {!isNumberValid && (
                 <p className="text-red-500 text-base font-medium mt-3">
                   Phone number must contain only digits
                 </p>
@@ -444,14 +466,62 @@ const BuyAirtime = () => {
             </div>
           ) : (
             <div className="w-full">
-              <TextInput
+              <div className="w-full">
+                <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                  Phone Numbers
+                </label>
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  {...register("number")}
+                  className="w-full bg-gray-100 h-14 rounded-lg py-2 pl-6 pr-16 placeholder:text-gray-400 outline-none text-sm sm:leading-6 border border-zinc-600"
+                  onKeyPress={(event) => {
+                    const isValidInput = /^\d+$/.test(event.key);
+                    if (!isValidInput) {
+                      event.preventDefault();
+                    }
+                  }}
+                  onKeyUp={(event) => {
+                    const target = event.target as HTMLInputElement;
+                    const phoneNumber = target.value;
+
+                    if (phoneNumber.length === 11) {
+                      target.blur();
+                    }
+                  }}
+                />
+                {errors?.number && (
+                  <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                    <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                      !
+                    </div>
+                    <p>{errors?.number?.message}</p>
+                  </div>
+                )}
+              </div>
+              {/* <TextInput
                 label="Phone Number"
                 placeholder="Enter phone number"
                 register={register}
                 fieldName={"number"}
                 error={errors.number}
                 className="bg-gray-100 rounded-sm border border-zinc-600"
-              />
+                onKeyPress={(event) => {
+                  const isValidInput = /^\d+$/.test(event.key);
+                  if (!isValidInput) {
+                    event.preventDefault();
+                  }
+                }}
+                onKeyUp={(event) => {
+                  const target = event.target as HTMLInputElement; // Cast event target to HTMLInputElement
+                  const phoneNumber = target.value; // Access the value property
+                  // Check if phone number has reached desired length (11 digits)
+                  if (phoneNumber.length === 11) {
+                    // Blur the input field to make it lose focus
+                    target.blur();
+                  }
+                }}
+              /> */}
             </div>
           )}
 

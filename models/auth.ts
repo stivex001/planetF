@@ -78,6 +78,10 @@ export const buyAirtimeSchema = yup.object().shape({
   //   }),
   number: yup
     .string()
+    .matches(
+      /^0[0-9]{10}$/,
+      "Phone number must start with 0 and be 11 digits long"
+    )
     .required("Phone numbers are required")
     .test("is-valid-phone", "Not a valid phone numbers", (phones: string) => {
       // Validate each phone number in the string
@@ -116,6 +120,10 @@ export const convertAirtimeSchema = yup.object().shape({
   number: yup
     .string()
     .required("Phone number is required")
+    .matches(
+      /^0[0-9]{10}$/,
+      "Phone number must start with 0 and be 11 digits long"
+    )
     .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
       if (!isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11) {
         return true;
@@ -144,6 +152,10 @@ export const buyDataSchema = yup.object().shape({
   number: yup
     .string()
     .required("Phone numbers are required")
+    .matches(
+      /^0[0-9]{10}$/,
+      "Phone number must start with 0 and be 11 digits long"
+    )
     .test("is-valid-phone", "Not a valid phone numbers", (phones: string) => {
       // Validate each phone number in the string
       const phoneArray = phones.split(",");
@@ -166,6 +178,10 @@ export const buyBettingSchema = yup.object().shape({
   number: yup
     .string()
     .required("Phone number is required")
+    .matches(
+      /^0[0-9]{10}$/,
+      "Phone number must start with 0 and be 11 digits long"
+    )
     .test("is-valid-phone", "Not a valid phone number", (phone: string) => {
       if (!isNaN(Number(phone)) && phone.length >= 10 && phone.length <= 11) {
         return true;
@@ -185,6 +201,10 @@ export const buyCheckerSchema = yup.object().shape({
   number: yup
     .string()
     .required("Phone number is required")
+    .matches(
+      /^0[0-9]{10}$/,
+      "Phone number must start with 0 and be 11 digits long"
+    )
     .test("is-valid-phone", "Not a valid phone number", (phone) => {
       if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
         return true;
@@ -228,6 +248,10 @@ export const buyElectricitySchema = yup.object().shape({
   phone: yup
     .string()
     .required("Phone number is required")
+    .matches(
+      /^0[0-9]{10}$/,
+      "Phone number must start with 0 and be 11 digits long"
+    )
     .test("is-valid-phone", "Not a valid phone number", (phone) => {
       if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
         return true;
@@ -250,6 +274,10 @@ export const validateTvSchema = yup.object().shape({
     }),
   phone: yup
     .string()
+    .matches(
+      /^0[0-9]{10}$/,
+      "Phone number must start with 0 and be 11 digits long"
+    )
     .required("Phone number is required")
     .test("is-valid-phone", "Not a valid phone number", (phone) => {
       if (Number(phone) && phone.length >= 10 && phone.length <= 11) {
