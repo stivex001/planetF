@@ -73,6 +73,7 @@ const ResultChecker = (props: Props) => {
       ref: "",
       number: "",
       amount: "",
+      cumulativeAmount: "",
     },
     mode: "all",
     resolver: yupResolver(buyCheckerSchema),
@@ -85,20 +86,44 @@ const ResultChecker = (props: Props) => {
   const { mutate: buyChecker, isPending } = useCheckResult();
   const { openModal, closeModal, isOpen } = useModal();
   const { data: user } = useUser();
+  const [totalAmount, setTotalAmount] = useState();
 
-
-  const handleBuyData = useCallback(
+  const handleBuyChecker = useCallback(
     (values: BuyCheckerFormValues) => {
-      buyChecker(values, {
+      const inputedAmount = values.amount;
+      const quantity = values.quantity;
+
+      if (quantity && inputedAmount) {
+        const cumulativeAmount =
+          parseFloat(quantity) * parseFloat(inputedAmount);
+        setValue("cumulativeAmount", cumulativeAmount.toFixed(2));
+      }
+
+      const payload = {
+        ...values,
+        amount: values.cumulativeAmount,
+      };
+
+      buyChecker(payload, {
         onError: (error: unknown) => {
           if (error instanceof Error) {
             console.log(error?.message);
             toast.error(error?.message);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error.message,
+            });
           }
         },
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data?.message);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: response?.data?.message,
+          });
         },
       });
     },
@@ -127,7 +152,13 @@ const ResultChecker = (props: Props) => {
   };
 
   const handleClick = () => {
+    const quantity = getValues().quantity;
+    const amount = getValues().amount;
     if (user?.user?.bvn === true) {
+      if (quantity && amount) {
+        const cumulativeAmount = parseFloat(quantity) * parseFloat(amount);
+        setValue("cumulativeAmount", cumulativeAmount.toFixed(2));
+      }
       proceedWithPurchase();
     } else {
       Swal.fire({
@@ -144,6 +175,7 @@ const ResultChecker = (props: Props) => {
       });
     }
   };
+  
 
   return (
     <div className="  rounded-md  w-full ">
@@ -154,7 +186,7 @@ const ResultChecker = (props: Props) => {
 
         <form
           className="mt-8 flex flex-col gap-4 lg:w-1/2 "
-          onSubmit={handleSubmit(handleBuyData)}
+          onSubmit={handleSubmit(handleBuyChecker)}
         >
           <div className="w-full ">
             <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
@@ -198,7 +230,7 @@ const ResultChecker = (props: Props) => {
 
           <div className="w-full mx-auto h-9 my-10">
             <CustomButton
-               onClick={(e) => {
+              onClick={(e) => {
                 e.preventDefault();
                 handleClick();
               }}
@@ -252,7 +284,7 @@ const ResultChecker = (props: Props) => {
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cummulative Amount: </p>
               <span className="text-[#164e63]">
-                ₦{formData?.amount || "2000"}
+                ₦{formData?.cumulativeAmount}
               </span>
             </div>
 
@@ -260,7 +292,7 @@ const ResultChecker = (props: Props) => {
               <CustomButton
                 onClick={() => {
                   if (formData) {
-                    handleBuyData(formData);
+                    handleBuyChecker(formData);
                   }
                 }}
                 className={clsx({

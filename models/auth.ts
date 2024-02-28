@@ -181,6 +181,7 @@ export const buyCheckerSchema = yup.object().shape({
   payment: yup.string(),
   promo: yup.string(),
   ref: yup.string(),
+  cumulativeAmount: yup.string(),
   number: yup
     .string()
     .required("Phone number is required")
