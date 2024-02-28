@@ -158,12 +158,22 @@ const CGBundles = (props: Props) => {
           if (error instanceof Error) {
             console.log(error?.message);
             toast.error(error?.message);
-            closeModal();
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error.message,
+            });
+            
           }
         },
         onSuccess: (response: any) => {
           console.log(response);
           toast.success(response?.data?.message);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: response?.data?.message,
+          });
           closeModal();
         },
       });

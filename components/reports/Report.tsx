@@ -22,18 +22,32 @@ const Report = ({ report, loading }: Props) => {
 
   const renderTableRows = () => {
     const rows = [];
-
+  
+    const modifiedKeys = {
+      data_amount: "Data",
+      airtime_amount: "Airtime",
+      tv_amount: "TV",
+      electricity_amount: "Electricity",
+    };
+  
     for (const [key, value] of Object.entries(report)) {
-      rows.push(
-        <tr key={key}>
-          <td className="p-2 border border-gray-300">{key}</td>
-          <td className="p-2 border border-gray-300">{value}</td>
-        </tr>
-      );
+      if (key !== "date") {
+        // const displayKey = key.endsWith("_amount") ? modifiedKeys[key] : key;
+        const displayValue = key.endsWith("_amount") ? `₦${value.toFixed(2)}` : value;
+        rows.push(
+          <tr key={key}>
+            <td className="p-2 border border-gray-300">{key}</td>
+            <td className="p-2 border border-gray-300">{displayValue}</td>
+          </tr>
+        );
+      }
     }
-
+  
     return rows;
   };
+  
+  
+  
 
   return (
     <div className="p-4">

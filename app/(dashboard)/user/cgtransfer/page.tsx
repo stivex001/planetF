@@ -17,6 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { TextInput } from "@/components/Form/TextInput";
 import { Spinner } from "@/components/Spinner";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 // Styles for modal
 const customStyles: Modal.Styles = {
@@ -59,8 +60,8 @@ const CGTransfer = (props: Props) => {
   });
 
   const handleBuyButtonClick = (bundle: CGbundles) => {
-    openModal();
     setSelectedBundle(bundle);
+    openModal();
   };
 
   console.log(selectedBundle?.id, "ygydgy");
@@ -91,7 +92,10 @@ const CGTransfer = (props: Props) => {
     useTransferBundles();
 
   const handleBuyWithTransfer = useCallback(
-    (values: CGFormTransferValues) => {
+    async(values: CGFormTransferValues) => {
+      if (selectedBundle){
+        values.cgwallet_id = selectedBundle?.id.toString()
+      }
       const payloads = {
         ...values,
         cgwallet_id: selectedBundle?.toString(),
@@ -102,12 +106,21 @@ const CGTransfer = (props: Props) => {
           if (error instanceof Error) {
             console.log(error?.message);
             toast.error(error?.message);
-            closeModal();
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error?.message,
+            });
           }
         },
         onSuccess: (response: any) => {
           console.log(response?.data);
           toast.success(response?.data);
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: response?.data
+          });
           closeModal();
           setTimeout(() => {
             router.push("/user/cgwallet");
@@ -182,7 +195,7 @@ const CGTransfer = (props: Props) => {
           <button
             type="button"
             onClick={closeModal}
-            className="absolute top-[270px] right-[360px] text-sm text-white px-4 h-12 bg-[#164e63] rounded-lg"
+            className="absolute top-[200px] right-[400px] text-sm text-white px-4 h-12 bg-[#164e63] rounded-lg"
           >
             Close
           </button>
