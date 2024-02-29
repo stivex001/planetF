@@ -24,6 +24,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/planetf-.png" />
+        <script
+          type="text/javascript"
+          src="https://sdk.monnify.com/plugin/monnify.js"
+        ></script>
       </head>
       <AuthProviders>
         <UserProvider>
@@ -41,6 +45,10 @@ export default function RootLayout({
                   pauseOnFocusLoss
                   theme="light"
                 />
+                <script
+                  type="text/javascript"
+                  src="https://sdk.monnify.com/plugin/monnify.js"
+                ></script>
               </body>
             </QueryProviders>
           </ModalProvider>

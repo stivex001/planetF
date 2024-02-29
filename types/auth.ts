@@ -20,4 +20,10 @@ export type UserProfile = {
   others: {
     banner: string;
   };
+  payment:{
+    fund_rave_key: string;
+    fund_monnify_apikey: string
+    fund_monnify_contractcode: string
+    fund_paystack_secret: string
+  }
 };

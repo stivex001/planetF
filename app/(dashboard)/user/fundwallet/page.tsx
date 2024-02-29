@@ -19,6 +19,21 @@ import Flutter from "@/images/flutter.svg";
 import Monify from "@/images/monify.svg";
 import Image from "next/image";
 import { useUser } from "@/hooks/auth/useUser";
+import { usePaystackPayment } from "react-paystack";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/Spinner";
 
 type Props = {};
 
@@ -54,10 +69,15 @@ const page = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
+  const [amount, setAmount] = useState<number>(0);
+  const [isAmountValid, setIsAmountValid] = useState<boolean>(true);
+  const [paymentLoading, setPaymentLoading] = useState<boolean>(false);
 
   const { data: user } = useUser();
 
-  console.log(user?.user, "user");
+  console.log(user?.payment, "user");
+
+  const router = useRouter();
 
   const openModal = () => {
     setIsOpen(true);
@@ -114,131 +134,141 @@ const page = (props: Props) => {
     setSelectedPayment(payment);
   };
 
-  const handleProceed = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    closeModal();
-    if (selectedPayment) {
-      openPaymentsModal();
-      setIsPaymentOpen(true); 
-    }
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value);
+    setAmount(value);
+    setIsAmountValid(!isNaN(value));
   };
-  
 
-  // const handleProceed = () => {
-  //   closeModal();
-  //   if (selectedPayment) {
-  //     Swal.fire({
-  //       title: `${selectedPayment} Checkout Process`,
-  //       html: `
-  //         <label>Amount</label>
-  //         <input id="amountInput" type="number" placeholder="Enter amount" class="swal2-input">
-  //       `,
-  //       showCancelButton: true,
-  //       confirmButtonText: "Fund",
-  //       cancelButtonText: "Cancel",
-  //       preConfirm: () => {
-  //         const amountInput = document.getElementById(
-  //           "amountInput"
-  //         ) as HTMLInputElement;
-  //         const amount = amountInput.value.trim();
-  //         if (!amount) {
-  //           Swal.showValidationMessage("Amount is required");
-  //         }
-  //         return amount;
-  //       },
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         const amount = parseFloat(result.value);
-  //         if (selectedPayment == "Flutterwave") {
-  //           alert(`flutter ${amount}`);
+  const config = {
+    public_key: `FLWPUBK_TEST-63cb99c4591abd2f329bd34193a31eb2-X`,
+    tx_ref: `${Date.now()}`,
+    amount: amount,
+    currency: "NGN",
+    payment_options: "card,mobilemoney,ussd",
+    customer: {
+      email: `${user?.user?.email}`,
+      phone_number: `${user?.user.phoneno}`,
+      name: `${user?.user?.user_name}`,
+    },
+    meta: {
+      transactionId: Date.now().toString(),
+      transactionTypes: "PAYMENT",
+      amount: amount,
+      userId: user?._id,
+    },
+    customizations: {
+      title: "PlanetF",
+      description: "Funding Account",
+      logo: "https://public-files-paystack-prod.s3.eu-west-1.amazonaws.com/integration-logos/TIVCK4thz5y5Xfq76dvc.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
+    },
+  };
 
-  //           const config = {
-  //             public_key: "FLWPUBK_TEST-36c70b4b57f3f789e4d3cdda3ab847d4-X",
-  //             tx_ref: "1234",
-  //             amount: amount,
-  //             currency: "NGN",
-  //             payment_options: "card,mobilemoney,ussd",
-  //             customer: {
-  //               email: `${user?.user?.email}`,
-  //               phone_number: `${user?.user.phoneno}`,
-  //               name: `${user?.user?.user_name}`,
-  //             },
-  //             // meta: {
-  //             //   transactionId: Date.now(),
-  //             //   transactionTypes: "PAYMENT",
-  //             //   amount: enteredAmount,
-  //             //   userId: currentUser?.data?.user?.id,
-  //             // },
-  //             customizations: {
-  //               title: "PlanetF",
-  //               description: "Payment for items in cart",
-  //               logo: "https://st2.https://public-files-paystack-prod.s3.eu-west-1.amazonaws.com/integration-logos/TIVCK4thz5y5Xfq76dvc.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
-  //             },
-  //           };
-  //           const handleFlutterPayment = useFlutterwave(config);
+  const handleFlutterPayment = useFlutterwave(config);
 
-  //           const payWithFlutterwave = (e: { preventDefault: () => void }) => {
-  //             e.preventDefault();
-  //             // config.amount = enteredAmount;
+  const handleFlutterwavePayment = () => {
+    setPaymentLoading(true);
+    if (amount > 0) {
+      handleFlutterPayment({
+        callback: async (response) => {
+          console.log(response, "flutter payment success");
 
-  //             handleFlutterPayment({
-  //               callback: async (response) => {
-  //                 console.log(response, "flutter payment success");
+          // Handle the payment success case and show a confirmation message
+          if (response?.status === "successful") {
+            router.push("/user");
+          }
 
-  //                 // Handle the payment success case and show a confirmation message
-  //                 // if (response?.status === "successful") {
-  //                 //   navigate("/user");
-  //                 // }
+          closePaymentModal();
+        },
+        onClose: () => {
+          console.log("Payment modal closed");
+          router.push("/user/fundwallet");
+          closeModal();
+        },
+      });
+    }
+    setIsAmountValid(false);
+    setPaymentLoading(false);
+  };
 
-  //                 closePaymentModal();
-  //               },
-  //               onClose: () => {
-  //                 console.log("Payment modal closed");
-  //               },
-  //             });
+  const paystackConfig = {
+    reference: new Date().getTime().toString(),
+    email: `${user?.user?.email}`,
+    amount: amount * 100,
+    publicKey: `pk_test_b987677881ebe03cc259505b4dbd30da70651f64`,
+  };
 
-  //           };
-  //         } else if (selectedPayment == "Paystack") {
-  //           alert("Paystack");
-  //         } else {
-  //           alert("monify");
+  const onSuccess = (reference: string) => {
+    console.log("Payment successful. Reference: ", reference);
 
-  //           //   e.preventDefault();
+    router.push("/user");
+  };
 
-  //           //   MonnifySDK.initialize({
-  //           //     amount: amount,
-  //           //     currency: "NGN",
-  //           //     reference: new String(new Date().getTime()),
-  //           //     customerFullName: `${currentUser?.data?.user?.firstname} ${currentUser?.data?.user?.lastname}`,
-  //           //     customerEmail: currentUser?.data?.user?.email,
-  //           //     apiKey,
-  //           //     contractCode,
-  //           //     paymentDescription: "Dking Communications Enterprise",
-  //           //     metadata: {
-  //           //       name: currentUser?.data?.user?.firstname,
-  //           //     },
+  const onClose = () => {
+    console.log("Payment closed.");
+    router.push("/user/fundwallet");
+  };
 
-  //           //     onLoadStart: () => {
-  //           //       console.log("loading has started");
-  //           //     },
-  //           //     onLoadComplete: () => {
-  //           //       console.log("SDK is UP");
-  //           //     },
-  //           //     onComplete: function (response) {
+  const initializePayment = usePaystackPayment(paystackConfig);
 
-  //           //       console.log(response);
-  //           //     },
-  //           //     onClose: function (data) {
-  //           //       console.log(data);
-  //           //       navigate("/user");
-  //           //     },
-  //           //   });
-  //           // };
-  //         }
-  //       }
-  //     });
-  //   }
-  // };
+  const handlePaystackPayment = () => {
+    if (amount > 0) {
+      initializePayment({
+        ...paystackConfig,
+        onSuccess: onSuccess,
+        onClose: onClose,
+      });
+    }
+    setIsAmountValid(false);
+  };
+
+  const handleMonifyPayment = () => {
+    if (amount > 0) {
+      // MonnifySDK.initialize({
+      //   amount: amount,
+      //   currency: "NGN",
+      //   reference: new String(new Date().getTime()),
+      //   customerFullName: `${user?.user?.user_name}`,
+      //   customerEmail: `${user?.user?.email}`,
+      //   apiKey: user?.payment?.fund_monnify_apikey,
+      //   contractCode: user?.payment?.fund_monnify_contractcode,
+      //   paymentDescription: "PlanetF Funding",
+      //   metadata: {
+      //     name: `${user?.user?.user_name}`,
+      //   },
+      //   // incomeSplitConfig: [
+      //   //   {
+      //   //     subAccountCode: "MFY_SUB_342113621921",
+      //   //     feePercentage: 50,
+      //   //     splitAmount: 1900,
+      //   //     feeBearer: true,
+      //   //   },
+      //   //   {
+      //   //     subAccountCode: "MFY_SUB_342113621922",
+      //   //     feePercentage: 50,
+      //   //     splitAmount: 2100,
+      //   //     feeBearer: true,
+      //   //   },
+      //   // ],
+      //   onLoadStart: () => {
+      //     console.log("loading has started");
+      //   },
+      //   onLoadComplete: () => {
+      //     console.log("SDK is UP");
+      //   },
+      //   onComplete: function (response: any) {
+      //     //Implement what happens when the transaction is completed.
+      //     console.log(response);
+      //   },
+      //   onClose: function (data: any) {
+      //     //Implement what should happen when the modal is closed here
+      //     console.log(data);
+      //     router.push("/user");
+      //   },
+      // });
+    }
+    setIsAmountValid(false);
+  };
 
   if (isLoading) {
     return <ScreenLoader />;
@@ -256,7 +286,6 @@ const page = (props: Props) => {
               text={`${account?.account_number}`}
               onCopy={() => onCopy(index)}
             >
-             
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between h-20 ">
                   <h1 className="text-2xl  font-medium ">
@@ -349,24 +378,94 @@ const page = (props: Props) => {
               </div>
             </div>
             {selectedPayment && (
-              <button
-                onClick={handleProceed}
-                className="bg-[#164e63] text-white py-2 px-4 rounded w-1/2 mx-auto"
-              >
-                Proceed
-              </button>
+              <>
+                <Dialog>
+                  <div className="flex items-center gap-5">
+                    <DialogTrigger asChild>
+                      <button className="bg-[#164e63] text-white py-2 px-4 rounded w-1/2 mx-auto">
+                        Proceed
+                      </button>
+                    </DialogTrigger>
+                    <button
+                      onClick={closeModal}
+                      className="bg-white text-[#164e63] py-2 px-4 rounded w-1/2 mx-auto"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>
+                        {selectedPayment} Checkout Process
+                      </DialogTitle>
+                      <DialogDescription className="my-5">
+                        Enter Your Amount below
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="flex flex-col  gap-4">
+                        <Label
+                          htmlFor="name"
+                          className=" font-semibold text-base"
+                        >
+                          Amount
+                        </Label>
+                        <Input
+                          type="number"
+                          placeholder="Enter Amount"
+                          className="col-span-3"
+                          onChange={handleAmountChange}
+                        />
+                        {!isAmountValid && (
+                          <span className="text-red-500">
+                            Kindly enter your desired amount
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      {selectedPayment === "Flutterwave" && (
+                        <Button
+                          type="button"
+                          onClick={handleFlutterwavePayment}
+                          className={`bg-[#164e63] text-white w-1/2 ${
+                            !isAmountValid && "cursor-not-allowed opacity-50"
+                          }`}
+                          disabled={!isAmountValid}
+                        >
+                          {paymentLoading ? <Spinner /> : "Fund"}
+                        </Button>
+                      )}
+                      {selectedPayment === "Monify" && (
+                        <Button
+                          onClick={handleMonifyPayment}
+                          className={`bg-[#164e63] text-white w-1/2 ${
+                            !isAmountValid && "cursor-not-allowed opacity-50"
+                          }`}
+                          disabled={!isAmountValid}
+                        >
+                          Fund
+                        </Button>
+                      )}
+                      {selectedPayment === "Paystack" && (
+                        <Button
+                          onClick={handlePaystackPayment}
+                          className={`bg-[#164e63] text-white w-1/2 ${
+                            !isAmountValid && "cursor-not-allowed opacity-50"
+                          }`}
+                          disabled={!isAmountValid}
+                        >
+                          Fund
+                        </Button>
+                      )}
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </>
             )}
           </div>
         </Modal>
-      )}
-
-      {isPaymentOpen && (
-        <div className="bg-red-500 h-screen text-center">gsyjgysdg</div>
-        // <PaymentModal
-        //   isOpen={isPaymentOpen}
-        //   onClose={closePaymentsModal}
-        //   selectedPayment={selectedPayment}
-        // />
       )}
     </main>
   );

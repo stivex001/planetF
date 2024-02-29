@@ -10,9 +10,10 @@ export const getUser = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log(response.data.data);
 
     if (response?.data?.success === 1) {
-      return response?.data?.data
+      return response?.data?.data;
     } else {
       throw new Error(response.data.message);
     }
