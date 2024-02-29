@@ -9,7 +9,7 @@ const Commission = (props: Props) => {
   return (
     <main>
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-medium text-[#1e293b]">Commission History</h2>
+        <h2 className="text-lg font-medium text-[#1e293b]">Commission List</h2>
       </div>
 
       <CommissionList />

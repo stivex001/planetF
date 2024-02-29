@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
+    "@paystack/inline-js": "^2.14.0",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-switch": "^1.0.3",
     "@react-pdf/renderer": "^3.1.14",
@@ -38,6 +39,7 @@
     "react-hook-form": "^7.48.2",
     "react-icons": "^4.11.0",
     "react-modal": "^3.16.1",
+    "react-paystack": "^5.0.0",
     "react-pdf": "^7.7.0",
     "react-phone-number-input": "^3.3.9",
     "react-select": "^5.8.0",

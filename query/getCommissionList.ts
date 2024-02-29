@@ -8,7 +8,7 @@ export const getCommissionList = async () => {
   const { token } = useToken();
 
   try {
-    const response = await axios.get(`${BASE_URL}/commissions`, {
+    const response = await axios.get(`${BASE_URL}/availableCommissions`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

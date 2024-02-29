@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import { FiRefreshCcw } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useUser } from "@/context/user-context";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { IoWalletOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
@@ -19,6 +18,7 @@ import Paystack from "@/images/Paystack.png";
 import Flutter from "@/images/flutter.svg";
 import Monify from "@/images/monify.svg";
 import Image from "next/image";
+import { useUser } from "@/hooks/auth/useUser";
 
 type Props = {};
 
@@ -52,12 +52,23 @@ const page = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [copiedText, setCopiedText] = useState<Array<string>>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
 
-  const { user, loading } = useUser();
+  const { data: user } = useUser();
+
+  console.log(user?.user, "user");
 
   const openModal = () => {
     setIsOpen(true);
+  };
+
+  const openPaymentsModal = () => {
+    setIsPaymentOpen(true);
+  };
+
+  const closePaymentsModal = () => {
+    setIsPaymentOpen(false);
   };
 
   const closeModal = () => {
@@ -103,89 +114,131 @@ const page = (props: Props) => {
     setSelectedPayment(payment);
   };
 
-  const handleProceed = () => {
+  const handleProceed = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     closeModal();
     if (selectedPayment) {
-      Swal.fire({
-        title: `${selectedPayment} Checkout Process`,
-        html: `
-          <label>Amount</label>
-          <input id="amountInput" type="number" placeholder="Enter amount" class="swal2-input">
-        `,
-        showCancelButton: true,
-        confirmButtonText: "Fund",
-        cancelButtonText: "Cancel",
-        preConfirm: () => {
-          const amountInput = document.getElementById(
-            "amountInput"
-          ) as HTMLInputElement;
-          const amount = amountInput.value.trim();
-          if (!amount) {
-            Swal.showValidationMessage("Amount is required");
-          }
-          return amount;
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const amount = parseFloat(result.value);
-          if (selectedPayment == "Flutterwave") {
-            alert(`flutter ${amount}`);
-          } else if (selectedPayment == "Paystack") {
-            alert("Paystack");
-          } else {
-            alert("monify");
-          }
-        }
-      });
+      openPaymentsModal();
+      setIsPaymentOpen(true); 
     }
   };
+  
 
-  const config = {
-    public_key: "",
-    tx_ref: "1234",
-    amount: 0,
-    currency: "NGN",
-    payment_options: "card,mobilemoney,ussd",
-    customer: {
-      email: "stephenadeyemo@gmail.com",
-      phone_number: "08162174754",
-      name: `baistevoo`,
-    },
-    // meta: {
-    //   transactionId: Date.now(),
-    //   transactionTypes: "PAYMENT",
-    //   amount: enteredAmount,
-    //   userId: currentUser?.data?.user?.id,
-    // },
-    customizations: {
-      title: "5stardatahub",
-      description: "Payment for items in cart",
-      logo: "https://st2.https://public-files-paystack-prod.s3.eu-west-1.amazonaws.com/integration-logos/TIVCK4thz5y5Xfq76dvc.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
-    },
-  };
+  // const handleProceed = () => {
+  //   closeModal();
+  //   if (selectedPayment) {
+  //     Swal.fire({
+  //       title: `${selectedPayment} Checkout Process`,
+  //       html: `
+  //         <label>Amount</label>
+  //         <input id="amountInput" type="number" placeholder="Enter amount" class="swal2-input">
+  //       `,
+  //       showCancelButton: true,
+  //       confirmButtonText: "Fund",
+  //       cancelButtonText: "Cancel",
+  //       preConfirm: () => {
+  //         const amountInput = document.getElementById(
+  //           "amountInput"
+  //         ) as HTMLInputElement;
+  //         const amount = amountInput.value.trim();
+  //         if (!amount) {
+  //           Swal.showValidationMessage("Amount is required");
+  //         }
+  //         return amount;
+  //       },
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         const amount = parseFloat(result.value);
+  //         if (selectedPayment == "Flutterwave") {
+  //           alert(`flutter ${amount}`);
 
-  const handleFlutterPayment = useFlutterwave(config);
+  //           const config = {
+  //             public_key: "FLWPUBK_TEST-36c70b4b57f3f789e4d3cdda3ab847d4-X",
+  //             tx_ref: "1234",
+  //             amount: amount,
+  //             currency: "NGN",
+  //             payment_options: "card,mobilemoney,ussd",
+  //             customer: {
+  //               email: `${user?.user?.email}`,
+  //               phone_number: `${user?.user.phoneno}`,
+  //               name: `${user?.user?.user_name}`,
+  //             },
+  //             // meta: {
+  //             //   transactionId: Date.now(),
+  //             //   transactionTypes: "PAYMENT",
+  //             //   amount: enteredAmount,
+  //             //   userId: currentUser?.data?.user?.id,
+  //             // },
+  //             customizations: {
+  //               title: "PlanetF",
+  //               description: "Payment for items in cart",
+  //               logo: "https://st2.https://public-files-paystack-prod.s3.eu-west-1.amazonaws.com/integration-logos/TIVCK4thz5y5Xfq76dvc.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
+  //             },
+  //           };
+  //           const handleFlutterPayment = useFlutterwave(config);
 
-  const payWithFlutterwave = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    // config.amount = enteredAmount;
+  //           const payWithFlutterwave = (e: { preventDefault: () => void }) => {
+  //             e.preventDefault();
+  //             // config.amount = enteredAmount;
 
-    handleFlutterPayment({
-      callback: async (response) => {
-        console.log(response, "flutter payment success");
+  //             handleFlutterPayment({
+  //               callback: async (response) => {
+  //                 console.log(response, "flutter payment success");
 
-        // Handle the payment success case and show a confirmation message
-        // if (response?.status === "successful") {
-        //   navigate("/user");
-        // }
+  //                 // Handle the payment success case and show a confirmation message
+  //                 // if (response?.status === "successful") {
+  //                 //   navigate("/user");
+  //                 // }
 
-        closePaymentModal();
-      },
-      onClose: () => {
-        console.log("Payment modal closed");
-      },
-    });
-  };
+  //                 closePaymentModal();
+  //               },
+  //               onClose: () => {
+  //                 console.log("Payment modal closed");
+  //               },
+  //             });
+
+  //           };
+  //         } else if (selectedPayment == "Paystack") {
+  //           alert("Paystack");
+  //         } else {
+  //           alert("monify");
+
+  //           //   e.preventDefault();
+
+  //           //   MonnifySDK.initialize({
+  //           //     amount: amount,
+  //           //     currency: "NGN",
+  //           //     reference: new String(new Date().getTime()),
+  //           //     customerFullName: `${currentUser?.data?.user?.firstname} ${currentUser?.data?.user?.lastname}`,
+  //           //     customerEmail: currentUser?.data?.user?.email,
+  //           //     apiKey,
+  //           //     contractCode,
+  //           //     paymentDescription: "Dking Communications Enterprise",
+  //           //     metadata: {
+  //           //       name: currentUser?.data?.user?.firstname,
+  //           //     },
+
+  //           //     onLoadStart: () => {
+  //           //       console.log("loading has started");
+  //           //     },
+  //           //     onLoadComplete: () => {
+  //           //       console.log("SDK is UP");
+  //           //     },
+  //           //     onComplete: function (response) {
+
+  //           //       console.log(response);
+  //           //     },
+  //           //     onClose: function (data) {
+  //           //       console.log(data);
+  //           //       navigate("/user");
+  //           //     },
+  //           //   });
+  //           // };
+  //         }
+  //       }
+  //     });
+  //   }
+  // };
 
   if (isLoading) {
     return <ScreenLoader />;
@@ -203,18 +256,7 @@ const page = (props: Props) => {
               text={`${account?.account_number}`}
               onCopy={() => onCopy(index)}
             >
-              {/* <div className="flex items-center justify-between">
-                <div>
-                  <IoWalletOutline size={30} />
-                </div>
-                <div className="flex flex-col">
-                  <h4 className="text-3xl font-bold text-right">{account?.account_number}</h4>
-                  <p className="text-base font-semibold capitalize text-right">
-                    {account?.bank_name}
-                  </p>
-                  <span className="text-base font-semibold capitalize text-right">{account?.account_name}</span>
-                </div>
-              </div> */}
+             
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between h-20 ">
                   <h1 className="text-2xl  font-medium ">
@@ -316,6 +358,15 @@ const page = (props: Props) => {
             )}
           </div>
         </Modal>
+      )}
+
+      {isPaymentOpen && (
+        <div className="bg-red-500 h-screen text-center">gsyjgysdg</div>
+        // <PaymentModal
+        //   isOpen={isPaymentOpen}
+        //   onClose={closePaymentsModal}
+        //   selectedPayment={selectedPayment}
+        // />
       )}
     </main>
   );

@@ -7,6 +7,8 @@ export type UserProfile = {
     status: string;
     referral_plan: string;
     bvn: boolean;
+    email:string
+    phoneno: string
   };
   balances: {
     wallet: string;
