@@ -1,12 +1,6 @@
 "use client";
 
-import { useModal } from "@/context/useModal";
-import { Transactions } from "@/types/transaction";
-import { format } from "date-fns";
 import React, { FC, useState } from "react";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import empty from "@/images/empty.png";
-import Image from "next/image";
 import { useCommissionList } from "@/hooks/queries/useCommissionList";
 import { ScreenLoader } from "./ScreenLoader";
 
@@ -40,11 +34,15 @@ export const CommissionList: FC<{}> = () => {
     <div className="my-5 flex flex-col gap-10">
       {Object.entries(commissionData).map(([category, commissions]) => (
         <div key={category}>
-          <h2 className="uppercase text-base font-bold text-[#164e63]">{category}</h2>
+          <h2 className="uppercase text-base font-bold text-[#164e63]">
+            {category}
+          </h2>
           <table className="w-full mt-2 table-auto">
             <thead>
               <tr className="bg-gray-300">
-                <th className="text-left p-2 border border-gray-500">Provider</th>
+                <th className="text-left p-2 border border-gray-500">
+                  Provider
+                </th>
                 <th className="text-left p-2 border border-gray-500">Value</th>
               </tr>
             </thead>
