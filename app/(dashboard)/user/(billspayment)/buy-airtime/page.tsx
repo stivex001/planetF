@@ -360,6 +360,16 @@ const BuyAirtime = () => {
     }
   };
 
+  const formatAmount = (value: string | number) => {
+    const parsedValue = typeof value === 'string' ? parseFloat(value) : value;
+    if (isNaN(parsedValue)) return "0.00";
+    return parsedValue.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+  
+
   return (
     <div className=" min-h-screen rounded-md  w-full ">
       <div className="w-full lg:w-11/12 mx-auto">
@@ -608,16 +618,16 @@ const BuyAirtime = () => {
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
               {isSwitchOn ? (
-                <span className="text-[#164e63]">₦{totalAmount}</span>
+                <span className="text-[#164e63]">₦{formatAmount(totalAmount)}</span>
               ) : (
-                <span className="text-[#164e63]">₦{formData?.amount}</span>
+                <span className="text-[#164e63]">₦{formatAmount(formData?.amount || 0)}</span>
               )}
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cashback: </p>
               <span className="text-[#164e63]">
-                ₦{cashbackAmount.toFixed(2)}
+                ₦{formatAmount(cashbackAmount.toFixed(2))}
               </span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">

@@ -63,7 +63,12 @@ const billPayment = [
     id: 10,
     title: "Airtime To Cash",
     url: "/user/airtime-converter",
-    subIcon: <FaArrowRightArrowLeft size={30} className="-ml-3 xl:ml-0 text-[#222c38]" />,
+    subIcon: (
+      <FaArrowRightArrowLeft
+        size={30}
+        className="-ml-3 xl:ml-0 text-[#222c38]"
+      />
+    ),
   },
 ];
 
@@ -74,7 +79,15 @@ const Dashboard = () => {
 
   const formatCurrency = (value: any) => {
     const parsedValue = Number(value);
-    return isNaN(parsedValue) ? "0.00" : parsedValue?.toFixed(2);
+    if (isNaN(parsedValue)) return "0.00";
+
+    // Use toLocaleString to format the number with commas for thousands separator
+    const formattedValue = parsedValue.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+    return formattedValue;
   };
 
   const wallet = formatCurrency(user?.balances?.wallet);
@@ -83,10 +96,8 @@ const Dashboard = () => {
   const points = formatCurrency(user?.balances?.points);
   const general_market = formatCurrency(user?.balances?.general_market);
 
- 
   useEffect(() => {
     if (user?.news && user.news.trim() !== "") {
-      
       Swal.fire({
         title: "General News!",
         text: user.news,
@@ -94,8 +105,7 @@ const Dashboard = () => {
         confirmButtonText: "OK",
       });
     }
-  }, [user]); // 
- 
+  }, [user]); //
 
   if (isLoading) {
     return <ScreenLoader />;
@@ -110,7 +120,9 @@ const Dashboard = () => {
               <IoWalletOutline size={30} />
             </div>
             <div>
-              <h4 className="text-3xl font-bold text-right">₦ {wallet}</h4>
+              <h4 className="text-3xl font-bold text-right">
+                ₦ {formatCurrency(wallet)}
+              </h4>
               <p className="text-base font-semibold capitalize text-right">
                 wallet balance
               </p>
@@ -123,7 +135,9 @@ const Dashboard = () => {
               <IoWalletOutline size={30} />
             </div>
             <div>
-              <h4 className="text-3xl font-bold text-right">₦ {bonus}</h4>
+              <h4 className="text-3xl font-bold text-right">
+                ₦ {formatCurrency(bonus)}
+              </h4>
               <p className="text-base font-semibold capitalize text-right">
                 bonus balance
               </p>
@@ -137,7 +151,7 @@ const Dashboard = () => {
             </div>
             <div>
               <h4 className="text-3xl font-bold text-right">
-                ₦ {agent_commision}
+                ₦ {formatCurrency(agent_commision)}
               </h4>
               <p className="text-base font-semibold capitalize text-right">
                 commission balance
@@ -164,11 +178,11 @@ const Dashboard = () => {
       </div>
 
       <div className="grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 ">
-        {billPayment.map((bill) => (
-          <CustomCard key={bill.id} className="bg-white">
-            <Link href={bill.url} className="flex items-center flex-col gap-5">
-              {bill.subIcon}
-              <span className="text-black">{bill.title}</span>
+        {billPayment?.map((bill) => (
+          <CustomCard key={bill?.id} className="bg-white">
+            <Link href={bill?.url} className="flex items-center flex-col gap-5">
+              {bill?.subIcon}
+              <span className="text-black">{bill?.title}</span>
             </Link>
           </CustomCard>
         ))}
