@@ -32,6 +32,7 @@ import { useModal } from "@/context/useModal";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import { useUser } from "@/hooks/auth/useUser";
+import { formatAmount } from "@/utils/formatNumber";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -367,7 +368,7 @@ const BuyTV = (props: Props) => {
               label="Amount"
               placeholder=""
               value={
-                selectedCategoryData ? `₦ ${selectedCategoryData.price}` : ""
+                selectedCategoryData ? `₦ ${formatAmount(selectedCategoryData.price)}` : ""
               }
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
@@ -377,7 +378,7 @@ const BuyTV = (props: Props) => {
             <ReadOnlyTextInput
               label="Cashback"
               placeholder=""
-              value={cashbackAmount !== undefined ? `₦${cashbackAmount}` : ""}
+              value={cashbackAmount !== undefined ? `₦${formatAmount(cashbackAmount)}` : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -498,13 +499,13 @@ const BuyTV = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
-              <span className="text-[#164e63]">₦{(formData?.price)}</span>
+              <span className="text-[#164e63]">₦{formatAmount(formData?.price || 0)}</span>
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cashback: </p>
               <span className="text-[#164e63]">
-                ₦{cashbackAmount.toFixed(2)}
+                ₦{formatAmount(cashbackAmount.toFixed(2))}
               </span>
             </div>
 
