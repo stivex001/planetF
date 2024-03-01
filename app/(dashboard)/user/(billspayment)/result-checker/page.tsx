@@ -25,6 +25,7 @@ import { useModal } from "@/context/useModal";
 import Swal from "sweetalert2";
 import { useUser } from "@/hooks/auth/useUser";
 import { getEducation } from "@/query/getEducation";
+import { formatAmount } from "@/utils/formatNumber";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -237,7 +238,7 @@ const ResultChecker = (props: Props) => {
               label="Price"
               placeholder=""
               value={
-                selectedCategoryData ? `₦ ${selectedCategoryData.price}` : ""
+                selectedCategoryData ? `₦ ${formatAmount(selectedCategoryData.price)}` : ""
               }
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
@@ -340,13 +341,13 @@ const ResultChecker = (props: Props) => {
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
               <span className="text-[#164e63]">
-                ₦{formData?.amount || "1000"}
+                ₦{formatAmount(formData?.amount || "1000") }
               </span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cummulative Amount: </p>
               <span className="text-[#164e63]">
-                ₦{formData?.cumulativeAmount}
+                ₦{formatAmount(formData?.cumulativeAmount || 0)}
               </span>
             </div>
 

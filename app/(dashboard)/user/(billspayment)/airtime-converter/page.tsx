@@ -33,6 +33,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { BASE_URL } from "@/utils/baseUrl";
 import { useAirtimeConverter } from "@/hooks/queries/useAirtimeConverter";
 import { useUser } from "@/hooks/auth/useUser";
+import { formatAmount } from "@/utils/formatNumber";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -498,7 +499,7 @@ const AirtimeConverter = (props: Props) => {
               fieldName={"amount"}
               error={errors.amount}
               onChange={handleAmountChange}
-              value={amount && `₦${amount}`}
+              value={amount && `₦${formatAmount(amount)}`}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -507,7 +508,7 @@ const AirtimeConverter = (props: Props) => {
             <ReadOnlyTextInput
               label="Return Amount"
               placeholder=""
-              value={returnAmount !== undefined ? `₦${returnAmount}` : ""}
+              value={returnAmount !== undefined ? `₦${formatAmount(returnAmount)}` : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -620,11 +621,11 @@ const AirtimeConverter = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
-              <span className="text-[#164e63]">₦{formData?.amount}</span>
+              <span className="text-[#164e63]">₦{formatAmount(formData?.amount || 0)}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount to Receive: </p>
-              <span className="text-[#164e63]">₦{returnAmount}</span>
+              <span className="text-[#164e63]">₦{formatAmount(returnAmount)}</span>
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b-2">
