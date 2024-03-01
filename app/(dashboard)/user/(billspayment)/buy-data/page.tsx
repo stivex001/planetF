@@ -33,6 +33,7 @@ import Swal from "sweetalert2";
 import { useUser } from "@/hooks/auth/useUser";
 import { getCGs } from "@/query/getCGs";
 import { CGwallets } from "@/types/cg";
+import { formatAmount } from "@/utils/formatNumber";
 
 type Props = {};
 
@@ -423,7 +424,7 @@ const BuyData = (props: Props) => {
 
   return (
     <div className=" rounded-md w-full h-full ">
-      <div className="w-full lg:w-11/12 mx-auto h-screen ">
+      <div className="w-full lg:w-11/12 mx-auto  ">
         <h2 className="lg:text-center text-2xl font-bold xl:text-left xl:text-3xl">
           Data TopUp
         </h2>
@@ -591,7 +592,7 @@ const BuyData = (props: Props) => {
               label="Amount"
               placeholder=""
               value={
-                selectedCategoryData ? `₦ ${selectedCategoryData.price}` : ""
+                selectedCategoryData ? `₦ ${formatAmount(selectedCategoryData?.price)}` : ""
               }
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
@@ -830,7 +831,7 @@ const BuyData = (props: Props) => {
                   ₦
                   {(
                     (selectedCategoryData
-                      ? parseFloat(selectedCategoryData.price)
+                      ? parseFloat(formatAmount(selectedCategoryData.price))
                       : 0) * value.length
                   ).toFixed(2)}
                 </span>
@@ -838,7 +839,7 @@ const BuyData = (props: Props) => {
                 <span className="text-[#164e63]">
                   ₦
                   {selectedCategoryData
-                    ? parseFloat(selectedCategoryData.price).toFixed(2)
+                    ? parseFloat(formatAmount(selectedCategoryData.price)).toFixed(2)
                     : 0}
                 </span>
               )}
