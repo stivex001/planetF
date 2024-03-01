@@ -29,6 +29,7 @@ import { useModal } from "@/context/useModal";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import { useUser } from "@/hooks/auth/useUser";
+import { formatAmount } from "@/utils/formatNumber";
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -353,7 +354,7 @@ const BuyElectricity = (props: Props) => {
               placeholder="Enter Amount"
               register={register}
               fieldName={"amount"}
-              value={amount && `₦${amount}`}
+              value={amount && `₦${formatAmount(amount)}`}
               error={errors.amount}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
@@ -363,7 +364,7 @@ const BuyElectricity = (props: Props) => {
             <ReadOnlyTextInput
               label="Cashback"
               placeholder=""
-              value={cashbackAmount !== undefined ? `₦${cashbackAmount}` : ""}
+              value={cashbackAmount !== undefined ? `₦${formatAmount(cashbackAmount)}` : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>
@@ -376,7 +377,7 @@ const BuyElectricity = (props: Props) => {
               <input
                 type="text"
                 placeholder="Phone Number"
-                {...register("number")}
+                {...register("phone")}
                 className="w-full bg-gray-100 h-14 rounded-lg py-2 pl-6 pr-16 placeholder:text-gray-400 outline-none text-sm sm:leading-6 border border-zinc-600"
                 onKeyPress={(event) => {
                   const isValidInput = /^\d+$/.test(event.key);
@@ -393,12 +394,12 @@ const BuyElectricity = (props: Props) => {
                   }
                 }}
               />
-              {errors?.number && (
+              {errors?.phone && (
                 <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
                   <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
                     !
                   </div>
-                  <p>{errors?.number?.message}</p>
+                  <p>{errors?.phone?.message}</p>
                 </div>
               )}
             </div>
@@ -498,13 +499,13 @@ const BuyElectricity = (props: Props) => {
             </div>
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Amount: </p>
-              <span className="text-[#164e63]">₦{formData?.amount}</span>
+              <span className="text-[#164e63]">₦{formatAmount(formData?.amount || 0)}</span>
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Cashback: </p>
               <span className="text-[#164e63]">
-                ₦{cashbackAmount.toFixed(2)}
+                ₦{formatAmount(cashbackAmount.toFixed(2))}
               </span>
             </div>
 
