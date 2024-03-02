@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { AiOutlineBell, AiOutlineSearch } from "react-icons/ai";
 import { HiBars3BottomRight } from "react-icons/hi2";
@@ -10,7 +10,7 @@ import UserModal from "./UserModal";
 import MobileNav from "./MobileNav";
 import { usePathname } from "next/navigation";
 import { useUser } from "@/hooks/auth/useUser";
-import logo from "@/images/planetf-.png"
+import logo from "@/images/planetf-.png";
 
 type Props = {};
 
@@ -20,11 +20,28 @@ const Navbar = (props: Props) => {
 
   const [showModal, setShowModal] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const { data: user } = useUser();
   console.log(user);
 
-  console.log(lastPathname, "userrrr");
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        "contains" in modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        setShowModal(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   const handleModalClick = () => {
     setShowModal(!showModal);
@@ -40,12 +57,7 @@ const Navbar = (props: Props) => {
         <nav className="flex items-center justify-between relative">
           <div className="flex items-center gap-[50px] lg:gap-[150px] ">
             <Link href="/user" className="flex items-center gap-2">
-              <Image
-                src={logo}
-                alt=""
-                width={20}
-                height={20}
-              />
+              <Image src={logo} alt="" width={20} height={20} />
               <span className="hidden xl:block text-white text-lg">
                 PlanetF
               </span>
@@ -97,8 +109,12 @@ const Navbar = (props: Props) => {
               />
             </div>
           </div>
+
           {showModal && (
-            <div className="hidden md:block absolute right-0 top-12">
+            <div
+              ref={modalRef}
+              className="hidden md:block absolute right-0 top-12"
+            >
               <UserModal user={user} />
             </div>
           )}
@@ -150,7 +166,7 @@ const Navbar = (props: Props) => {
           </div>
           {showModal && (
             <div className=" md:hidden absolute right-6 top-14">
-              <UserModal user={user } />
+              <UserModal user={user} />
             </div>
           )}
         </nav>

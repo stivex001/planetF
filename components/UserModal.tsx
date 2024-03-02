@@ -43,20 +43,20 @@ const UserModal = ({ user }: Props) => {
             <IoMdPerson size={24} className="text-white/70" />
             <span className="font-medium">Profile</span>
           </Link>
-          <Link
+          {/* <Link
             href="#"
             className="flex items-center transition duration-300 ease-in-out rounded-md hover:bg-white/5 gap-2 p-2"
           >
             <FaEdit size={24} className="text-white/70" />
             <span className="font-medium">Add Account</span>
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             href="/forgotpassword"
             className="flex items-center transition duration-300 ease-in-out rounded-md hover:bg-white/5 gap-2 p-2"
           >
             <FaLock size={24} className="text-white/70" />
             <span className="font-medium">Reset Password</span>
-          </Link>
+          </Link> */}
           <Link
             href="#"
             className="flex items-center transition duration-300 ease-in-out rounded-md hover:bg-white/5 gap-2 p-2"
