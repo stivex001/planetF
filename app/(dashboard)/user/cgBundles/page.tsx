@@ -25,6 +25,7 @@ import { useTransferBundles } from "@/mutation/useTransferBundles";
 import Image from "next/image";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Swal from "sweetalert2";
+import { formatAmount } from "@/utils/formatNumber";
 
 // Styles for modal
 const customStyles: Modal.Styles = {
@@ -289,9 +290,9 @@ const CGBundles = (props: Props) => {
                 >
                   <div className="w-full mt-2">
                     <ReadOnlyTextInput
-                      label={`Pay with Wallet (₦${walletBalance})`}
+                      label={`Pay with Wallet (₦${formatAmount(walletBalance || 0)})`}
                       placeholder="Wallet balance"
-                      value={`₦${selectedBundle?.price}`}
+                      value={`₦${formatAmount(selectedBundle?.price || 0)}`}
                       className="bg-gray-100 rounded-sm border border-zinc-600"
                     />
                   </div>
