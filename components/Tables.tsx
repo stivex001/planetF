@@ -16,6 +16,7 @@ import {
   StyleSheet,
   PDFDownloadLink,
 } from "@react-pdf/renderer";
+import { formatAmount } from "@/utils/formatNumber";
 
 type Props = {};
 
@@ -250,18 +251,20 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
                     {row?.description}
                   </td>
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold ">
-                    ₦{Number(row?.amount).toFixed(2)}
+                    ₦{formatAmount(Number(row?.amount).toFixed(2))}
                   </td>
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                    ₦{Number(row?.i_wallet).toFixed(2)}
+                    ₦{formatAmount(Number(row?.i_wallet).toFixed(2))}
                   </td>
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
-                    ₦{Number(row?.f_wallet).toFixed(2)}
+                    ₦{formatAmount(Number(row?.f_wallet).toFixed(2))}
                   </td>
                   <td className="px-6 py-4 text-[#163e63] text-xl font-semibold whitespace-nowrap">
                     <span
                       className={`bg-white shadow px-4 py-2 rounded-md ${
                         row.status == "pending"
+                          ? "text-orange-500"
+                          : row.status == "reversed"
                           ? "text-red-500"
                           : "text-green-400"
                       }`}
@@ -276,7 +279,12 @@ const Tables: FC<{ transactionData: Transactions[] }> = ({
                     App
                   </td>
                   <td className="px-6 py-4 text-white text-xl font-semibold whitespace-nowrap ">
-                    <button onClick={() => handleViewClick(row)} className="bg-[#163e63]/80 hover:scale-105 duration-200 px-4 py-2 rounded-md">View</button>
+                    <button
+                      onClick={() => handleViewClick(row)}
+                      className="bg-[#163e63]/80 hover:scale-105 duration-200 px-4 py-2 rounded-md"
+                    >
+                      View
+                    </button>
                   </td>
                 </tr>
               ))

@@ -1,6 +1,5 @@
-import { CommissionList } from "@/components/CommissionList";
-import MovingBanner from "@/components/MovingBanner";
-import Transactions from "@/components/Transactions";
+import CommisionRecord from "@/components/CommisionRecord";
+
 
 import React from "react";
 
@@ -10,10 +9,10 @@ const CommissionRecord = (props: Props) => {
   return (
     <main>
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-medium text-[#1e293b]">Commission List</h2>
+        <h2 className="text-lg font-medium text-[#1e293b]">Commission Records</h2>
       </div>
 
-      <Transactions />
+      <CommisionRecord />
     </main>
   );
 };

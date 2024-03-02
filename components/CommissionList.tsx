@@ -24,7 +24,6 @@ interface Commissions {
 
 export const CommissionList: FC<{}> = () => {
   const { data: commissionData, isPending } = useCommissionList();
-  console.log(commissionData, "data");
 
   if (isPending || !commissionData) {
     return <ScreenLoader />;
