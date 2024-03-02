@@ -12,16 +12,24 @@ import {
   FiLayout,
   FiSidebar,
 } from "react-icons/fi";
-import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import { FaArrowRightArrowLeft, FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaGraduationCap, FaPhoneAlt, FaRegLightbulb, FaWallet } from "react-icons/fa";
 import { IoPhonePortraitOutline, IoTvSharp } from "react-icons/io5";
 import { MdOutlineElectricalServices, MdReport } from "react-icons/md";
+import { GiWallet } from "react-icons/gi";
 
 const navbarLinks = [
   {
-    id: 1,
+    id: 10,
     icon: <BiHomeAlt size={24} className="-ml-3 xl:ml-0" />,
     title: "Dashboard",
+    url: "/user",
+    // arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
+  },
+  {
+    id: 1,
+    icon: <GiWallet size={24} className="-ml-3 xl:ml-0" />,
+    title: "Wallets",
     url: "/user",
     arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
     sublinks: [
@@ -53,8 +61,8 @@ const navbarLinks = [
   },
   {
     id: 2,
-    icon: <FiBox size={24} className="-ml-3 xl:ml-0" />,
-    title: "Bills Payment",
+    icon: <FaMoneyBillTransfer size={24} className="-ml-3 xl:ml-0" />,
+    title: "Products",
     url: "/user/payment",
     arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
     sublinks: [

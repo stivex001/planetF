@@ -11,16 +11,24 @@ import {
   FiSidebar,
 } from "react-icons/fi";
 import Link from "next/link";
-import { FaArrowRightArrowLeft } from "react-icons/fa6";
-import { FaGraduationCap, FaPhoneAlt, FaRegLightbulb } from "react-icons/fa";
+import { FaArrowRightArrowLeft, FaMoneyBillTransfer } from "react-icons/fa6";
+import { FaGraduationCap, FaPhoneAlt, FaRegLightbulb, FaWallet } from "react-icons/fa";
 import { MdOutlineElectricalServices, MdReport } from "react-icons/md";
 import { IoPhonePortraitOutline, IoTvSharp } from "react-icons/io5";
+import { GiWallet } from "react-icons/gi";
 
 const navbarLinks = [
   {
-    id: 1,
-    icon: <BiHomeAlt size={24} />,
+    id: 10,
+    icon: <BiHomeAlt size={24} className="-ml-3 xl:ml-0" />,
     title: "Dashboard",
+    url: "/user",
+    // arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
+  },
+  {
+    id: 1,
+    icon: <GiWallet size={24} />,
+    title: "Wallets",
     url: "/user",
     arrowIcon: <IoIosArrowDown />,
     sublinks: [
@@ -28,19 +36,19 @@ const navbarLinks = [
         id: 1,
         title: "Fund Wallet",
         url: "/user/fundwallet",
-        subIcon: <FiActivity size={24} />,
+        subIcon: <FaWallet size={24} />,
       },
       {
         id: 2,
         title: "CG Transfer",
         url: "/user/cgtransfer",
-        subIcon: <FiActivity size={24} />,
+        subIcon: <FaArrowRightArrowLeft size={24} />,
       },
       {
         id: 3,
         title: "CG Wallet",
         url: "/user/cgwallet",
-        subIcon: <FiActivity size={24} />,
+        subIcon: <FaArrowRightArrowLeft size={24} />,
       },
       {
         id: 4,
@@ -52,7 +60,7 @@ const navbarLinks = [
   },
   {
     id: 2,
-    icon: <FiBox size={24} className="-ml-3 xl:ml-0" />,
+    icon: <FaMoneyBillTransfer size={24} className="-ml-3 xl:ml-0" />,
     title: "Bills Payment",
     url: "/user/payment",
     arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
