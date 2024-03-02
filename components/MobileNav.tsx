@@ -11,7 +11,7 @@ import {
   FiSidebar,
 } from "react-icons/fi";
 import Link from "next/link";
-import { FaArrowRightArrowLeft, FaMoneyBillTransfer } from "react-icons/fa6";
+import { FaArrowRightArrowLeft, FaCodeCommit, FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaGraduationCap, FaPhoneAlt, FaRegLightbulb, FaWallet } from "react-icons/fa";
 import { MdOutlineElectricalServices, MdReport } from "react-icons/md";
 import { IoPhonePortraitOutline, IoTvSharp } from "react-icons/io5";
@@ -109,9 +109,25 @@ const navbarLinks = [
   {
     id: 3,
     icon: <FiActivity size={24} />,
-    title: "Commission List",
+    title: "Commission",
     url: "/user/commission",
     arrowIcon: <IoIosArrowDown />,
+    sublinks: [
+      {
+        id: 1,
+        title: "Commission List",
+        url: "/user/commission/commission-list",
+        subIcon: <FaCodeCommit size={24} className="" />,
+      },
+      {
+        id: 3,
+        title: "Commission Records",
+        url: "/user/commission/commission-record",
+        subIcon: <FaCodeCommit size={24} className="" />,
+      },
+      
+     
+    ],
   },
   // {
   //   id: 4,

@@ -3,6 +3,7 @@ import { ScreenLoader } from "../ScreenLoader";
 import CustomCard from "../CustomCard";
 import { IoWalletOutline } from "react-icons/io5";
 import { ReportData } from "@/types/transaction";
+import { FaRegCalendarAlt } from "react-icons/fa";
 
 type Props = {
   loading: boolean;
@@ -54,7 +55,7 @@ const Report = ({ report, loading }: Props) => {
       <CustomCard className="bg-[#2d5f72] text-white">
         <div className="flex items-center justify-between">
           <div>
-            <IoWalletOutline size={30} />
+            <FaRegCalendarAlt size={30} />
           </div>
           <div>
             <h4 className="text-3xl font-bold text-right">{report?.date}</h4>

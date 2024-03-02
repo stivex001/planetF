@@ -12,7 +12,7 @@ import {
   FiLayout,
   FiSidebar,
 } from "react-icons/fi";
-import { FaArrowRightArrowLeft, FaMoneyBillTransfer } from "react-icons/fa6";
+import { FaArrowRightArrowLeft, FaCodeCommit, FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaGraduationCap, FaPhoneAlt, FaRegLightbulb, FaWallet } from "react-icons/fa";
 import { IoPhonePortraitOutline, IoTvSharp } from "react-icons/io5";
 import { MdOutlineElectricalServices, MdReport } from "react-icons/md";
@@ -115,10 +115,26 @@ const navbarLinks = [
   },
   {
     id: 3,
-    icon: <FiActivity size={24} className="-ml-3 xl:ml-0" />,
-    title: "Commission List",
+    icon: <FaCodeCommit size={24} className="-ml-3 xl:ml-0" />,
+    title: "Commission",
     url: "/user/commission",
-    // arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
+    arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
+    sublinks: [
+      {
+        id: 1,
+        title: "Commission List",
+        url: "/user/commission/commission-list",
+        subIcon: <FaCodeCommit size={24} className="-ml-3 xl:ml-0" />,
+      },
+      {
+        id: 3,
+        title: "Commission Records",
+        url: "/user/commission/commission-record",
+        subIcon: <FaCodeCommit size={24} className="-ml-3 xl:ml-0" />,
+      },
+      
+     
+    ],
   },
   // {
   //   id: 4,
@@ -132,14 +148,14 @@ const navbarLinks = [
     icon: <BsInbox size={24} className="-ml-3 xl:ml-0" />,
     title: "Upgrade",
     url: "/user/upgrade",
-    arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
+    // arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
   },
   {
     id: 6,
     icon: <FiSidebar size={24} className="-ml-3 xl:ml-0" />,
     title: "Refer and Earn",
     url: "/user/refer",
-    arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
+    // arrowIcon: <IoIosArrowDown className="hidden xl:block" />,
   },
   {
     id: 7,

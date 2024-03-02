@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { ReportData } from "@/types/transaction";
 import { fetchMontlyReprt } from "@/mutation/fetchMontlyReport";
 import { fetchYearlyReport } from "@/mutation/fetchYearlyReport";
+import { FaRegCalendarAlt } from "react-icons/fa";
 
 type Props = {};
 
@@ -180,7 +181,7 @@ const SalesReport = (props: Props) => {
         <CustomCard className="" onClick={() => handleTabClick("daily")}>
           <div className="flex items-center justify-between">
             <div>
-              <IoWalletOutline size={30} />
+              <FaRegCalendarAlt size={30} />
             </div>
             <div>
               <h4 className="text-3xl font-bold text-right">
@@ -199,7 +200,7 @@ const SalesReport = (props: Props) => {
         <CustomCard className="" onClick={() => handleTabClick("monthly")}>
           <div className="flex items-center justify-between">
             <div>
-              <IoWalletOutline size={30} />
+              <FaRegCalendarAlt size={30} />
             </div>
             <div>
               <h4 className="text-3xl font-bold text-right">
@@ -214,7 +215,7 @@ const SalesReport = (props: Props) => {
         <CustomCard className="" onClick={() => handleTabClick("yearly")}>
           <div className="flex items-center justify-between">
             <div>
-              <IoWalletOutline size={30} />
+              <FaRegCalendarAlt size={30} />
             </div>
             <div>
               <h4 className="text-3xl font-bold text-right">
