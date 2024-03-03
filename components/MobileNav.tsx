@@ -12,8 +12,8 @@ import {
 } from "react-icons/fi";
 import Link from "next/link";
 import { FaArrowRightArrowLeft, FaCodeCommit, FaMoneyBillTransfer } from "react-icons/fa6";
-import { FaGraduationCap, FaPhoneAlt, FaRegLightbulb, FaWallet } from "react-icons/fa";
-import { MdOutlineElectricalServices, MdReport } from "react-icons/md";
+import { FaBarcode, FaGraduationCap, FaPhoneAlt, FaRegLightbulb, FaWallet } from "react-icons/fa";
+import { MdOutlineElectricalServices, MdReport, MdVerified } from "react-icons/md";
 import { IoPhonePortraitOutline, IoTvSharp } from "react-icons/io5";
 import { GiWallet } from "react-icons/gi";
 
@@ -149,6 +149,22 @@ const navbarLinks = [
     title: "Refer and Earn",
     url: "/user/refer",
     arrowIcon: <IoIosArrowDown />,
+    sublinks: [
+      {
+        id: 1,
+        title: "Promo Code",
+        url: "/user/promo-code",
+        subIcon: <FaBarcode size={24} className="" />,
+      },
+      {
+        id: 3,
+        title: "KYC",
+        url: "/user/kyc",
+        subIcon: <MdVerified size={24} className="" />,
+      },
+      
+     
+    ],
   },
   {
     id: 7,
