@@ -57,8 +57,8 @@ const Navbar = (props: Props) => {
         <nav className="flex items-center justify-between relative">
           <div className="flex items-center gap-[50px] lg:gap-[150px] ">
             <Link href="/user" className="flex items-center gap-2">
-              <Image src={logo} alt="" width={20} height={20} />
-              <span className="hidden xl:block text-white text-lg">
+              <Image src={logo} alt="" width={40} height={40} />
+              <span className="hidden xl:block text-white text-lg font-extrabold">
                 PlanetF
               </span>
             </Link>
@@ -81,14 +81,14 @@ const Navbar = (props: Props) => {
             onClick={toggleMobileMenu}
           />
           <div className="hidden md:flex items-center gap-5">
-            <div className="hidden sm:flex items-center justify-between rounded-[50px] bg-slate-200 px-3 py-2">
+            {/* <div className="hidden sm:flex items-center justify-between rounded-[50px] bg-slate-200 px-3 py-2">
               <input
                 type="text"
                 placeholder="Search."
                 className="w-full outline-none bg-transparent text-slate-400/100  shadow-none placeholder:text-slate-400/90"
               />
               <AiOutlineSearch size={24} className="text-slate-400/100" />
-            </div>
+            </div> */}
             <div className="relative">
               <AiOutlineBell size={24} className="text-slate-400/100" />
               <div className="bg-red-500 absolute top-0 right-1 w-2 h-2 rounded-full" />

@@ -396,7 +396,7 @@ const AirtimeConverter = (props: Props) => {
           <div className="w-full">
             <div className="w-full">
               <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-                Phone Numbers
+                Sending From
               </label>
               <input
                 type="text"

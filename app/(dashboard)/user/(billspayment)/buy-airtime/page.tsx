@@ -426,7 +426,7 @@ const BuyAirtime = () => {
             <ReadOnlyTextInput
               label="Cashback"
               placeholder=""
-              value={cashbackAmount !== undefined ? `₦${cashbackAmount}` : ""}
+              value={cashbackAmount !== undefined ? `₦${formatAmount(cashbackAmount)}` : ""}
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
           </div>

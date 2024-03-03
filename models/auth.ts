@@ -2,6 +2,7 @@ import * as yup from "yup";
 
 export const signUpSchema = yup.object().shape({
   user_name: yup.string().required("Username is required"),
+  fullName: yup.string().required("Full Name is required"),
   phoneno: yup
     .string()
     .matches(

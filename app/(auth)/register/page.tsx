@@ -58,6 +58,7 @@ const Register = () => {
       password: "",
       confirmPassword: "",
       referral: "",
+      fullName: ""
     },
     mode: "all",
     resolver: yupResolver(signUpSchema),
@@ -137,6 +138,20 @@ const Register = () => {
             className="mt-8 flex flex-col gap-4 "
             onSubmit={handleSubmit(handleSignUp)}
           >
+            <input
+              type="text"
+              placeholder="FullName"
+              {...register("fullName")}
+              className="w-full text-sm border-slate-200 px-4 py-3 rounded-md border"
+            />
+            {errors?.fullName && (
+              <div className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                <div className="w-3 h-3 rounded-full text-white bg-red-500 flex items-center justify-center">
+                  !
+                </div>
+                <p>{errors?.fullName?.message}</p>
+              </div>
+            )}
             <input
               type="text"
               placeholder="UserName"
