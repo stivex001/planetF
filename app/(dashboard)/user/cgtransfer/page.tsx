@@ -166,7 +166,7 @@ const CGTransfer = (props: Props) => {
             >
               <td className="py-2 px-4 border-b">{data?.id}</td>
               <td className="py-2 px-4 border-b">{data?.name}</td>
-              <td className="py-2 px-4 border-b">{data?.balance}</td>
+              <td className="py-2 px-4 border-b">{data?.balance} GG</td>
               <td className="py-2 px-4 border-b">
                 <button
                   className="bg-[#164e63] text-white px-4 py-2 rounded-md"
@@ -191,14 +191,14 @@ const CGTransfer = (props: Props) => {
           overlayClassName={`left-0 bg-[#00000070] outline-none transition-all ease-in-out duration-500`}
           className="w-full h-full flex items-center justify-center"
         >
-          <button
-            type="button"
-            onClick={closeModal}
-            className="absolute top-[200px] right-[400px] text-sm text-white px-4 h-12 bg-[#164e63] rounded-lg"
-          >
-            Close
-          </button>
-          <div className="w-11/12 md:w-1/2 h-[50vh]  flex justify-center items-center bg-white/70 shadow-md rounded-lg">
+          <div className="w-11/12 md:w-1/2 h-[50vh]  flex justify-center items-center bg-white/70 shadow-md rounded-lg relative">
+            <button
+              type="button"
+              onClick={closeModal}
+              className="absolute top-0 right-0 text-lg text-white flex justify-center items-center w-10 h-10 bg-[#164e63] rounded-full"
+            >
+              X
+            </button>
             <div className="flex flex-col gap-8">
               <form
                 className="flex flex-col"
@@ -207,7 +207,7 @@ const CGTransfer = (props: Props) => {
                 <div className="w-full mt-2">
                   <TextInput
                     label=""
-                    placeholder="username"
+                    placeholder="username / phone number"
                     register={register}
                     fieldName={"user_name"}
                     error={errors.user_name}

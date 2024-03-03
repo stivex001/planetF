@@ -84,6 +84,11 @@ const mtnTypes = [
     img: mtnImage,
   },
   {
+    id: "10",
+    name: "MTN-SME2",
+    img: mtnImage,
+  },
+  {
     id: "2",
     name: "MTN-CG",
     img: mtnImage,
@@ -403,7 +408,7 @@ const BuyData = (props: Props) => {
           id: 0,
           user_id: 16204,
           name: "wallet",
-          balance: `₦${user?.balances?.wallet}`,
+          balance: `₦${formatAmount(user?.balances?.wallet || 0)}`,
           status: 1,
           created_at: "2022-07-22T21:59:05.000000Z",
           updated_at: "2024-01-07T16:58:17.000000Z",
@@ -592,7 +597,9 @@ const BuyData = (props: Props) => {
               label="Amount"
               placeholder=""
               value={
-                selectedCategoryData ? `₦ ${formatAmount(selectedCategoryData?.price)}` : ""
+                selectedCategoryData
+                  ? `₦ ${formatAmount(selectedCategoryData?.price)}`
+                  : ""
               }
               className="bg-gray-100 rounded-sm border border-zinc-600"
             />
@@ -691,6 +698,12 @@ const BuyData = (props: Props) => {
                       if (selectedCategoryData?.name?.includes("SME")) {
                         return (
                           category.name.includes("MTN SME") ||
+                          category.name.includes("wallet")
+                        );
+                      }
+                      if (selectedCategoryData?.name?.includes("SME2")) {
+                        return (
+                          category.name.includes("MTN SME2") ||
                           category.name.includes("wallet")
                         );
                       }
@@ -816,10 +829,7 @@ const BuyData = (props: Props) => {
                 />
               )}
             </div>
-            <div className="flex items-center justify-between pb-2 border-b-2">
-              <p>Network Provider: </p>
-              <span className="text-[#164e63]">{`${formData?.network} `}</span>
-            </div>
+
             <div className="flex items-center justify-between pb-2 border-b-2">
               <p>Plan: </p>
               <span className="text-[#164e63]">{` ${formData?.name}`}</span>
@@ -839,7 +849,9 @@ const BuyData = (props: Props) => {
                 <span className="text-[#164e63]">
                   ₦
                   {selectedCategoryData
-                    ? parseFloat(formatAmount(selectedCategoryData.price)).toFixed(2)
+                    ? parseFloat(
+                        formatAmount(selectedCategoryData.price)
+                      ).toFixed(2)
                     : 0}
                 </span>
               )}

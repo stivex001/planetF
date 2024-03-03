@@ -35,7 +35,7 @@ export const buyCGBundleSchema = yup.object().shape({
 
 export const transferCGBundleSchema = yup.object().shape({
   cgwallet_id: yup.string(),
-  user_name: yup.string().required("Username is required"),
+  user_name: yup.string().required("Username or Phone number is required"),
   amount: yup.number().required("Amount is required"),
 });
 
